@@ -77,14 +77,18 @@ public class AdminDashboard {
         Button[] allTabs = {flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn};
         VBox[] allPanes = {flightsPane, reservationsPane, reportsPane, simulationPane};
 
-        for (int i = 0; i < allTabs.length; i++) {
+        int i = 0;
+        while (i < allTabs.length) {
             final int index = i;
             allTabs[i].setOnAction(e -> {
-                for (int j = 0; j < allPanes.length; j++) {
+                int j = 0;
+                while (j < allPanes.length) {
                     allPanes[j].setVisible(j == index);
                     updatePillTabStyle(allTabs[j], j == index);
+                    j++;
                 }
             });
+            i++;
         }
 
         tabBar.getChildren().addAll(flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn);

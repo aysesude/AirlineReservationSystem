@@ -40,8 +40,10 @@ public class Reservation implements Serializable {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder code = new StringBuilder();
         Random random = new Random();
-        for (int i = 0; i < 6; i++) {
+        int i = 0;
+        while (i < 6) {
             code.append(chars.charAt(random.nextInt(chars.length())));
+            i++;
         }
         return code.toString();
     }
@@ -153,7 +155,7 @@ public class Reservation implements Serializable {
     @Override
     public String toString() {
         return String.format("Reservation{code='%s', passenger='%s', flight='%s', seat='%s', status=%s}",
-                reservationCode, passenger.getFullName(), flight.getFlightNum(), 
+                reservationCode, passenger.getFullName(), flight.getFlightNum(),
                 seat.getSeatNum(), status);
     }
 

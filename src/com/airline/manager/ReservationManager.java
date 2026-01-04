@@ -132,7 +132,9 @@ public class ReservationManager {
      * @return Bulunan rezervasyon veya null
      */
     public Reservation getReservation(String reservationCode) {
-        for (Reservation r : reservations) {
+        java.util.Iterator<Reservation> iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = iterator.next();
             if (r.getReservationCode().equalsIgnoreCase(reservationCode)) {
                 return r;
             }
@@ -209,7 +211,9 @@ public class ReservationManager {
      * Bilet ID'sine göre bilet arar.
      */
     public Ticket getTicketById(String ticketId) {
-        for (Ticket t : tickets) {
+        java.util.Iterator<Ticket> iterator = tickets.iterator();
+        while (iterator.hasNext()) {
+            Ticket t = iterator.next();
             if (t.getTicketId().equals(ticketId)) {
                 return t;
             }

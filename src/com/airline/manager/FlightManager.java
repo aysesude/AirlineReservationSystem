@@ -74,12 +74,14 @@ public class FlightManager {
      * Uçuşu günceller.
      */
     public boolean updateFlight(Flight flight) {
-        for (int i = 0; i < flights.size(); i++) {
+        int i = 0;
+        while (i < flights.size()) {
             if (flights.get(i).getFlightNum().equals(flight.getFlightNum())) {
                 flights.set(i, flight);
                 saveToFile();
                 return true;
             }
+            i++;
         }
         return false;
     }
@@ -99,7 +101,9 @@ public class FlightManager {
      * Uçuş numarasına göre uçuş arar.
      */
     public Flight getFlightByNumber(String flightNum) {
-        for (Flight flight : flights) {
+        java.util.Iterator<Flight> iterator = flights.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             if (flight.getFlightNum().equalsIgnoreCase(flightNum)) {
                 return flight;
             }
@@ -171,7 +175,9 @@ public class FlightManager {
      * Uçak ID'sine göre uçak arar.
      */
     public Plane getPlaneById(String planeId) {
-        for (Plane plane : planes) {
+        java.util.Iterator<Plane> iterator = planes.iterator();
+        while (iterator.hasNext()) {
+            Plane plane = iterator.next();
             if (plane.getPlaneId().equals(planeId)) {
                 return plane;
             }

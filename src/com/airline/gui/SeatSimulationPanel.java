@@ -62,7 +62,8 @@ public class SeatSimulationPanel extends VBox {
 
         // Sütun başlıkları (A-F)
         char[] columns = {'A', 'B', 'C', ' ', 'D', 'E', 'F'};
-        for (int c = 0; c < columns.length; c++) {
+        int c = 0;
+        while (c < columns.length) {
             if (columns[c] != ' ') {
                 Label label = new Label(String.valueOf(columns[c]));
                 label.setFont(Font.font("Arial", FontWeight.BOLD, 10));
@@ -71,10 +72,12 @@ public class SeatSimulationPanel extends VBox {
                 label.setAlignment(Pos.CENTER);
                 seatGrid.add(label, c + 1, 0);
             }
+            c++;
         }
 
         // Koltukları oluştur
-        for (int row = 0; row < ROWS; row++) {
+        int row = 0;
+        while (row < ROWS) {
             // Sıra numarası
             Label rowLabel = new Label(String.valueOf(row + 1));
             rowLabel.setFont(Font.font("Arial", 9));
@@ -83,7 +86,8 @@ public class SeatSimulationPanel extends VBox {
             seatGrid.add(rowLabel, 0, row + 1);
 
             int colIndex = 0;
-            for (int col = 0; col < 7; col++) {
+            int col = 0;
+            while (col < 7) {
                 if (col == 3) {
                     // Koridor
                     Region corridor = new Region();
@@ -108,7 +112,9 @@ public class SeatSimulationPanel extends VBox {
                     seatGrid.add(rect, col + 1, row + 1);
                     colIndex++;
                 }
+                col++;
             }
+            row++;
         }
 
         // Lejant
@@ -199,7 +205,8 @@ public class SeatSimulationPanel extends VBox {
             Random random = new Random();
 
             // 90 yolcu thread'i oluştur
-            for (int i = 0; i < PASSENGER_COUNT; i++) {
+            int i = 0;
+            while (i < PASSENGER_COUNT) {
                 final int passengerId = i;
 
                 Thread passengerThread = new Thread(() -> {
@@ -255,10 +262,13 @@ public class SeatSimulationPanel extends VBox {
 
                 passengerThread.setName("Passenger-" + passengerId);
                 passengerThreads.add(passengerThread);
+                i++;
             }
 
             // Tüm thread'leri başlat
-            for (Thread t : passengerThreads) {
+            java.util.Iterator<Thread> threadIterator = passengerThreads.iterator();
+            while (threadIterator.hasNext()) {
+                Thread t = threadIterator.next();
                 t.start();
             }
 
@@ -313,14 +323,18 @@ public class SeatSimulationPanel extends VBox {
         statusLabel.setText("Hazır");
         statusLabel.setTextFill(Color.BLACK);
 
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < SEATS_PER_ROW; col++) {
+        int row = 0;
+        while (row < ROWS) {
+            int col = 0;
+            while (col < SEATS_PER_ROW) {
                 if (row < 5) {
                     seatRectangles[row][col].setFill(Color.LIGHTBLUE);
                 } else {
                     seatRectangles[row][col].setFill(Color.LIGHTGREEN);
                 }
+                col++;
             }
+            row++;
         }
         updateStatus(0, 0);
     }

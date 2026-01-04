@@ -47,7 +47,7 @@ public class ReportGenerator implements Runnable {
     /**
      * Rapor türü ile oluşturur.
      */
-    public ReportGenerator(FlightManager flightManager, ReservationManager reservationManager, 
+    public ReportGenerator(FlightManager flightManager, ReservationManager reservationManager,
                            ReportType reportType) {
         this.flightManager = flightManager;
         this.reservationManager = reservationManager;
@@ -95,7 +95,7 @@ public class ReportGenerator implements Runnable {
         report.append("Oluşturulma: ").append(getCurrentDateTime()).append("\n\n");
 
         List<Flight> flights = flightManager.getAllFlights();
-        
+
         if (flights.isEmpty()) {
             report.append("Henüz kayıtlı uçuş bulunmamaktadır.\n");
             return report.toString();
@@ -104,12 +104,14 @@ public class ReportGenerator implements Runnable {
         double totalOccupancy = 0;
         int flightCount = 0;
 
-        for (Flight flight : flights) {
+        java.util.Iterator<Flight> flightIterator = flights.iterator();
+        while (flightIterator.hasNext()) {
+            Flight flight = flightIterator.next();
             if (cancelled) return "Rapor iptal edildi.";
-            
+
             // Simüle edilmiş gecikme (uzun işlem)
             simulateDelay(100);
-            
+
             double occupancy = calculateOccupancyRate(flight);
             totalOccupancy += occupancy;
             flightCount++;
@@ -147,7 +149,7 @@ public class ReportGenerator implements Runnable {
         report.append("Oluşturulma: ").append(getCurrentDateTime()).append("\n\n");
 
         List<Reservation> reservations = reservationManager.getAllReservations();
-        
+
         if (reservations.isEmpty()) {
             report.append("Henüz kayıtlı rezervasyon bulunmamaktadır.\n");
             return report.toString();
@@ -157,13 +159,15 @@ public class ReportGenerator implements Runnable {
         int confirmedCount = 0;
         int cancelledCount = 0;
 
-        for (Reservation res : reservations) {
+        java.util.Iterator<Reservation> resIterator = reservations.iterator();
+        while (resIterator.hasNext()) {
+            Reservation res = resIterator.next();
             if (cancelled) return "Rapor iptal edildi.";
-            
+
             simulateDelay(50);
 
             double price = res.getSeat().getCalculatedPrice();
-            
+
             switch (res.getStatus()) {
                 case CONFIRMED:
                 case COMPLETED:
@@ -199,15 +203,17 @@ public class ReportGenerator implements Runnable {
         report.append("Oluşturulma: ").append(getCurrentDateTime()).append("\n\n");
 
         List<Reservation> reservations = reservationManager.getAllReservations();
-        
+
         if (reservations.isEmpty()) {
             report.append("Henüz kayıtlı rezervasyon bulunmamaktadır.\n");
             return report.toString();
         }
 
-        for (Reservation res : reservations) {
+        java.util.Iterator<Reservation> reservationIterator = reservations.iterator();
+        while (reservationIterator.hasNext()) {
+            Reservation res = reservationIterator.next();
             if (cancelled) return "Rapor iptal edildi.";
-            
+
             simulateDelay(30);
 
             report.append(String.format("Kod: %s | %s | %s → %s | Koltuk: %s | %s\n",
@@ -231,14 +237,14 @@ public class ReportGenerator implements Runnable {
      */
     public String generateFullReport() {
         StringBuilder report = new StringBuilder();
-        
+
         report.append("\n\n");
         report.append(generateOccupancyReport());
         report.append("\n\n");
         report.append(generateRevenueReport());
         report.append("\n\n");
         report.append(generateReservationReport());
-        
+
         return report.toString();
     }
 

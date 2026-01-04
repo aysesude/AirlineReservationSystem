@@ -52,7 +52,9 @@ public class UserManager {
      * @return Giriş başarılı ise kullanıcı, değilse null
      */
     public User login(String username, String password) {
-        for (User user : users) {
+        java.util.Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.login(username, password)) {
                 currentUser = user;
                 return user;
@@ -131,7 +133,9 @@ public class UserManager {
      * Kullanıcı adına göre kullanıcı arar.
      */
     public User getUserByUsername(String username) {
-        for (User user : users) {
+        java.util.Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getUsername().equalsIgnoreCase(username)) {
                 return user;
             }
@@ -143,7 +147,9 @@ public class UserManager {
      * ID'ye göre kullanıcı arar.
      */
     public User getUserById(String userId) {
-        for (User user : users) {
+        java.util.Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getUserId().equals(userId)) {
                 return user;
             }
@@ -171,12 +177,14 @@ public class UserManager {
      * Kullanıcı bilgilerini günceller.
      */
     public boolean updateUser(User user) {
-        for (int i = 0; i < users.size(); i++) {
+        int i = 0;
+        while (i < users.size()) {
             if (users.get(i).getUserId().equals(user.getUserId())) {
                 users.set(i, user);
                 saveToFile();
                 return true;
             }
+            i++;
         }
         return false;
     }
@@ -238,7 +246,9 @@ public class UserManager {
      * ID'ye göre yolcu arar.
      */
     public Passenger getPassengerById(String passengerId) {
-        for (Passenger p : passengers) {
+        java.util.Iterator<Passenger> iterator = passengers.iterator();
+        while (iterator.hasNext()) {
+            Passenger p = iterator.next();
             if (p.getPassengerId().equals(passengerId)) {
                 return p;
             }

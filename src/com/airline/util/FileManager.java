@@ -45,7 +45,7 @@ public class FileManager {
         if (!file.exists()) {
             return null;
         }
-        
+
         try (ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(file))) {
             return ois.readObject();
@@ -123,7 +123,7 @@ public class FileManager {
         if (!file.exists()) {
             return null;
         }
-        
+
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(file))) {
@@ -148,10 +148,13 @@ public class FileManager {
         File dir = new File(DATA_DIR);
         File[] fileList = dir.listFiles();
         if (fileList != null) {
-            for (File file : fileList) {
+            int i = 0;
+            while (i < fileList.length) {
+                File file = fileList[i];
                 if (file.isFile()) {
                     files.add(file.getName());
                 }
+                i++;
             }
         }
         return files;
@@ -164,8 +167,11 @@ public class FileManager {
         File dir = new File(DATA_DIR);
         File[] files = dir.listFiles();
         if (files != null) {
-            for (File file : files) {
+            int i = 0;
+            while (i < files.length) {
+                File file = files[i];
                 file.delete();
+                i++;
             }
         }
     }

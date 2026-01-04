@@ -143,7 +143,9 @@ public class SeatManagerTest {
 
         assertEquals(178, availableSeats.size(), "178 boş koltuk olmalı");
 
-        for (Seat seat : availableSeats) {
+        java.util.Iterator<Seat> iterator = availableSeats.iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             assertFalse(seat.isReserveStatus(), "Listede rezerve koltuk olmamalı");
         }
     }
@@ -160,11 +162,15 @@ public class SeatManagerTest {
         // 25 sıra economy * 6 koltuk = 150 economy koltuk
         assertEquals(150, economySeats.size(), "150 economy koltuk olmalı");
 
-        for (Seat seat : businessSeats) {
+        java.util.Iterator<Seat> businessIterator = businessSeats.iterator();
+        while (businessIterator.hasNext()) {
+            Seat seat = businessIterator.next();
             assertEquals(SeatClass.BUSINESS, seat.getClass_());
         }
 
-        for (Seat seat : economySeats) {
+        java.util.Iterator<Seat> economyIterator = economySeats.iterator();
+        while (economyIterator.hasNext()) {
+            Seat seat = economyIterator.next();
             assertEquals(SeatClass.ECONOMY, seat.getClass_());
         }
     }
@@ -186,10 +192,14 @@ public class SeatManagerTest {
                 "Başlangıçta doluluk %0 olmalı");
 
         // 18 koltuk rezerve et (%10)
-        for (int i = 1; i <= 3; i++) {
-            for (char c = 'A'; c <= 'F'; c++) {
+        int i = 1;
+        while (i <= 3) {
+            char c = 'A';
+            while (c <= 'F') {
                 seatManager.reserveSeat(i + String.valueOf(c));
+                c++;
             }
+            i++;
         }
 
         assertEquals(10.0, seatManager.getOccupancyRate(), 0.01,
@@ -209,7 +219,9 @@ public class SeatManagerTest {
     @DisplayName("Tüm koltuklar dolu iken rastgele koltuk null dönmeli")
     void testGetRandomAvailableSeatWhenFull() {
         // Tüm koltukları rezerve et
-        for (Seat seat : seatManager.getAllSeats()) {
+        java.util.Iterator<Seat> iterator = seatManager.getAllSeats().iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             seat.reserve();
         }
 

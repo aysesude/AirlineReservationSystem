@@ -54,13 +54,17 @@ public class Plane implements Serializable {
     private void initializeSeats(double basePrice) {
         char[] columns = {'A', 'B', 'C', 'D', 'E', 'F'};
 
-        for (int row = 1; row <= rows; row++) {
-            for (int col = 0; col < seatsPerRow && col < columns.length; col++) {
+        int row = 1;
+        while (row <= rows) {
+            int col = 0;
+            while (col < seatsPerRow && col < columns.length) {
                 String seatNum = row + String.valueOf(columns[col]);
                 SeatClass seatClass = (row <= businessRows) ? SeatClass.BUSINESS : SeatClass.ECONOMY;
                 Seat seat = new Seat(seatNum, seatClass, basePrice);
                 seatMatrix.put(seatNum, seat);
+                col++;
             }
+            row++;
         }
     }
 
@@ -76,7 +80,9 @@ public class Plane implements Serializable {
      */
     public List<Seat> getAvailableSeats() {
         List<Seat> availableSeats = new ArrayList<>();
-        for (Seat seat : seatMatrix.values()) {
+        java.util.Iterator<Seat> iterator = seatMatrix.values().iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             if (!seat.isReserveStatus()) {
                 availableSeats.add(seat);
             }
@@ -89,7 +95,9 @@ public class Plane implements Serializable {
      */
     public List<Seat> getAvailableSeatsByClass(SeatClass seatClass) {
         List<Seat> availableSeats = new ArrayList<>();
-        for (Seat seat : seatMatrix.values()) {
+        java.util.Iterator<Seat> iterator = seatMatrix.values().iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             if (!seat.isReserveStatus() && seat.getClass_() == seatClass) {
                 availableSeats.add(seat);
             }
@@ -109,7 +117,9 @@ public class Plane implements Serializable {
      */
     public int getAvailableSeatCount() {
         int count = 0;
-        for (Seat seat : seatMatrix.values()) {
+        java.util.Iterator<Seat> iterator = seatMatrix.values().iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             if (!seat.isReserveStatus()) {
                 count++;
             }
@@ -128,7 +138,9 @@ public class Plane implements Serializable {
      * Tüm koltukları serbest bırakır.
      */
     public void resetAllSeats() {
-        for (Seat seat : seatMatrix.values()) {
+        java.util.Iterator<Seat> iterator = seatMatrix.values().iterator();
+        while (iterator.hasNext()) {
+            Seat seat = iterator.next();
             seat.release();
         }
     }

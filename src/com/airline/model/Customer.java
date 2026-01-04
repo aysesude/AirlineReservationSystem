@@ -81,7 +81,9 @@ public class Customer extends User {
      */
     public int getActiveReservationCount() {
         int count = 0;
-        for (Reservation r : reservationHistory) {
+        java.util.Iterator<Reservation> iterator = reservationHistory.iterator();
+        while (iterator.hasNext()) {
+            Reservation r = iterator.next();
             if (r.isActive()) {
                 count++;
             }
@@ -109,7 +111,7 @@ public class Customer extends User {
     @Override
     public String toString() {
         return String.format("Customer{id='%s', username='%s', passenger='%s', reservations=%d}",
-                getUserId(), getUsername(), 
+                getUserId(), getUsername(),
                 passenger != null ? passenger.getFullName() : "N/A",
                 reservationHistory.size());
     }

@@ -52,14 +52,18 @@ public class MainApp extends Application {
      */
     private void syncReservationsWithFlights() {
         // Önce tüm uçuşlardaki koltukları sıfırla
-        for (com.airline.model.Flight flight : flightManager.getAllFlights()) {
+        java.util.Iterator<com.airline.model.Flight> flightIterator = flightManager.getAllFlights().iterator();
+        while (flightIterator.hasNext()) {
+            com.airline.model.Flight flight = flightIterator.next();
             if (flight.getPlane() != null) {
                 flight.getPlane().resetAllSeats();
             }
         }
 
         // Sonra sadece aktif rezervasyonlardaki koltukları rezerve et
-        for (com.airline.model.Reservation reservation : reservationManager.getAllReservations()) {
+        java.util.Iterator<com.airline.model.Reservation> reservationIterator = reservationManager.getAllReservations().iterator();
+        while (reservationIterator.hasNext()) {
+            com.airline.model.Reservation reservation = reservationIterator.next();
             System.out.println("DEBUG: Rezervasyon " + reservation.getReservationCode() +
                 " - Status: " + reservation.getStatus() +
                 " - isActive: " + reservation.isActive() +

@@ -31,7 +31,7 @@ public class FlightSearchEngineTest {
         // Her test için temiz bir FlightManager oluştur
         flightManager = new FlightManager();
         flightManager.clearAllData();
-        
+
         searchEngine = new FlightSearchEngine(flightManager);
         testPlane = new Plane("TEST-001", "Boeing 737", 500);
 
@@ -47,7 +47,7 @@ public class FlightSearchEngineTest {
         // Istanbul -> Ankara uçuşları
         Route route1 = new Route("İstanbul", "IST", "Ankara", "ESB");
         flightManager.createFlight("TK101", route1, today, LocalTime.of(10, 0), 60, testPlane);
-        flightManager.createFlight("TK102", route1, tomorrow, LocalTime.of(14, 0), 60, 
+        flightManager.createFlight("TK102", route1, tomorrow, LocalTime.of(14, 0), 60,
                 new Plane("TEST-002", "Airbus A320", 450));
 
         // Istanbul -> Izmir uçuşları
@@ -66,12 +66,14 @@ public class FlightSearchEngineTest {
     @DisplayName("Kalkış ve varış şehrine göre uçuş arama testi")
     void testSearchFlightsByRoute() {
         List<Flight> results = searchEngine.searchFlights("İstanbul", "Ankara");
-        
+
         assertNotNull(results, "Sonuç null olmamalı");
         assertFalse(results.isEmpty(), "En az bir uçuş bulunmalı");
-        
+
         // Tüm sonuçlar Istanbul -> Ankara olmalı
-        for (Flight flight : results) {
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertEquals("İstanbul", flight.getDeparturePlace());
             assertEquals("Ankara", flight.getArrivalPlace());
         }
@@ -82,10 +84,12 @@ public class FlightSearchEngineTest {
     void testSearchFlightsWithDate() {
         LocalDate today = LocalDate.now();
         List<Flight> results = searchEngine.searchFlights("İstanbul", "Ankara", today);
-        
+
         assertFalse(results.isEmpty(), "Bugün için uçuş bulunmalı");
-        
-        for (Flight flight : results) {
+
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertEquals(today, flight.getDate(), "Tüm uçuşlar bugüne ait olmalı");
         }
     }
@@ -94,7 +98,7 @@ public class FlightSearchEngineTest {
     @DisplayName("Bulunamayan rota testi")
     void testSearchFlightsNoResults() {
         List<Flight> results = searchEngine.searchFlights("İstanbul", "Tokyo");
-        
+
         assertTrue(results.isEmpty(), "Tokyo uçuşu bulunmamalı");
     }
 
@@ -102,10 +106,12 @@ public class FlightSearchEngineTest {
     @DisplayName("Kalkış şehrine göre filtreleme testi")
     void testFilterByDeparture() {
         List<Flight> results = searchEngine.filterByDeparture("İstanbul");
-        
+
         assertFalse(results.isEmpty(), "İstanbul'dan kalkan uçuş bulunmalı");
-        
-        for (Flight flight : results) {
+
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertEquals("İstanbul", flight.getDeparturePlace());
         }
     }
@@ -114,10 +120,12 @@ public class FlightSearchEngineTest {
     @DisplayName("Varış şehrine göre filtreleme testi")
     void testFilterByArrival() {
         List<Flight> results = searchEngine.filterByArrival("Ankara");
-        
+
         assertFalse(results.isEmpty(), "Ankara'ya giden uçuş bulunmalı");
-        
-        for (Flight flight : results) {
+
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertEquals("Ankara", flight.getArrivalPlace());
         }
     }
@@ -127,10 +135,12 @@ public class FlightSearchEngineTest {
     void testFilterByDate() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<Flight> results = searchEngine.filterByDate(tomorrow);
-        
+
         assertFalse(results.isEmpty(), "Yarın için uçuş bulunmalı");
-        
-        for (Flight flight : results) {
+
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertEquals(tomorrow, flight.getDate());
         }
     }
@@ -139,8 +149,10 @@ public class FlightSearchEngineTest {
     @DisplayName("Süresi geçmiş uçuşları çıkarma testi")
     void testRemoveExpiredFlights() {
         List<Flight> activeFlights = searchEngine.removeExpiredFlights();
-        
-        for (Flight flight : activeFlights) {
+
+        java.util.Iterator<Flight> iterator = activeFlights.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertFalse(flight.isExpired(), "Expired uçuş olmamalı");
         }
     }
@@ -149,9 +161,11 @@ public class FlightSearchEngineTest {
     @DisplayName("Müsait uçuşları getirme testi")
     void testGetAvailableFlights() {
         List<Flight> availableFlights = searchEngine.getAvailableFlights();
-        
-        for (Flight flight : availableFlights) {
-            assertTrue(flight.getAvailableSeatCount() > 0, 
+
+        java.util.Iterator<Flight> iterator = availableFlights.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
+            assertTrue(flight.getAvailableSeatCount() > 0,
                     "Her uçuşta boş koltuk olmalı");
             assertFalse(flight.isExpired(), "Expired uçuş olmamalı");
         }
@@ -161,7 +175,7 @@ public class FlightSearchEngineTest {
     @DisplayName("Uçuş numarasına göre arama testi")
     void testFindByFlightNumber() {
         Flight found = searchEngine.findByFlightNumber("TK101");
-        
+
         assertNotNull(found, "TK101 uçuşu bulunmalı");
         assertEquals("TK101", found.getFlightNum());
     }
@@ -170,7 +184,7 @@ public class FlightSearchEngineTest {
     @DisplayName("Bulunamayan uçuş numarası testi")
     void testFindByFlightNumberNotFound() {
         Flight found = searchEngine.findByFlightNumber("NOTEXIST");
-        
+
         assertNull(found, "Olmayan uçuş null dönmeli");
     }
 
@@ -203,10 +217,12 @@ public class FlightSearchEngineTest {
     void testGetFlightsBetweenDates() {
         LocalDate start = LocalDate.now();
         LocalDate end = LocalDate.now().plusDays(7);
-        
+
         List<Flight> results = searchEngine.getFlightsBetweenDates(start, end);
-        
-        for (Flight flight : results) {
+
+        java.util.Iterator<Flight> iterator = results.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
             assertTrue(!flight.getDate().isBefore(start), "Tarih başlangıçtan önce olmamalı");
             assertTrue(!flight.getDate().isAfter(end), "Tarih bitişten sonra olmamalı");
         }
@@ -217,7 +233,7 @@ public class FlightSearchEngineTest {
     void testInvalidDateRangeThrowsException() {
         LocalDate start = LocalDate.now().plusDays(7);
         LocalDate end = LocalDate.now();
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             searchEngine.getFlightsBetweenDates(start, end);
         }, "Başlangıç bitişten sonra olamaz");
@@ -227,7 +243,7 @@ public class FlightSearchEngineTest {
     @DisplayName("Tüm kalkış şehirlerini getirme testi")
     void testGetAllDepartureCities() {
         List<String> cities = searchEngine.getAllDepartureCities();
-        
+
         assertFalse(cities.isEmpty(), "En az bir kalkış şehri olmalı");
         assertTrue(cities.contains("İstanbul"), "İstanbul listede olmalı");
     }
@@ -236,7 +252,7 @@ public class FlightSearchEngineTest {
     @DisplayName("Tüm varış şehirlerini getirme testi")
     void testGetAllArrivalCities() {
         List<String> cities = searchEngine.getAllArrivalCities();
-        
+
         assertFalse(cities.isEmpty(), "En az bir varış şehri olmalı");
         assertTrue(cities.contains("Ankara"), "Ankara listede olmalı");
     }
