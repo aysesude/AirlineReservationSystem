@@ -19,9 +19,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
+import javafx.scene.Cursor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +42,10 @@ public class CustomerDashboard {
     private ComboBox<String> departureCombo;
     private ComboBox<String> arrivalCombo;
     private DatePicker datePicker;
+    private DatePicker returnDatePicker;
+    private ComboBox<String> tripTypeCombo;
+    private ComboBox<String> passengerCombo;
+    private ComboBox<SeatClass> cabinClassCombo;
 
     public CustomerDashboard(Stage stage, Customer customer) {
         this.stage = stage;
@@ -66,7 +73,7 @@ public class CustomerDashboard {
         tabPane.getTabs().addAll(searchTab, reservationsTab);
         mainLayout.setCenter(tabPane);
 
-        Scene scene = new Scene(mainLayout, 1000, 700);
+        Scene scene = new Scene(mainLayout, 1100, 750);
         stage.setScene(scene);
         stage.show();
     }
@@ -75,7 +82,7 @@ public class CustomerDashboard {
         HBox header = new HBox();
         header.setPadding(new Insets(15, 20, 15, 20));
         header.setAlignment(Pos.CENTER_LEFT);
-        header.setStyle("-fx-background-color: #1a237e;");
+        header.setStyle("-fx-background-color: #05203c;");
 
         Label titleLabel = new Label("✈ Havayolu Rezervasyon Sistemi");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -101,70 +108,328 @@ public class CustomerDashboard {
     }
 
     private VBox createSearchPane() {
-        VBox pane = new VBox(15);
-        pane.setPadding(new Insets(20));
+        VBox pane = new VBox(20);
+        pane.setPadding(new Insets(0));
+        pane.setStyle("-fx-background-color: #f5f5f5;");
 
-        // Arama formu
-        HBox searchBox = new HBox(15);
-        searchBox.setAlignment(Pos.CENTER_LEFT);
+        // Ana arama bölümü - koyu mavi arka plan
+        VBox searchSection = new VBox(15);
+        searchSection.setPadding(new Insets(20, 30, 25, 30));
+        searchSection.setStyle("-fx-background-color: #05203c;");
 
-        // Kalkış şehri
-        VBox depBox = new VBox(5);
-        depBox.getChildren().add(new Label("Nereden"));
-        departureCombo = new ComboBox<>();
-        departureCombo.setPromptText("Şehir seçin");
-        departureCombo.setPrefWidth(150);
-        depBox.getChildren().add(departureCombo);
+        // Üst kısım: Trip Type Chip
+        HBox topRow = new HBox(10);
+        topRow.setAlignment(Pos.CENTER_LEFT);
 
-        // Varış şehri
-        VBox arrBox = new VBox(5);
-        arrBox.getChildren().add(new Label("Nereye"));
-        arrivalCombo = new ComboBox<>();
-        arrivalCombo.setPromptText("Şehir seçin");
-        arrivalCombo.setPrefWidth(150);
-        arrBox.getChildren().add(arrivalCombo);
+        tripTypeCombo = new ComboBox<>();
+        tripTypeCombo.getItems().addAll("Gidiş Dönüş", "Tek Yön");
+        tripTypeCombo.setValue("Gidiş Dönüş");
+        tripTypeCombo.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: rgba(255,255,255,0.5); " +
+            "-fx-border-radius: 20; " +
+            "-fx-background-radius: 20; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 13px; " +
+            "-fx-padding: 6 12;"
+        );
 
-        // Şehirleri yükle (ComboBox'lar oluşturulduktan sonra)
-        loadCities();
+        topRow.getChildren().add(tripTypeCombo);
 
-        // Tarih
-        VBox dateBox = new VBox(5);
-        dateBox.getChildren().add(new Label("Tarih"));
-        datePicker = new DatePicker(LocalDate.now());
-        datePicker.setPrefWidth(150);
-        dateBox.getChildren().add(datePicker);
+        // Ana arama kutusu - beyaz arka plan
+        HBox searchBox = new HBox(0);
+        searchBox.setAlignment(Pos.CENTER);
+        searchBox.setStyle(
+            "-fx-background-color: white; " +
+            "-fx-background-radius: 10; " +
+            "-fx-border-radius: 10;"
+        );
+        searchBox.setPadding(new Insets(5));
 
-        // Ara butonu
-        Button searchButton = new Button("🔍 Ara");
-        searchButton.setStyle("-fx-background-color: #1a237e; -fx-text-fill: white; " +
-                "-fx-font-size: 14px; -fx-padding: 10 20;");
+        // Kalkış Bölümü
+        VBox departureBox = createSearchField("Kalkış:", "Ülke, şehir veya havaalanı", true);
+        departureBox.setPrefWidth(200);
+
+        // Swap Button - Skyscanner tarzı yukarı-aşağı oklar
+        StackPane swapButtonPane = new StackPane();
+        swapButtonPane.setStyle(
+            "-fx-background-color: white; " +
+            "-fx-border-color: #05203c; " +
+            "-fx-border-width: 3; " +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 50; " +
+            "-fx-min-width: 40; " +
+            "-fx-min-height: 40; " +
+            "-fx-max-width: 40; " +
+            "-fx-max-height: 40; " +
+            "-fx-cursor: hand;"
+        );
+        swapButtonPane.setCursor(Cursor.HAND);
+
+        // SVGPath ile yukarı-aşağı ok ikonu
+        SVGPath swapIcon = new SVGPath();
+        swapIcon.setContent("M2 4 L6 0 L10 4 M6 0 L6 14 M14 10 L18 14 L22 10 M18 14 L18 0");
+        swapIcon.setStyle("-fx-fill: transparent; -fx-stroke: #05203c; -fx-stroke-width: 2;");
+        swapIcon.setScaleX(0.6);
+        swapIcon.setScaleY(0.6);
+        swapIcon.setRotate(90); // 90 derece çevir - yatay yap
+
+        swapButtonPane.getChildren().add(swapIcon);
+        swapButtonPane.setOnMouseClicked(e -> swapLocations());
+        swapButtonPane.setOnMouseEntered(e -> swapButtonPane.setStyle(
+            "-fx-background-color: #f0f0f0; " +
+            "-fx-border-color: #05203c; " +
+            "-fx-border-width: 3; " +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 50; " +
+            "-fx-min-width: 40; " +
+            "-fx-min-height: 40; " +
+            "-fx-max-width: 40; " +
+            "-fx-max-height: 40; " +
+            "-fx-cursor: hand;"
+        ));
+        swapButtonPane.setOnMouseExited(e -> swapButtonPane.setStyle(
+            "-fx-background-color: white; " +
+            "-fx-border-color: #05203c; " +
+            "-fx-border-width: 3; " +
+            "-fx-border-radius: 50; " +
+            "-fx-background-radius: 50; " +
+            "-fx-min-width: 40; " +
+            "-fx-min-height: 40; " +
+            "-fx-max-width: 40; " +
+            "-fx-max-height: 40; " +
+            "-fx-cursor: hand;"
+        ));
+
+        StackPane swapPane = new StackPane(swapButtonPane);
+        swapPane.setPadding(new Insets(10, 5, 0, 5));
+
+        // Varış Bölümü
+        VBox arrivalBox = createSearchField("Nereye", "Ülke, şehir veya havaalanı", false);
+        arrivalBox.setPrefWidth(200);
+
+        // Ayırıcı
+        Region separator1 = createSeparator();
+
+        // Kalkış Tarihi
+        VBox departureDateBox = createDateField("Kalkış", "Tarih ekleyin", true);
+        departureDateBox.setPrefWidth(140);
+
+        // Ayırıcı
+        Region separator2 = createSeparator();
+
+        // Dönüş Tarihi
+        VBox returnDateBox = createDateField("Dönüş", "Tarih ekleyin", false);
+        returnDateBox.setPrefWidth(140);
+
+        // Ayırıcı
+        Region separator3 = createSeparator();
+
+        // Trip Type değişikliğinde dönüş tarihini gizle/göster
+        tripTypeCombo.setOnAction(e -> {
+            boolean isRoundTrip = "Gidiş Dönüş".equals(tripTypeCombo.getValue());
+            returnDateBox.setVisible(isRoundTrip);
+            returnDateBox.setManaged(isRoundTrip);
+            separator2.setVisible(isRoundTrip);
+            separator2.setManaged(isRoundTrip);
+        });
+
+        // Yolcular ve Kabin Sınıfı
+        VBox passengerBox = createPassengerField();
+        passengerBox.setPrefWidth(180);
+
+        // Ara Butonu
+        Button searchButton = new Button("Ara");
+        searchButton.setStyle(
+            "-fx-background-color: #0770e3; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-radius: 8; " +
+            "-fx-padding: 15 30; " +
+            "-fx-cursor: hand;"
+        );
+        searchButton.setCursor(Cursor.HAND);
         searchButton.setOnAction(e -> searchFlights());
 
-        // Tüm uçuşları göster
-        Button showAllButton = new Button("Tümünü Göster");
+        searchBox.getChildren().addAll(
+            departureBox, swapPane, arrivalBox, separator1,
+            departureDateBox, separator2, returnDateBox, separator3,
+            passengerBox, searchButton
+        );
+
+        // Tüm uçuşları göster butonu
+        Button showAllButton = new Button("Tüm Uçuşları Göster");
+        showAllButton.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-text-fill: rgba(255,255,255,0.8); " +
+            "-fx-font-size: 13px; " +
+            "-fx-underline: true; " +
+            "-fx-cursor: hand;"
+        );
+        showAllButton.setCursor(Cursor.HAND);
         showAllButton.setOnAction(e -> showAllFlights());
 
-        searchBox.getChildren().addAll(depBox, arrBox, dateBox, searchButton, showAllButton);
+        HBox bottomRow = new HBox(showAllButton);
+        bottomRow.setAlignment(Pos.CENTER_RIGHT);
+        bottomRow.setPadding(new Insets(10, 0, 0, 0));
+
+        searchSection.getChildren().addAll(topRow, searchBox, bottomRow);
+
+        // Sonuçlar bölümü
+        VBox resultsSection = new VBox(15);
+        resultsSection.setPadding(new Insets(20));
+        resultsSection.setStyle("-fx-background-color: #f5f5f5;");
+
+        Label resultsLabel = new Label("Uçuş Sonuçları");
+        resultsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        resultsLabel.setTextFill(Color.web("#05203c"));
 
         // Uçuş tablosu
         flightTable = createFlightTable();
 
         // Rezervasyon butonu
         Button reserveButton = new Button("✈ Seçili Uçuşu Rezerve Et");
-        reserveButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; " +
-                "-fx-font-size: 14px; -fx-padding: 10 30;");
+        reserveButton.setStyle(
+            "-fx-background-color: #0770e3; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 12 30; " +
+            "-fx-background-radius: 8;"
+        );
+        reserveButton.setCursor(Cursor.HAND);
         reserveButton.setOnAction(e -> makeReservation());
 
         HBox buttonBox = new HBox(reserveButton);
         buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
-        pane.getChildren().addAll(searchBox, flightTable, buttonBox);
+        resultsSection.getChildren().addAll(resultsLabel, flightTable, buttonBox);
         VBox.setVgrow(flightTable, Priority.ALWAYS);
+
+        pane.getChildren().addAll(searchSection, resultsSection);
+        VBox.setVgrow(resultsSection, Priority.ALWAYS);
+
+        // Şehirleri yükle
+        loadCities();
 
         // Başlangıçta tüm uçuşları göster
         showAllFlights();
 
         return pane;
+    }
+
+    private VBox createSearchField(String label, String placeholder, boolean isDeparture) {
+        VBox box = new VBox(2);
+        box.setPadding(new Insets(10, 15, 10, 15));
+
+        Label fieldLabel = new Label(label);
+        fieldLabel.setStyle("-fx-text-fill: #68697f; -fx-font-size: 12px;");
+
+        ComboBox<String> combo;
+        if (isDeparture) {
+            departureCombo = new ComboBox<>();
+            combo = departureCombo;
+        } else {
+            arrivalCombo = new ComboBox<>();
+            combo = arrivalCombo;
+        }
+
+        combo.setPromptText(placeholder);
+        combo.setEditable(true);
+        combo.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: transparent; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 0;"
+        );
+        combo.setPrefWidth(170);
+
+        box.getChildren().addAll(fieldLabel, combo);
+        return box;
+    }
+
+    private VBox createDateField(String label, String placeholder, boolean isDeparture) {
+        VBox box = new VBox(2);
+        box.setPadding(new Insets(10, 15, 10, 15));
+
+        Label fieldLabel = new Label(label);
+        fieldLabel.setStyle("-fx-text-fill: #68697f; -fx-font-size: 12px;");
+
+        DatePicker picker;
+        if (isDeparture) {
+            datePicker = new DatePicker();
+            picker = datePicker;
+        } else {
+            returnDatePicker = new DatePicker();
+            picker = returnDatePicker;
+        }
+
+        picker.setPromptText(placeholder);
+        picker.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: transparent; " +
+            "-fx-font-size: 13px;"
+        );
+        picker.setPrefWidth(120);
+
+        box.getChildren().addAll(fieldLabel, picker);
+        return box;
+    }
+
+    private VBox createPassengerField() {
+        VBox box = new VBox(2);
+        box.setPadding(new Insets(10, 15, 10, 15));
+
+        Label fieldLabel = new Label("Yolcular ve kabin sınıfı");
+        fieldLabel.setStyle("-fx-text-fill: #68697f; -fx-font-size: 12px;");
+
+        HBox valueBox = new HBox(5);
+        valueBox.setAlignment(Pos.CENTER_LEFT);
+
+        passengerCombo = new ComboBox<>();
+        passengerCombo.getItems().addAll("1 yetişkin", "2 yetişkin", "3 yetişkin", "4 yetişkin");
+        passengerCombo.setValue("1 yetişkin");
+        passengerCombo.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: transparent; " +
+            "-fx-font-size: 13px; " +
+            "-fx-font-weight: bold;"
+        );
+
+        Label commaLabel = new Label(",");
+        commaLabel.setStyle("-fx-font-weight: bold;");
+
+        cabinClassCombo = new ComboBox<>();
+        cabinClassCombo.getItems().addAll(SeatClass.values());
+        cabinClassCombo.setValue(SeatClass.ECONOMY);
+        cabinClassCombo.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-border-color: transparent; " +
+            "-fx-font-size: 13px; " +
+            "-fx-font-weight: bold;"
+        );
+
+        valueBox.getChildren().addAll(passengerCombo, commaLabel, cabinClassCombo);
+        box.getChildren().addAll(fieldLabel, valueBox);
+        return box;
+    }
+
+    private Region createSeparator() {
+        Region separator = new Region();
+        separator.setStyle("-fx-background-color: #e0e0e0;");
+        separator.setPrefWidth(1);
+        separator.setPrefHeight(50);
+        return separator;
+    }
+
+    private void swapLocations() {
+        String departure = departureCombo.getValue();
+        String arrival = arrivalCombo.getValue();
+        departureCombo.setValue(arrival);
+        arrivalCombo.setValue(departure);
     }
 
     private void loadCities() {
@@ -227,17 +492,58 @@ public class CustomerDashboard {
         String departure = departureCombo.getValue();
         String arrival = arrivalCombo.getValue();
         LocalDate date = datePicker.getValue();
+        boolean isRoundTrip = "Gidiş Dönüş".equals(tripTypeCombo.getValue());
+        LocalDate returnDate = returnDatePicker.getValue();
 
         if (departure == null || arrival == null) {
             showAlert("Uyarı", "Lütfen kalkış ve varış şehirlerini seçin!");
             return;
         }
 
-        List<Flight> results = searchEngine.searchFlights(departure, arrival, date);
-        flightTable.setItems(FXCollections.observableArrayList(results));
+        // Gidiş-dönüş seçiliyse dönüş tarihini kontrol et
+        if (isRoundTrip && returnDate == null) {
+            showAlert("Uyarı", "Gidiş-dönüş için lütfen dönüş tarihini de seçin!");
+            return;
+        }
 
-        if (results.isEmpty()) {
-            showAlert("Bilgi", "Arama kriterlerine uygun uçuş bulunamadı.");
+        // Dönüş tarihi kalkış tarihinden önce olamaz
+        if (isRoundTrip && date != null && returnDate != null && returnDate.isBefore(date)) {
+            showAlert("Uyarı", "Dönüş tarihi kalkış tarihinden önce olamaz!");
+            return;
+        }
+
+        // Gidiş uçuşlarını ara
+        List<Flight> outboundResults = searchEngine.searchFlights(departure, arrival, date);
+
+        if (isRoundTrip) {
+            // Dönüş uçuşlarını da ara (varış -> kalkış)
+            List<Flight> returnResults = searchEngine.searchFlights(arrival, departure, returnDate);
+
+            // Her iki yönde de uçuş varsa göster
+            if (outboundResults.isEmpty() && returnResults.isEmpty()) {
+                flightTable.setItems(FXCollections.observableArrayList());
+                showAlert("Bilgi", "Gidiş ve dönüş için uygun uçuş bulunamadı.");
+            } else if (outboundResults.isEmpty()) {
+                flightTable.setItems(FXCollections.observableArrayList(returnResults));
+                showAlert("Bilgi", "Gidiş için uygun uçuş bulunamadı. Sadece dönüş uçuşları gösteriliyor.");
+            } else if (returnResults.isEmpty()) {
+                flightTable.setItems(FXCollections.observableArrayList(outboundResults));
+                showAlert("Bilgi", "Dönüş için uygun uçuş bulunamadı. Sadece gidiş uçuşları gösteriliyor.");
+            } else {
+                // Her iki yönün uçuşlarını birleştir
+                List<Flight> allResults = new ArrayList<>();
+                allResults.addAll(outboundResults);
+                allResults.addAll(returnResults);
+                flightTable.setItems(FXCollections.observableArrayList(allResults));
+                showAlert("Bilgi", String.format("Gidiş: %d uçuş, Dönüş: %d uçuş bulundu.",
+                    outboundResults.size(), returnResults.size()));
+            }
+        } else {
+            // Tek yön - sadece gidiş uçuşlarını göster
+            flightTable.setItems(FXCollections.observableArrayList(outboundResults));
+            if (outboundResults.isEmpty()) {
+                showAlert("Bilgi", "Arama kriterlerine uygun uçuş bulunamadı.");
+            }
         }
     }
 
