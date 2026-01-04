@@ -71,7 +71,7 @@ public class AdminDashboard {
         HBox header = new HBox();
         header.setPadding(new Insets(15, 20, 15, 20));
         header.setAlignment(Pos.CENTER_LEFT);
-        header.setStyle("-fx-background-color: #1a237e;");
+        header.setStyle("-fx-background-color: #f9a825;");
 
         Label titleLabel = new Label("✈ Havayolu Yönetim Paneli");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -458,7 +458,7 @@ public class AdminDashboard {
         reservationButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.RESERVATION));
 
         Button fullButton = new Button("📑 Tam Rapor");
-        fullButton.setStyle("-fx-background-color: #1a237e; -fx-text-fill: white;");
+        fullButton.setStyle("-fx-background-color: #f9a825; -fx-text-fill: white;");
         fullButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.FULL));
 
         buttonBox.getChildren().addAll(occupancyButton, revenueButton, reservationButton, fullButton);

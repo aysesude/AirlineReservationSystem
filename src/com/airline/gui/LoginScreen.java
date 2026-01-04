@@ -37,7 +37,7 @@ public class LoginScreen {
         VBox mainLayout = new VBox(20);
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.setPadding(new Insets(40));
-        mainLayout.setStyle("-fx-background-color: linear-gradient(to bottom, #1a237e, #283593);");
+        mainLayout.setStyle("-fx-background-color: linear-gradient(to bottom, #f9a825, #ff8f00);");
 
         // Başlık
         Label titleLabel = new Label("✈ Havayolu Rezervasyon Sistemi");
@@ -79,7 +79,7 @@ public class LoginScreen {
         Button loginButton = new Button("Giriş Yap");
         loginButton.setPrefWidth(200);
         loginButton.setPrefHeight(40);
-        loginButton.setStyle("-fx-background-color: #1a237e; -fx-text-fill: white; " +
+        loginButton.setStyle("-fx-background-color: #f9a825; -fx-text-fill: white; " +
                 "-fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;");
         loginButton.setOnAction(e -> handleLogin());
 
@@ -87,8 +87,8 @@ public class LoginScreen {
         Button registerButton = new Button("Yeni Hesap Oluştur");
         registerButton.setPrefWidth(200);
         registerButton.setPrefHeight(35);
-        registerButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a237e; " +
-                "-fx-font-size: 12px; -fx-cursor: hand; -fx-border-color: #1a237e; -fx-border-radius: 5;");
+        registerButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #f9a825; " +
+                "-fx-font-size: 12px; -fx-cursor: hand; -fx-border-color: #f9a825; -fx-border-radius: 5;");
         registerButton.setOnAction(e -> showRegisterDialog());
 
         // Enter tuşu ile giriş
@@ -127,7 +127,7 @@ public class LoginScreen {
 
         if (user != null) {
             showMessage("Giriş başarılı!", Color.GREEN);
-            
+
             // Kullanıcı rolüne göre ekran aç
             if (user.getRole() == UserRole.ADMIN || user.getRole() == UserRole.STAFF) {
                 new AdminDashboard(stage, user).show();

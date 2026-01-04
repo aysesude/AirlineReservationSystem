@@ -122,8 +122,8 @@ public class Seat implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Koltuk %s (%s) - %.2f TL",
-                seatNum, Class.getDisplayName(), getCalculatedPrice());
+        return String.format("Koltuk %s (%s)",
+                seatNum, Class.getDisplayName());
     }
 
     @Override

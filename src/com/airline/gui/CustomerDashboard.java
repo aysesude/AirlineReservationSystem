@@ -82,7 +82,7 @@ public class CustomerDashboard {
         HBox header = new HBox();
         header.setPadding(new Insets(15, 20, 15, 20));
         header.setAlignment(Pos.CENTER_LEFT);
-        header.setStyle("-fx-background-color: #05203c;");
+        header.setStyle("-fx-background-color: #ffc107;");
 
         Label titleLabel = new Label("✈ Havayolu Rezervasyon Sistemi");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -112,10 +112,10 @@ public class CustomerDashboard {
         pane.setPadding(new Insets(0));
         pane.setStyle("-fx-background-color: #f5f5f5;");
 
-        // Ana arama bölümü - koyu mavi arka plan
+        // Ana arama bölümü - koyu sarı arka plan
         VBox searchSection = new VBox(15);
         searchSection.setPadding(new Insets(20, 30, 25, 30));
-        searchSection.setStyle("-fx-background-color: #05203c;");
+        searchSection.setStyle("-fx-background-color: #ffc107;");
 
         // Üst kısım: Trip Type Chip
         HBox topRow = new HBox(10);
@@ -154,7 +154,7 @@ public class CustomerDashboard {
         StackPane swapButtonPane = new StackPane();
         swapButtonPane.setStyle(
             "-fx-background-color: white; " +
-            "-fx-border-color: #05203c; " +
+            "-fx-border-color: #ffc107; " +
             "-fx-border-width: 3; " +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 50; " +
@@ -169,7 +169,7 @@ public class CustomerDashboard {
         // SVGPath ile yukarı-aşağı ok ikonu
         SVGPath swapIcon = new SVGPath();
         swapIcon.setContent("M2 4 L6 0 L10 4 M6 0 L6 14 M14 10 L18 14 L22 10 M18 14 L18 0");
-        swapIcon.setStyle("-fx-fill: transparent; -fx-stroke: #05203c; -fx-stroke-width: 2;");
+        swapIcon.setStyle("-fx-fill: transparent; -fx-stroke: #ffc107; -fx-stroke-width: 2;");
         swapIcon.setScaleX(0.6);
         swapIcon.setScaleY(0.6);
         swapIcon.setRotate(90); // 90 derece çevir - yatay yap
@@ -178,7 +178,7 @@ public class CustomerDashboard {
         swapButtonPane.setOnMouseClicked(e -> swapLocations());
         swapButtonPane.setOnMouseEntered(e -> swapButtonPane.setStyle(
             "-fx-background-color: #f0f0f0; " +
-            "-fx-border-color: #05203c; " +
+            "-fx-border-color: #ffc107; " +
             "-fx-border-width: 3; " +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 50; " +
@@ -190,7 +190,7 @@ public class CustomerDashboard {
         ));
         swapButtonPane.setOnMouseExited(e -> swapButtonPane.setStyle(
             "-fx-background-color: white; " +
-            "-fx-border-color: #05203c; " +
+            "-fx-border-color: #ffc107; " +
             "-fx-border-width: 3; " +
             "-fx-border-radius: 50; " +
             "-fx-background-radius: 50; " +
@@ -241,8 +241,8 @@ public class CustomerDashboard {
         // Ara Butonu
         Button searchButton = new Button("Ara");
         searchButton.setStyle(
-            "-fx-background-color: #0770e3; " +
-            "-fx-text-fill: white; " +
+            "-fx-background-color: #ffc107; " +
+            "-fx-text-fill: #333; " +
             "-fx-font-size: 16px; " +
             "-fx-font-weight: bold; " +
             "-fx-background-radius: 8; " +
@@ -283,7 +283,7 @@ public class CustomerDashboard {
 
         Label resultsLabel = new Label("Uçuş Sonuçları");
         resultsLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        resultsLabel.setTextFill(Color.web("#05203c"));
+        resultsLabel.setTextFill(Color.web("#ffc107"));
 
         // Uçuş tablosu
         flightTable = createFlightTable();
@@ -291,8 +291,8 @@ public class CustomerDashboard {
         // Rezervasyon butonu
         Button reserveButton = new Button("✈ Seçili Uçuşu Rezerve Et");
         reserveButton.setStyle(
-            "-fx-background-color: #0770e3; " +
-            "-fx-text-fill: white; " +
+            "-fx-background-color: #ffc107; " +
+            "-fx-text-fill: #333; " +
             "-fx-font-size: 14px; " +
             "-fx-font-weight: bold; " +
             "-fx-padding: 12 30; " +
