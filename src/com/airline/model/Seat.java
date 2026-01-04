@@ -2,32 +2,40 @@ package com.airline.model;
 
 import com.airline.model.enums.SeatClass;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * Uçaktaki bir koltuğu temsil eder.
  * Örnek koltuk numarası: "15A" (15. sıra, A kolonu)
  */
 public class Seat implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;  // Versiyon güncellendi
 
     private String seatNum;      // Örn: "15A"
-    private SeatClass seatClass; // ECONOMY veya BUSINESS
+    private SeatClass Class; // ECONOMY veya BUSINESS
     private double price;        // Koltuk fiyatı
-    private boolean reserved;    // Rezerve edilmiş mi?
+    private boolean reserveStatus;    // Rezerve edilmiş mi?
     private int row;             // Sıra numarası
     private char column;         // Kolon harfi (A, B, C, D, E, F)
+
+    // Eski field isimleri için geçici değişkenler (backward compatibility)
+    @SuppressWarnings("unused")
+    private transient SeatClass seatClass;
+    @SuppressWarnings("unused")
+    private transient boolean reserved;
 
     /**
      * Yeni bir koltuk oluşturur.
      * @param seatNum Koltuk numarası (örn: "15A")
-     * @param seatClass Koltuk sınıfı (ECONOMY/BUSINESS)
+     * @param Class Koltuk sınıfı (ECONOMY/BUSINESS)
      * @param price Baz fiyat
      */
-    public Seat(String seatNum, SeatClass seatClass, double price) {
+    public Seat(String seatNum, SeatClass Class, double price) {
         this.seatNum = seatNum;
-        this.seatClass = seatClass;
+        this.Class = Class;
         this.price = price;
-        this.reserved = false;
+        this.reserveStatus = false;
         parseSeatNum(seatNum);
     }
 
@@ -50,28 +58,28 @@ public class Seat implements Serializable {
      * Koltuğu rezerve eder.
      */
     public synchronized void reserve() {
-        this.reserved = true;
+        this.reserveStatus = true;
     }
 
     /**
      * Koltuk rezervasyonunu iptal eder.
      */
     public synchronized void release() {
-        this.reserved = false;
+        this.reserveStatus = false;
     }
 
     /**
      * Koltuğun rezerve edilip edilmediğini kontrol eder.
      */
-    public boolean isReserved() {
-        return reserved;
+    public boolean isReserveStatus() {
+        return reserveStatus;
     }
 
     /**
      * Koltuk sınıfına göre hesaplanmış fiyatı döndürür.
      */
     public double getCalculatedPrice() {
-        return price * seatClass.getPriceMultiplier();
+        return price * Class.getPriceMultiplier();
     }
 
     // Getter ve Setter metodları
@@ -84,12 +92,12 @@ public class Seat implements Serializable {
         parseSeatNum(seatNum);
     }
 
-    public SeatClass getSeatClass() {
-        return seatClass;
+    public SeatClass getClass_() {
+        return Class;
     }
 
-    public void setSeatClass(SeatClass seatClass) {
-        this.seatClass = seatClass;
+    public void setClass_(SeatClass Class) {
+        this.Class = Class;
     }
 
     public double getPrice() {
@@ -100,8 +108,8 @@ public class Seat implements Serializable {
         this.price = price;
     }
 
-    public void setReserved(boolean reserved) {
-        this.reserved = reserved;
+    public void setReserveStatus(boolean reserveStatus) {
+        this.reserveStatus = reserveStatus;
     }
 
     public int getRow() {
@@ -115,7 +123,7 @@ public class Seat implements Serializable {
     @Override
     public String toString() {
         return String.format("Koltuk %s (%s) - %.2f TL",
-                seatNum, seatClass.getDisplayName(), getCalculatedPrice());
+                seatNum, Class.getDisplayName(), getCalculatedPrice());
     }
 
     @Override

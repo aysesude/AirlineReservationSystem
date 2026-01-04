@@ -37,7 +37,7 @@ public class UserManager {
     private void createDefaultAdmin() {
         boolean adminExists = users.stream()
                 .anyMatch(u -> u.getRole() == UserRole.ADMIN);
-        
+
         if (!adminExists) {
             Admin admin = new Admin("admin", "admin123", "admin@airline.com", 2);
             users.add(admin);
@@ -76,20 +76,20 @@ public class UserManager {
      * @param username Kullanıcı adı
      * @param password Şifre
      * @param email E-posta
-     * @param firstName Ad
-     * @param lastName Soyad
+     * @param name Ad
+     * @param surname Soyad
      * @param phone Telefon
      * @return Oluşturulan müşteri
      */
     public Customer registerCustomer(String username, String password, String email,
-                                      String firstName, String lastName, String phone) {
+                                      String name, String surname, String phone) {
         // Kullanıcı adı kontrolü
         if (isUsernameTaken(username)) {
             throw new IllegalArgumentException("Bu kullanıcı adı zaten kullanılıyor: " + username);
         }
 
         // Yolcu oluştur
-        Passenger passenger = new Passenger(firstName, lastName, email, phone);
+        Passenger passenger = new Passenger(name, surname, email, phone);
         passengers.add(passenger);
 
         // Müşteri oluştur
@@ -159,7 +159,7 @@ public class UserManager {
             throw new SecurityException("Bu işlem için admin yetkisi gerekli!");
         }
 
-        boolean removed = users.removeIf(u -> u.getUserId().equals(userId) && 
+        boolean removed = users.removeIf(u -> u.getUserId().equals(userId) &&
                                               u.getRole() != UserRole.ADMIN);
         if (removed) {
             saveToFile();
@@ -271,7 +271,7 @@ public class UserManager {
      * Şu anki kullanıcının personel olup olmadığını kontrol eder.
      */
     public boolean isCurrentUserStaff() {
-        return currentUser != null && 
+        return currentUser != null &&
                (currentUser.getRole() == UserRole.STAFF || currentUser.getRole() == UserRole.ADMIN);
     }
 

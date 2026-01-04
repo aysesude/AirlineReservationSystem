@@ -11,12 +11,13 @@ import java.util.UUID;
  * Rezervasyon, fiyat ve bagaj bilgilerini içerir.
  */
 public class Ticket implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private String ticketId;
     private Reservation reservation;
     private double price;
     private Baggage baggage;
+    private int baggageAllowance;
     private LocalDateTime issueDate;
     private TicketStatus ticketStatus;
 
@@ -29,9 +30,9 @@ public class Ticket implements Serializable {
         this.price = price;
         this.issueDate = LocalDateTime.now();
         this.ticketStatus = TicketStatus.ISSUED;
-        
+
         // Bagaj hakkını koltuk sınıfına göre ayarla
-        int baggageAllowance = reservation.getSeat().getSeatClass().getBaggageAllowance();
+        this.baggageAllowance = reservation.getSeat().getClass_().getBaggageAllowance();
         this.baggage = new Baggage(0, baggageAllowance);
     }
 
@@ -43,6 +44,7 @@ public class Ticket implements Serializable {
         this.reservation = reservation;
         this.price = price;
         this.baggage = baggage;
+        this.baggageAllowance = baggage != null ? baggage.getAllowance() : 0;
         this.issueDate = LocalDateTime.now();
         this.ticketStatus = TicketStatus.ISSUED;
     }
@@ -104,14 +106,14 @@ public class Ticket implements Serializable {
         sb.append(String.format("Bilet No    : %s\n", ticketId));
         sb.append(String.format("Yolcu       : %s\n", reservation.getPassenger().getFullName()));
         sb.append(String.format("Uçuş        : %s\n", reservation.getFlight().getFlightNum()));
-        sb.append(String.format("Rota        : %s → %s\n", 
+        sb.append(String.format("Rota        : %s → %s\n",
                 reservation.getFlight().getDeparturePlace(),
                 reservation.getFlight().getArrivalPlace()));
         sb.append(String.format("Tarih       : %s\n", reservation.getFlight().getDate()));
         sb.append(String.format("Saat        : %s\n", reservation.getFlight().getHour()));
-        sb.append(String.format("Koltuk      : %s (%s)\n", 
+        sb.append(String.format("Koltuk      : %s (%s)\n",
                 reservation.getSeat().getSeatNum(),
-                reservation.getSeat().getSeatClass()));
+                reservation.getSeat().getClass_()));
         sb.append(String.format("Fiyat       : %.2f TL\n", price));
         if (baggage != null && baggage.getExtraFee() > 0) {
             sb.append(String.format("Bagaj Ek    : %.2f TL\n", baggage.getExtraFee()));
@@ -160,6 +162,14 @@ public class Ticket implements Serializable {
 
     public void setBaggage(Baggage baggage) {
         this.baggage = baggage;
+    }
+
+    public int getBaggageAllowance() {
+        return baggageAllowance;
+    }
+
+    public void setBaggageAllowance(int baggageAllowance) {
+        this.baggageAllowance = baggageAllowance;
     }
 
     public LocalDateTime getIssueDate() {

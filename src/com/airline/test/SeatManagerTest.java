@@ -34,8 +34,8 @@ public class SeatManagerTest {
     void testInitialSeatsEmpty() {
         int emptyCount = seatManager.emptySeatsCount();
         int totalCapacity = testPlane.getCapacity();
-        
-        assertEquals(totalCapacity, emptyCount, 
+
+        assertEquals(totalCapacity, emptyCount,
                 "Başlangıçta tüm koltuklar boş olmalı");
         assertEquals(180, emptyCount, "30x6 = 180 koltuk olmalı");
     }
@@ -44,12 +44,12 @@ public class SeatManagerTest {
     @DisplayName("Koltuk rezervasyonu sonrası boş koltuk sayısı azalmalı")
     void testEmptySeatsCountDecreasesAfterReservation() {
         int initialCount = seatManager.emptySeatsCount();
-        
+
         // Bir koltuk rezerve et
         boolean reserved = seatManager.reserveSeat("10A");
-        
+
         assertTrue(reserved, "Rezervasyon başarılı olmalı");
-        assertEquals(initialCount - 1, seatManager.emptySeatsCount(), 
+        assertEquals(initialCount - 1, seatManager.emptySeatsCount(),
                 "Boş koltuk sayısı 1 azalmalı");
     }
 
@@ -57,14 +57,14 @@ public class SeatManagerTest {
     @DisplayName("Birden fazla rezervasyon sonrası koltuk sayısı testi")
     void testMultipleReservations() {
         int initialCount = seatManager.emptySeatsCount();
-        
+
         seatManager.reserveSeat("10A");
         seatManager.reserveSeat("10B");
         seatManager.reserveSeat("10C");
-        
-        assertEquals(initialCount - 3, seatManager.emptySeatsCount(), 
+
+        assertEquals(initialCount - 3, seatManager.emptySeatsCount(),
                 "Boş koltuk sayısı 3 azalmalı");
-        assertEquals(3, seatManager.reservedSeatsCount(), 
+        assertEquals(3, seatManager.reservedSeatsCount(),
                 "3 koltuk dolu olmalı");
     }
 
@@ -97,7 +97,7 @@ public class SeatManagerTest {
     void testReserveAlreadyReservedSeat() {
         seatManager.reserveSeat("15A");
         boolean secondReserve = seatManager.reserveSeat("15A");
-        
+
         assertFalse(secondReserve, "Zaten rezerve koltuk için false dönmeli");
     }
 
@@ -106,11 +106,11 @@ public class SeatManagerTest {
     void testReleaseSeat() {
         seatManager.reserveSeat("20A");
         int afterReserve = seatManager.emptySeatsCount();
-        
+
         boolean released = seatManager.releaseSeat("20A");
-        
+
         assertTrue(released, "Serbest bırakma başarılı olmalı");
-        assertEquals(afterReserve + 1, seatManager.emptySeatsCount(), 
+        assertEquals(afterReserve + 1, seatManager.emptySeatsCount(),
                 "Boş koltuk sayısı 1 artmalı");
     }
 
@@ -118,7 +118,7 @@ public class SeatManagerTest {
     @DisplayName("Zaten boş koltuk için release false dönmeli")
     void testReleaseEmptySeat() {
         boolean released = seatManager.releaseSeat("25A");
-        
+
         assertFalse(released, "Boş koltuk için release false dönmeli");
     }
 
@@ -126,10 +126,10 @@ public class SeatManagerTest {
     @DisplayName("Koltuk bilgisi getirme testi")
     void testGetSeat() {
         Seat seat = seatManager.getSeat("5A");
-        
+
         assertNotNull(seat, "Koltuk null olmamalı");
         assertEquals("5A", seat.getSeatNum());
-        assertEquals(SeatClass.BUSINESS, seat.getSeatClass(), 
+        assertEquals(SeatClass.BUSINESS, seat.getClass_(),
                 "5. sıra business olmalı");
     }
 
@@ -138,13 +138,13 @@ public class SeatManagerTest {
     void testGetAvailableSeats() {
         seatManager.reserveSeat("1A");
         seatManager.reserveSeat("1B");
-        
+
         List<Seat> availableSeats = seatManager.getAvailableSeats();
-        
+
         assertEquals(178, availableSeats.size(), "178 boş koltuk olmalı");
-        
+
         for (Seat seat : availableSeats) {
-            assertFalse(seat.isReserved(), "Listede rezerve koltuk olmamalı");
+            assertFalse(seat.isReserveStatus(), "Listede rezerve koltuk olmamalı");
         }
     }
 
@@ -153,19 +153,19 @@ public class SeatManagerTest {
     void testGetSeatsByClass() {
         List<Seat> businessSeats = seatManager.getSeatsByClass(SeatClass.BUSINESS);
         List<Seat> economySeats = seatManager.getSeatsByClass(SeatClass.ECONOMY);
-        
+
         // 5 sıra business * 6 koltuk = 30 business koltuk
         assertEquals(30, businessSeats.size(), "30 business koltuk olmalı");
-        
+
         // 25 sıra economy * 6 koltuk = 150 economy koltuk
         assertEquals(150, economySeats.size(), "150 economy koltuk olmalı");
-        
+
         for (Seat seat : businessSeats) {
-            assertEquals(SeatClass.BUSINESS, seat.getSeatClass());
+            assertEquals(SeatClass.BUSINESS, seat.getClass_());
         }
-        
+
         for (Seat seat : economySeats) {
-            assertEquals(SeatClass.ECONOMY, seat.getSeatClass());
+            assertEquals(SeatClass.ECONOMY, seat.getClass_());
         }
     }
 
@@ -173,26 +173,26 @@ public class SeatManagerTest {
     @DisplayName("Koltuk müsaitlik kontrolü testi")
     void testIsSeatAvailable() {
         assertTrue(seatManager.isSeatAvailable("10A"), "Başlangıçta müsait olmalı");
-        
+
         seatManager.reserveSeat("10A");
-        
+
         assertFalse(seatManager.isSeatAvailable("10A"), "Rezerve sonrası müsait olmamalı");
     }
 
     @Test
     @DisplayName("Doluluk oranı hesaplama testi")
     void testGetOccupancyRate() {
-        assertEquals(0.0, seatManager.getOccupancyRate(), 0.01, 
+        assertEquals(0.0, seatManager.getOccupancyRate(), 0.01,
                 "Başlangıçta doluluk %0 olmalı");
-        
+
         // 18 koltuk rezerve et (%10)
         for (int i = 1; i <= 3; i++) {
             for (char c = 'A'; c <= 'F'; c++) {
                 seatManager.reserveSeat(i + String.valueOf(c));
             }
         }
-        
-        assertEquals(10.0, seatManager.getOccupancyRate(), 0.01, 
+
+        assertEquals(10.0, seatManager.getOccupancyRate(), 0.01,
                 "18/180 = %10 doluluk olmalı");
     }
 
@@ -200,9 +200,9 @@ public class SeatManagerTest {
     @DisplayName("Rastgele boş koltuk seçme testi")
     void testGetRandomAvailableSeat() {
         Seat randomSeat = seatManager.getRandomAvailableSeat();
-        
+
         assertNotNull(randomSeat, "Rastgele koltuk null olmamalı");
-        assertFalse(randomSeat.isReserved(), "Seçilen koltuk boş olmalı");
+        assertFalse(randomSeat.isReserveStatus(), "Seçilen koltuk boş olmalı");
     }
 
     @Test
@@ -212,9 +212,9 @@ public class SeatManagerTest {
         for (Seat seat : seatManager.getAllSeats()) {
             seat.reserve();
         }
-        
+
         Seat randomSeat = seatManager.getRandomAvailableSeat();
-        
+
         assertNull(randomSeat, "Tüm koltuklar dolu iken null dönmeli");
     }
 
@@ -222,7 +222,7 @@ public class SeatManagerTest {
     @DisplayName("Tüm koltukları listeleme testi")
     void testGetAllSeats() {
         List<Seat> allSeats = seatManager.getAllSeats();
-        
+
         assertEquals(180, allSeats.size(), "Toplam 180 koltuk olmalı");
     }
 
@@ -232,11 +232,11 @@ public class SeatManagerTest {
         // Bazı koltukları rezerve et
         seatManager.reserveSeat("5A");
         seatManager.reserveSeat("10B");
-        
+
         // Düzeni sıfırla
         seatManager.createSeatLayout();
-        
-        assertEquals(180, seatManager.emptySeatsCount(), 
+
+        assertEquals(180, seatManager.emptySeatsCount(),
                 "Sıfırlama sonrası tüm koltuklar boş olmalı");
     }
 }

@@ -8,11 +8,11 @@ import java.util.UUID;
  * Kişisel bilgiler ve iletişim bilgilerini içerir.
  */
 public class Passenger implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private String passengerId;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String surname;
     private String email;
     private String phone;
     private String passportNo;
@@ -21,10 +21,10 @@ public class Passenger implements Serializable {
     /**
      * Yeni bir yolcu oluşturur.
      */
-    public Passenger(String firstName, String lastName, String email, String phone) {
+    public Passenger(String name, String surname, String email, String phone) {
         this.passengerId = generatePassengerId();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.surname = surname;
         this.email = email;
         this.phone = phone;
     }
@@ -32,11 +32,11 @@ public class Passenger implements Serializable {
     /**
      * ID ile birlikte yolcu oluşturur.
      */
-    public Passenger(String passengerId, String firstName, String lastName, 
+    public Passenger(String passengerId, String name, String surname,
                      String email, String phone) {
         this.passengerId = passengerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.surname = surname;
         this.email = email;
         this.phone = phone;
     }
@@ -44,11 +44,11 @@ public class Passenger implements Serializable {
     /**
      * Tüm bilgilerle yolcu oluşturur.
      */
-    public Passenger(String firstName, String lastName, String email, 
+    public Passenger(String name, String surname, String email,
                      String phone, String passportNo, String tcNo) {
         this.passengerId = generatePassengerId();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.surname = surname;
         this.email = email;
         this.phone = phone;
         this.passportNo = passportNo;
@@ -63,7 +63,7 @@ public class Passenger implements Serializable {
      * Yolcunun tam adını döndürür.
      */
     public String getFullName() {
-        return firstName + " " + lastName;
+        return name + " " + surname;
     }
 
     /**
@@ -82,20 +82,20 @@ public class Passenger implements Serializable {
         this.passengerId = passengerId;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
@@ -133,7 +133,7 @@ public class Passenger implements Serializable {
     @Override
     public String toString() {
         return String.format("Passenger{id='%s', name='%s %s', email='%s'}",
-                passengerId, firstName, lastName, email);
+                passengerId, name, surname, email);
     }
 
     @Override

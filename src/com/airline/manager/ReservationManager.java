@@ -44,7 +44,7 @@ public class ReservationManager {
         lock.lock();
         try {
             // Koltuk zaten rezerve mi kontrol et
-            if (seat.isReserved()) {
+            if (seat.isReserveStatus()) {
                 throw new IllegalStateException("Bu koltuk zaten rezerve edilmiş: " + seat.getSeatNum());
             }
 
@@ -52,7 +52,7 @@ public class ReservationManager {
             Reservation reservation = new Reservation(flight, passenger, seat);
             reservation.confirm(); // Koltuğu da rezerve eder
             reservations.add(reservation);
-            
+
             saveToFile();
             return reservation;
         } finally {
@@ -68,7 +68,7 @@ public class ReservationManager {
     public boolean synchronizedReserve(Seat seat) {
         lock.lock();
         try {
-            if (seat.isReserved()) {
+            if (seat.isReserveStatus()) {
                 return false;
             }
             seat.reserve();
@@ -85,7 +85,7 @@ public class ReservationManager {
      */
     public boolean unsynchronizedReserve(Seat seat) {
         // Bu metod synchronized DEĞİL - race condition olabilir
-        if (seat.isReserved()) {
+        if (seat.isReserveStatus()) {
             return false;
         }
         // Yapay gecikme ekle - race condition'ı daha görünür yapmak için

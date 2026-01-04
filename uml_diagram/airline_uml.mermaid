@@ -56,15 +56,15 @@ classDiagram
 
     class Seat {
         -String seatNum
-        -SeatClass seatClass
+        -SeatClass Class
         -double price
-        -boolean reserved
+        -boolean reserveStatus
         -int row
         -char column
-        +Seat(seatNum, seatClass, price)
+        +Seat(seatNum, Class, price)
         +reserve() void
         +release() void
-        +isReserved() boolean
+        +isReserveStatus() boolean
     }
 
     class Plane {
@@ -100,12 +100,12 @@ classDiagram
     %% ==================== RESERVATION MODULE ====================
     class Passenger {
         -String passengerId
-        -String firstName
-        -String lastName
+        -String name
+        -String surname
         -String email
         -String phone
         -String passportNo
-        +Passenger(id, firstName, lastName, email, phone)
+        +Passenger(id, name, surname, email, phone)
         +getFullName() String
         +getContactInfo() String
     }
@@ -138,6 +138,7 @@ classDiagram
         -Reservation reservation
         -double price
         -Baggage baggage
+        -int baggageAllowance
         -LocalDateTime issueDate
         -TicketStatus ticketStatus
         +Ticket(reservation, price)
@@ -264,22 +265,22 @@ classDiagram
     }
 
     %% ==================== RELATIONSHIPS ====================
-    
+
     %% Composition (strong ownership - filled diamond)
     Plane *-- Seat : contains
     Ticket *-- Reservation : contains
     Ticket *-- Baggage : contains
-    
+
     %% Aggregation (weak ownership - empty diamond)
     Flight o-- Plane : uses
     Flight o-- Route : has
-    
+
     %% Association
     Reservation --> Flight : refers to
     Reservation --> Passenger : has
     Reservation --> Seat : has
     Customer --> Passenger : has
-    
+
     %% Dependency (uses)
     FlightManager ..> Flight : manages
     FlightManager ..> Plane : manages
@@ -292,12 +293,12 @@ classDiagram
     FlightSearchEngine ..> FlightManager : uses
     ReportGenerator ..> FlightManager : uses
     ReportGenerator ..> ReservationManager : uses
-    
+
     %% Inheritance
     Customer --|> User : extends
     Staff --|> User : extends
     Admin --|> Staff : extends
-    
+
     %% Enum usage
     Seat ..> SeatClass : uses
     Flight ..> FlightStatus : uses

@@ -26,7 +26,7 @@ public class SeatManager {
 
     /**
      * Yeni koltuk düzeni oluşturur.
-     * Bu metod Plane içinde zaten çağrılıyor, 
+     * Bu metod Plane içinde zaten çağrılıyor,
      * ancak manuel olarak yeniden oluşturmak için kullanılabilir.
      */
     public void createSeatLayout() {
@@ -67,16 +67,16 @@ public class SeatManager {
         if (plane == null) {
             throw new IllegalArgumentException("Uçak tanımlanmamış!");
         }
-        
+
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
             throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
         }
-        
-        if (seat.isReserved()) {
+
+        if (seat.isReserveStatus()) {
             return false; // Koltuk zaten rezerve
         }
-        
+
         seat.reserve();
         return true;
     }
@@ -91,16 +91,16 @@ public class SeatManager {
         if (plane == null) {
             throw new IllegalArgumentException("Uçak tanımlanmamış!");
         }
-        
+
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
             throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
         }
-        
-        if (!seat.isReserved()) {
+
+        if (!seat.isReserveStatus()) {
             return false; // Koltuk zaten boş
         }
-        
+
         seat.release();
         return true;
     }
@@ -115,12 +115,12 @@ public class SeatManager {
         if (plane == null) {
             throw new IllegalArgumentException("Uçak tanımlanmamış!");
         }
-        
+
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
             throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
         }
-        
+
         return seat;
     }
 
@@ -166,7 +166,7 @@ public class SeatManager {
     public boolean isSeatAvailable(String seatNum) {
         try {
             Seat seat = getSeat(seatNum);
-            return !seat.isReserved();
+            return !seat.isReserveStatus();
         } catch (IllegalArgumentException e) {
             return false;
         }

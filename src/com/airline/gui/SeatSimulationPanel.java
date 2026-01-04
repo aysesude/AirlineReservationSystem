@@ -96,13 +96,13 @@ public class SeatSimulationPanel extends VBox {
                     rect.setStrokeWidth(1);
                     rect.setArcWidth(5);
                     rect.setArcHeight(5);
-                    
+
                     // İlk 5 sıra business (farklı renk)
                     if (row < 5) {
                         rect.setFill(Color.LIGHTBLUE);
                         rect.setStroke(Color.DARKBLUE);
                     }
-                    
+
                     seatRectangles[row][actualCol] = rect;
                     seatGrid.add(rect, col + 1, row + 1);
                     colIndex++;
@@ -219,7 +219,7 @@ public class SeatSimulationPanel extends VBox {
 
                         // GUI'yi güncelle
                         final boolean wasReserved = reserved;
-                        final boolean hasConflict = !synchronized_ && !reserved && selectedSeat.isReserved();
+                        final boolean hasConflict = !synchronized_ && !reserved && selectedSeat.isReserveStatus();
 
                         Platform.runLater(() -> {
                             if (row >= 0 && row < ROWS && col >= 0 && col < SEATS_PER_ROW) {

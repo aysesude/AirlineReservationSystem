@@ -28,7 +28,7 @@ public class Plane implements Serializable {
      * @param businessRows İlk kaç sıra business class
      * @param basePrice Ekonomi sınıfı baz fiyat
      */
-    public Plane(String planeId, String planeModel, int rows, int seatsPerRow, 
+    public Plane(String planeId, String planeModel, int rows, int seatsPerRow,
                  int businessRows, double basePrice) {
         this.planeId = planeId;
         this.planeModel = planeModel;
@@ -53,7 +53,7 @@ public class Plane implements Serializable {
      */
     private void initializeSeats(double basePrice) {
         char[] columns = {'A', 'B', 'C', 'D', 'E', 'F'};
-        
+
         for (int row = 1; row <= rows; row++) {
             for (int col = 0; col < seatsPerRow && col < columns.length; col++) {
                 String seatNum = row + String.valueOf(columns[col]);
@@ -77,7 +77,7 @@ public class Plane implements Serializable {
     public List<Seat> getAvailableSeats() {
         List<Seat> availableSeats = new ArrayList<>();
         for (Seat seat : seatMatrix.values()) {
-            if (!seat.isReserved()) {
+            if (!seat.isReserveStatus()) {
                 availableSeats.add(seat);
             }
         }
@@ -90,7 +90,7 @@ public class Plane implements Serializable {
     public List<Seat> getAvailableSeatsByClass(SeatClass seatClass) {
         List<Seat> availableSeats = new ArrayList<>();
         for (Seat seat : seatMatrix.values()) {
-            if (!seat.isReserved() && seat.getSeatClass() == seatClass) {
+            if (!seat.isReserveStatus() && seat.getClass_() == seatClass) {
                 availableSeats.add(seat);
             }
         }
@@ -110,7 +110,7 @@ public class Plane implements Serializable {
     public int getAvailableSeatCount() {
         int count = 0;
         for (Seat seat : seatMatrix.values()) {
-            if (!seat.isReserved()) {
+            if (!seat.isReserveStatus()) {
                 count++;
             }
         }

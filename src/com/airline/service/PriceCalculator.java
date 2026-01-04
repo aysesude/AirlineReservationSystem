@@ -53,7 +53,7 @@ public class PriceCalculator {
         }
 
         double price;
-        if (seat.getSeatClass() == SeatClass.BUSINESS) {
+        if (seat.getClass_() == SeatClass.BUSINESS) {
             price = calculateBusinessPrice(basePrice);
         } else {
             price = calculateEconomyPrice(basePrice);
