@@ -168,6 +168,50 @@ public class CustomerDashboard {
         });
     }
 
+    private void applyOutlineStyle(Button btn, String color) {
+        btn.setCursor(Cursor.HAND);
+        btn.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-text-fill: " + color + "; " +
+            "-fx-font-size: 13px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-radius: 8; " +
+            "-fx-border-radius: 8; " +
+            "-fx-border-color: " + color + "; " +
+            "-fx-border-width: 2; " +
+            "-fx-padding: 8 16; " +
+            "-fx-cursor: hand;"
+        );
+        btn.setOnMouseEntered(e -> {
+            btn.setStyle(
+                "-fx-background-color: " + color + "; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8; " +
+                "-fx-border-radius: 8; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 2; " +
+                "-fx-padding: 8 16; " +
+                "-fx-cursor: hand;"
+            );
+        });
+        btn.setOnMouseExited(e -> {
+            btn.setStyle(
+                "-fx-background-color: transparent; " +
+                "-fx-text-fill: " + color + "; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8; " +
+                "-fx-border-radius: 8; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 2; " +
+                "-fx-padding: 8 16; " +
+                "-fx-cursor: hand;"
+            );
+        });
+    }
+
     private HBox createHeader() {
         HBox header = new HBox();
         header.setPadding(new Insets(15, 20, 15, 20));
@@ -187,7 +231,7 @@ public class CustomerDashboard {
         userLabel.setTextFill(Color.WHITE);
 
         Button logoutButton = new Button("Çıkış");
-        logoutButton.setStyle("-fx-background-color: #c62828; -fx-text-fill: white;");
+        applyOutlineStyle(logoutButton, "#c62828");
         logoutButton.setOnAction(e -> {
             MainApp.getUserManager().logout();
             new LoginScreen(stage).show();
@@ -776,11 +820,12 @@ public class CustomerDashboard {
 
         // Yenile butonu
         Button refreshButton = new Button("🔄 Yenile");
+        applyOutlineStyle(refreshButton, "#FF9800");
         refreshButton.setOnAction(e -> loadReservations());
 
         // İptal butonu
         Button cancelButton = new Button("❌ Seçili Rezervasyonu İptal Et");
-        cancelButton.setStyle("-fx-background-color: #c62828; -fx-text-fill: white;");
+        applyOutlineStyle(cancelButton, "#c62828");
         cancelButton.setOnAction(e -> cancelReservation());
 
         HBox buttonBox = new HBox(15, refreshButton, cancelButton);

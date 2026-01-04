@@ -161,6 +161,50 @@ public class AdminDashboard {
         });
     }
 
+    private void applyOutlineStyle(Button btn, String color) {
+        btn.setCursor(Cursor.HAND);
+        btn.setStyle(
+            "-fx-background-color: transparent; " +
+            "-fx-text-fill: " + color + "; " +
+            "-fx-font-size: 13px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-radius: 8; " +
+            "-fx-border-radius: 8; " +
+            "-fx-border-color: " + color + "; " +
+            "-fx-border-width: 2; " +
+            "-fx-padding: 8 16; " +
+            "-fx-cursor: hand;"
+        );
+        btn.setOnMouseEntered(e -> {
+            btn.setStyle(
+                "-fx-background-color: " + color + "; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8; " +
+                "-fx-border-radius: 8; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 2; " +
+                "-fx-padding: 8 16; " +
+                "-fx-cursor: hand;"
+            );
+        });
+        btn.setOnMouseExited(e -> {
+            btn.setStyle(
+                "-fx-background-color: transparent; " +
+                "-fx-text-fill: " + color + "; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 8; " +
+                "-fx-border-radius: 8; " +
+                "-fx-border-color: " + color + "; " +
+                "-fx-border-width: 2; " +
+                "-fx-padding: 8 16; " +
+                "-fx-cursor: hand;"
+            );
+        });
+    }
+
     private HBox createHeader() {
         HBox header = new HBox();
         header.setPadding(new Insets(15, 20, 15, 20));
@@ -199,17 +243,19 @@ public class AdminDashboard {
         // Butonlar
         HBox buttonBox = new HBox(10);
         Button addButton = new Button("➕ Yeni Uçuş Ekle");
-        addButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white;");
+        applyOutlineStyle(addButton, "#4caf50");
         addButton.setOnAction(e -> showAddFlightDialog());
 
         Button editButton = new Button("✏ Düzenle");
+        applyOutlineStyle(editButton, "#FF9800");
         editButton.setOnAction(e -> showEditFlightDialog());
 
         Button deleteButton = new Button("🗑 Sil");
-        deleteButton.setStyle("-fx-background-color: #c62828; -fx-text-fill: white;");
+        applyOutlineStyle(deleteButton, "#c62828");
         deleteButton.setOnAction(e -> deleteFlight());
 
         Button refreshButton = new Button("🔄 Yenile");
+        applyOutlineStyle(refreshButton, "#FF9800");
         refreshButton.setOnAction(e -> loadFlights());
 
         buttonBox.getChildren().addAll(addButton, editButton, deleteButton, refreshButton);
@@ -463,6 +509,7 @@ public class AdminDashboard {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
         Button refreshButton = new Button("🔄 Yenile");
+        applyOutlineStyle(refreshButton, "#FF9800");
         refreshButton.setOnAction(e -> loadReservations());
 
         reservationTable = createReservationTable();
@@ -543,16 +590,19 @@ public class AdminDashboard {
         HBox buttonBox = new HBox(10);
 
         Button occupancyButton = new Button("📊 Doluluk Raporu");
+        applyOutlineStyle(occupancyButton, "#FF9800");
         occupancyButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.OCCUPANCY));
 
         Button revenueButton = new Button("💰 Gelir Raporu");
+        applyOutlineStyle(revenueButton, "#4caf50");
         revenueButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.REVENUE));
 
         Button reservationButton = new Button("📋 Rezervasyon Raporu");
+        applyOutlineStyle(reservationButton, "#FF9800");
         reservationButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.RESERVATION));
 
         Button fullButton = new Button("📑 Tam Rapor");
-        fullButton.setStyle("-fx-background-color: #f9a825; -fx-text-fill: white;");
+        applyOutlineStyle(fullButton, "#4caf50");
         fullButton.setOnAction(e -> generateReport(ReportGenerator.ReportType.FULL));
 
         buttonBox.getChildren().addAll(occupancyButton, revenueButton, reservationButton, fullButton);
@@ -627,7 +677,7 @@ public class AdminDashboard {
         syncCheckBox.setSelected(true);
 
         Button startButton = new Button("▶ Simülasyonu Başlat");
-        startButton.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-size: 14px;");
+        applyOutlineStyle(startButton, "#4caf50");
 
         controlBox.getChildren().addAll(syncCheckBox, startButton);
 
