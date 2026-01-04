@@ -334,7 +334,7 @@
         </div>
         <div class="legend-item">
             <div class="legend-color" style="background: #9c27b0;"></div>
-            <span>Additional Classes</span>
+            <span>User Classes</span>
         </div>
         <div class="legend-item">
             <div class="legend-color" style="background: #607d8b;"></div>
@@ -342,7 +342,7 @@
         </div>
         <div class="legend-item">
             <div class="legend-color" style="background: #00bcd4;"></div>
-            <span>Interfaces</span>
+            <span>Abstract/Interface</span>
         </div>
     </div>
 
@@ -358,21 +358,25 @@
                     <div class="class-box">
                         <div class="class-header">Plane</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">planeId: <span class="type">String</span></div>
                             <div class="attribute">planeModel: <span class="type">String</span></div>
                             <div class="attribute">capacity: <span class="type">int</span></div>
                             <div class="attribute">seatMatrix: <span class="type">Map&lt;String, Seat&gt;</span></div>
                             <div class="attribute">rows: <span class="type">int</span></div>
                             <div class="attribute">seatsPerRow: <span class="type">int</span></div>
+                            <div class="attribute">businessRows: <span class="type">int</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">Plane(id, model, rows, seatsPerRow)</div>
-                            <div class="method">initializeSeats(): <span class="type">void</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Plane(planeId, planeModel, rows, seatsPerRow, businessRows, basePrice)</div>
+                            <div class="method private">initializeSeats(basePrice): <span class="type">void</span></div>
                             <div class="method">getSeat(seatNum): <span class="type">Seat</span></div>
                             <div class="method">getAvailableSeats(): <span class="type">List&lt;Seat&gt;</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">getAvailableSeatsByClass(seatClass): <span class="type">List&lt;Seat&gt;</span></div>
+                            <div class="method">getAvailableSeatCount(): <span class="type">int</span></div>
+                            <div class="method">getReservedSeatCount(): <span class="type">int</span></div>
+                            <div class="method">resetAllSeats(): <span class="type">void</span></div>
                         </div>
                     </div>
 
@@ -380,25 +384,30 @@
                     <div class="class-box">
                         <div class="class-header">Flight</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">flightNum: <span class="type">String</span></div>
                             <div class="attribute">departurePlace: <span class="type">String</span></div>
                             <div class="attribute">arrivalPlace: <span class="type">String</span></div>
                             <div class="attribute">date: <span class="type">LocalDate</span></div>
                             <div class="attribute">hour: <span class="type">LocalTime</span></div>
-                            <div class="attribute">duration: <span class="type">int</span> (minutes)</div>
+                            <div class="attribute">duration: <span class="type">int</span></div>
                             <div class="attribute">plane: <span class="type">Plane</span></div>
                             <div class="attribute">route: <span class="type">Route</span></div>
                             <div class="attribute">status: <span class="type">FlightStatus</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">Flight(flightNum, route, date, hour, duration, plane)</div>
-                            <div class="method">getArrivalTime(): <span class="type">LocalDateTime</span></div>
                             <div class="method">getDepartureDateTime(): <span class="type">LocalDateTime</span></div>
+                            <div class="method">getArrivalDateTime(): <span class="type">LocalDateTime</span></div>
+                            <div class="method">getArrivalTime(): <span class="type">LocalTime</span></div>
                             <div class="method">isExpired(): <span class="type">boolean</span></div>
+                            <div class="method">isToday(): <span class="type">boolean</span></div>
                             <div class="method">getAvailableSeats(): <span class="type">List&lt;Seat&gt;</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">getAvailableSeatCount(): <span class="type">int</span></div>
+                            <div class="method">getOccupancyRate(): <span class="type">double</span></div>
+                            <div class="method">getFormattedDuration(): <span class="type">String</span></div>
+                            <div class="method">getFlightSummary(): <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -406,8 +415,8 @@
                     <div class="class-box">
                         <div class="class-header">Seat</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
-                            <div class="attribute">seatNum: <span class="type">String</span> (örn: "15A")</div>
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">seatNum: <span class="type">String</span></div>
                             <div class="attribute">Class: <span class="type">SeatClass</span></div>
                             <div class="attribute">price: <span class="type">double</span></div>
                             <div class="attribute">reserveStatus: <span class="type">boolean</span></div>
@@ -415,12 +424,13 @@
                             <div class="attribute">column: <span class="type">char</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">Seat(seatNum, Class, price)</div>
-                            <div class="method">reserve(): <span class="type">void</span></div>
-                            <div class="method">release(): <span class="type">void</span></div>
+                            <div class="method private">parseSeatNum(seatNum): <span class="type">void</span></div>
+                            <div class="method">reserve(): <span class="type">void</span> [synchronized]</div>
+                            <div class="method">release(): <span class="type">void</span> [synchronized]</div>
                             <div class="method">isReserveStatus(): <span class="type">boolean</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">getCalculatedPrice(): <span class="type">double</span></div>
                         </div>
                     </div>
 
@@ -428,19 +438,22 @@
                     <div class="class-box">
                         <div class="class-header">Route</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">routeId: <span class="type">String</span></div>
                             <div class="attribute">departureCity: <span class="type">String</span></div>
                             <div class="attribute">departureAirport: <span class="type">String</span></div>
+                            <div class="attribute">departureAirportCode: <span class="type">String</span></div>
                             <div class="attribute">arrivalCity: <span class="type">String</span></div>
                             <div class="attribute">arrivalAirport: <span class="type">String</span></div>
-                            <div class="attribute">distance: <span class="type">int</span> (km)</div>
+                            <div class="attribute">arrivalAirportCode: <span class="type">String</span></div>
+                            <div class="attribute">distance: <span class="type">int</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">Route(depCity, depAirport, arrCity, arrAirport)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Route(depCity, depAirport, depCode, arrCity, arrAirport, arrCode)</div>
+                            <div class="method private">generateRouteId(): <span class="type">String</span></div>
                             <div class="method">getRouteDescription(): <span class="type">String</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">getShortDescription(): <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -448,14 +461,19 @@
                     <div class="class-box">
                         <div class="class-header enum-header">«enum» SeatClass</div>
                         <div class="class-section">
-                            <div class="section-title">Values (Değerler)</div>
+                            <div class="section-title">Values</div>
                             <span class="enum-value">ECONOMY</span>
                             <span class="enum-value">BUSINESS</span>
                         </div>
                         <div class="class-section">
                             <div class="section-title">Attributes</div>
-                            <div class="attribute">multiplier: <span class="type">double</span></div>
+                            <div class="attribute">priceMultiplier: <span class="type">double</span></div>
                             <div class="attribute">baggageAllowance: <span class="type">int</span></div>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Methods</div>
+                            <div class="method">getPriceMultiplier(): <span class="type">double</span></div>
+                            <div class="method">getBaggageAllowance(): <span class="type">int</span></div>
                         </div>
                     </div>
 
@@ -463,13 +481,17 @@
                     <div class="class-box">
                         <div class="class-header enum-header">«enum» FlightStatus</div>
                         <div class="class-section">
-                            <div class="section-title">Values (Değerler)</div>
+                            <div class="section-title">Values</div>
                             <span class="enum-value">SCHEDULED</span>
                             <span class="enum-value">BOARDING</span>
                             <span class="enum-value">DEPARTED</span>
                             <span class="enum-value">ARRIVED</span>
                             <span class="enum-value">CANCELLED</span>
                             <span class="enum-value">DELAYED</span>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">description: <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -485,20 +507,21 @@
                     <div class="class-box">
                         <div class="class-header">Passenger</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">passengerId: <span class="type">String</span></div>
                             <div class="attribute">name: <span class="type">String</span></div>
                             <div class="attribute">surname: <span class="type">String</span></div>
                             <div class="attribute">email: <span class="type">String</span></div>
                             <div class="attribute">phone: <span class="type">String</span></div>
                             <div class="attribute">passportNo: <span class="type">String</span></div>
+                            <div class="attribute">tcNo: <span class="type">String</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">Passenger(id, name, surname, email, phone)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Passenger(name, surname, email, phone)</div>
+                            <div class="method private">generatePassengerId(): <span class="type">String</span></div>
                             <div class="method">getFullName(): <span class="type">String</span></div>
                             <div class="method">getContactInfo(): <span class="type">String</span></div>
-                            <div class="method">getters/setters</div>
                         </div>
                     </div>
 
@@ -506,7 +529,7 @@
                     <div class="class-box">
                         <div class="class-header">Reservation</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">reservationCode: <span class="type">String</span></div>
                             <div class="attribute">flight: <span class="type">Flight</span></div>
                             <div class="attribute">passenger: <span class="type">Passenger</span></div>
@@ -515,12 +538,15 @@
                             <div class="attribute">status: <span class="type">ReservationStatus</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">Reservation(flight, passenger, seat)</div>
-                            <div class="method">generateCode(): <span class="type">String</span></div>
-                            <div class="method">cancel(): <span class="type">void</span></div>
+                            <div class="method private">generateReservationCode(): <span class="type">String</span></div>
                             <div class="method">confirm(): <span class="type">void</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">cancel(): <span class="type">void</span></div>
+                            <div class="method">complete(): <span class="type">void</span></div>
+                            <div class="method">isActive(): <span class="type">boolean</span></div>
+                            <div class="method">getFormattedDate(): <span class="type">String</span></div>
+                            <div class="method">getSummary(): <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -528,7 +554,7 @@
                     <div class="class-box">
                         <div class="class-header">Ticket</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">ticketId: <span class="type">String</span></div>
                             <div class="attribute">reservation: <span class="type">Reservation</span></div>
                             <div class="attribute">price: <span class="type">double</span></div>
@@ -538,11 +564,14 @@
                             <div class="attribute">ticketStatus: <span class="type">TicketStatus</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">Ticket(reservation, price)</div>
-                            <div class="method">generateTicketId(): <span class="type">String</span></div>
+                            <div class="method private">generateTicketId(): <span class="type">String</span></div>
                             <div class="method">calculateTotalPrice(): <span class="type">double</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">checkIn(): <span class="type">void</span></div>
+                            <div class="method">board(): <span class="type">void</span></div>
+                            <div class="method">use(): <span class="type">void</span></div>
+                            <div class="method">refund(): <span class="type">void</span></div>
                         </div>
                     </div>
 
@@ -550,18 +579,21 @@
                     <div class="class-box">
                         <div class="class-header">Baggage</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">baggageId: <span class="type">String</span></div>
-                            <div class="attribute">weight: <span class="type">double</span> (kg)</div>
-                            <div class="attribute">allowance: <span class="type">int</span> (kg)</div>
+                            <div class="attribute">weight: <span class="type">double</span></div>
+                            <div class="attribute">allowance: <span class="type">int</span></div>
                             <div class="attribute">extraFee: <span class="type">double</span></div>
+                            <div class="attribute public">EXTRA_FEE_PER_KG: <span class="type">double</span> = 50.0</div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">Baggage(weight, allowance)</div>
+                            <div class="method private">generateBaggageId(): <span class="type">String</span></div>
                             <div class="method">calculateExtraFee(): <span class="type">double</span></div>
                             <div class="method">isOverweight(): <span class="type">boolean</span></div>
-                            <div class="method">getters/setters</div>
+                            <div class="method">getExtraWeight(): <span class="type">double</span></div>
+                            <div class="method">getRemainingAllowance(): <span class="type">double</span></div>
                         </div>
                     </div>
 
@@ -569,11 +601,15 @@
                     <div class="class-box">
                         <div class="class-header enum-header">«enum» ReservationStatus</div>
                         <div class="class-section">
-                            <div class="section-title">Values (Değerler)</div>
+                            <div class="section-title">Values</div>
                             <span class="enum-value">PENDING</span>
                             <span class="enum-value">CONFIRMED</span>
                             <span class="enum-value">CANCELLED</span>
                             <span class="enum-value">COMPLETED</span>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">description: <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -581,12 +617,16 @@
                     <div class="class-box">
                         <div class="class-header enum-header">«enum» TicketStatus</div>
                         <div class="class-section">
-                            <div class="section-title">Values (Değerler)</div>
+                            <div class="section-title">Values</div>
                             <span class="enum-value">ISSUED</span>
                             <span class="enum-value">CHECKED_IN</span>
                             <span class="enum-value">BOARDED</span>
                             <span class="enum-value">USED</span>
                             <span class="enum-value">REFUNDED</span>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">description: <span class="type">String</span></div>
                         </div>
                     </div>
 
@@ -602,18 +642,26 @@
                     <div class="class-box">
                         <div class="class-header">FlightManager</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">flights: <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="attribute">planes: <span class="type">List&lt;Plane&gt;</span></div>
                             <div class="attribute">routes: <span class="type">List&lt;Route&gt;</span></div>
+                            <div class="attribute public">FLIGHTS_FILE: <span class="type">String</span></div>
+                            <div class="attribute public">PLANES_FILE: <span class="type">String</span></div>
+                            <div class="attribute public">ROUTES_FILE: <span class="type">String</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">createFlight(flightNum, route, ...): <span class="type">Flight</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">FlightManager()</div>
+                            <div class="method">createFlight(flightNum, route, date, hour, duration, plane): <span class="type">Flight</span></div>
                             <div class="method">updateFlight(flight): <span class="type">boolean</span></div>
                             <div class="method">deleteFlight(flightNum): <span class="type">boolean</span></div>
-                            <div class="method">getFlightByNumber(num): <span class="type">Flight</span></div>
+                            <div class="method">getFlightByNumber(flightNum): <span class="type">Flight</span></div>
                             <div class="method">getAllFlights(): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">getActiveFlights(): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">getFlightsByDate(date): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">addPlane(plane): <span class="type">void</span></div>
+                            <div class="method">getPlaneById(planeId): <span class="type">Plane</span></div>
                             <div class="method">saveToFile(): <span class="type">void</span></div>
                             <div class="method">loadFromFile(): <span class="type">void</span></div>
                         </div>
@@ -623,19 +671,23 @@
                     <div class="class-box">
                         <div class="class-header">SeatManager</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">plane: <span class="type">Plane</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
                             <div class="method">SeatManager(plane)</div>
                             <div class="method">createSeatLayout(): <span class="type">void</span></div>
                             <div class="method">emptySeatsCount(): <span class="type">int</span></div>
+                            <div class="method">reservedSeatsCount(): <span class="type">int</span></div>
                             <div class="method">reserveSeat(seatNum): <span class="type">boolean</span></div>
                             <div class="method">releaseSeat(seatNum): <span class="type">boolean</span></div>
                             <div class="method">getSeat(seatNum): <span class="type">Seat</span></div>
                             <div class="method">getAvailableSeats(): <span class="type">List&lt;Seat&gt;</span></div>
                             <div class="method">getSeatsByClass(seatClass): <span class="type">List&lt;Seat&gt;</span></div>
+                            <div class="method">isSeatAvailable(seatNum): <span class="type">boolean</span></div>
+                            <div class="method">getOccupancyRate(): <span class="type">double</span></div>
+                            <div class="method">getRandomAvailableSeat(): <span class="type">Seat</span></div>
                         </div>
                     </div>
 
@@ -643,19 +695,57 @@
                     <div class="class-box">
                         <div class="class-header">ReservationManager</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">reservations: <span class="type">List&lt;Reservation&gt;</span></div>
+                            <div class="attribute">tickets: <span class="type">List&lt;Ticket&gt;</span></div>
                             <div class="attribute">lock: <span class="type">ReentrantLock</span></div>
+                            <div class="attribute public">RESERVATIONS_FILE: <span class="type">String</span></div>
+                            <div class="attribute public">TICKETS_FILE: <span class="type">String</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">ReservationManager()</div>
                             <div class="method">makeReservation(flight, passenger, seat): <span class="type">Reservation</span></div>
                             <div class="method">cancelReservation(code): <span class="type">boolean</span></div>
                             <div class="method">getReservation(code): <span class="type">Reservation</span></div>
-                            <div class="method">getReservationsByPassenger(id): <span class="type">List&lt;Reservation&gt;</span></div>
+                            <div class="method">getReservationsByPassenger(passengerId): <span class="type">List&lt;Reservation&gt;</span></div>
+                            <div class="method">getReservationsByFlight(flightNum): <span class="type">List&lt;Reservation&gt;</span></div>
+                            <div class="method">getAllReservations(): <span class="type">List&lt;Reservation&gt;</span></div>
+                            <div class="method">getActiveReservations(): <span class="type">List&lt;Reservation&gt;</span></div>
                             <div class="method">synchronizedReserve(seat): <span class="type">boolean</span></div>
+                            <div class="method">unsynchronizedReserve(seat): <span class="type">boolean</span></div>
+                            <div class="method">createTicket(reservation, price): <span class="type">Ticket</span></div>
                             <div class="method">saveToFile(): <span class="type">void</span></div>
                             <div class="method">loadFromFile(): <span class="type">void</span></div>
+                        </div>
+                    </div>
+
+                    <!-- UserManager Class -->
+                    <div class="class-box">
+                        <div class="class-header">UserManager</div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">users: <span class="type">List&lt;User&gt;</span></div>
+                            <div class="attribute">passengers: <span class="type">List&lt;Passenger&gt;</span></div>
+                            <div class="attribute">currentUser: <span class="type">User</span></div>
+                            <div class="attribute public">USERS_FILE: <span class="type">String</span></div>
+                            <div class="attribute public">PASSENGERS_FILE: <span class="type">String</span></div>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Methods</div>
+                            <div class="method">UserManager()</div>
+                            <div class="method private">createDefaultAdmin(): <span class="type">void</span></div>
+                            <div class="method">login(username, password): <span class="type">User</span></div>
+                            <div class="method">logout(): <span class="type">void</span></div>
+                            <div class="method">registerCustomer(...): <span class="type">Customer</span></div>
+                            <div class="method">registerStaff(...): <span class="type">Staff</span></div>
+                            <div class="method">isUsernameTaken(username): <span class="type">boolean</span></div>
+                            <div class="method">getUserByUsername(username): <span class="type">User</span></div>
+                            <div class="method">getUserById(userId): <span class="type">User</span></div>
+                            <div class="method">deleteUser(userId): <span class="type">boolean</span></div>
+                            <div class="method">updateUser(user): <span class="type">boolean</span></div>
+                            <div class="method">getAllUsers(): <span class="type">List&lt;User&gt;</span></div>
+                            <div class="method">getCurrentUser(): <span class="type">User</span></div>
                         </div>
                     </div>
 
@@ -663,13 +753,20 @@
                     <div class="class-box">
                         <div class="class-header">PriceCalculator</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">basePrice: <span class="type">double</span></div>
                             <div class="attribute">taxRate: <span class="type">double</span></div>
+                            <div class="attribute">businessMultiplier: <span class="type">double</span></div>
+                            <div class="attribute">economyMultiplier: <span class="type">double</span></div>
+                            <div class="attribute public">DEFAULT_BASE_PRICE: <span class="type">double</span> = 500.0</div>
+                            <div class="attribute public">DEFAULT_TAX_RATE: <span class="type">double</span> = 0.18</div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">PriceCalculator()</div>
+                            <div class="method">PriceCalculator(basePrice, taxRate)</div>
                             <div class="method">calculatePrice(seat, flight): <span class="type">double</span></div>
+                            <div class="method">calculatePrice(seat): <span class="type">double</span></div>
                             <div class="method">calculateBusinessPrice(base): <span class="type">double</span></div>
                             <div class="method">calculateEconomyPrice(base): <span class="type">double</span></div>
                             <div class="method">applyDiscount(price, percent): <span class="type">double</span></div>
@@ -682,62 +779,104 @@
                     <div class="class-box">
                         <div class="class-header">FlightSearchEngine</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">flightManager: <span class="type">FlightManager</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">FlightSearchEngine(flightManager)</div>
                             <div class="method">searchFlights(from, to, date): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">searchFlights(from, to): <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="method">filterByDeparture(city): <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="method">filterByArrival(city): <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="method">filterByDate(date): <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="method">removeExpiredFlights(): <span class="type">List&lt;Flight&gt;</span></div>
                             <div class="method">getAvailableFlights(): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">findByFlightNumber(flightNum): <span class="type">Flight</span></div>
+                            <div class="method">getFlightsBetweenDates(start, end): <span class="type">List&lt;Flight&gt;</span></div>
+                            <div class="method">getAllDepartureCities(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="method">getAllArrivalCities(): <span class="type">List&lt;String&gt;</span></div>
                         </div>
                     </div>
 
                     <!-- ReportGenerator Class -->
                     <div class="class-box">
-                        <div class="class-header">ReportGenerator</div>
+                        <div class="class-header interface-header">ReportGenerator implements Runnable</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">flightManager: <span class="type">FlightManager</span></div>
                             <div class="attribute">reservationManager: <span class="type">ReservationManager</span></div>
+                            <div class="attribute">onComplete: <span class="type">Consumer&lt;String&gt;</span></div>
+                            <div class="attribute">onProgress: <span class="type">Consumer&lt;Integer&gt;</span></div>
+                            <div class="attribute">reportResult: <span class="type">String</span></div>
+                            <div class="attribute">reportType: <span class="type">ReportType</span></div>
+                            <div class="attribute">cancelled: <span class="type">volatile boolean</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar) - Runnable</div>
-                            <div class="method">run(): <span class="type">void</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">ReportGenerator(flightManager, reservationManager)</div>
+                            <div class="method">run(): <span class="type">void</span> [Override]</div>
                             <div class="method">generateOccupancyReport(): <span class="type">String</span></div>
                             <div class="method">generateRevenueReport(): <span class="type">String</span></div>
+                            <div class="method">generateReservationReport(): <span class="type">String</span></div>
+                            <div class="method">generateFullReport(): <span class="type">String</span></div>
                             <div class="method">calculateOccupancyRate(flight): <span class="type">double</span></div>
-                            <div class="method">onReportComplete(callback): <span class="type">void</span></div>
+                            <div class="method">setOnComplete(callback): <span class="type">void</span></div>
+                            <div class="method">setOnProgress(callback): <span class="type">void</span></div>
+                            <div class="method">cancel(): <span class="type">void</span></div>
+                        </div>
+                    </div>
+
+                    <!-- FileManager Class -->
+                    <div class="class-box">
+                        <div class="class-header">FileManager (Utility)</div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute public">DATA_DIR: <span class="type">String</span> = "data/"</div>
+                        </div>
+                        <div class="class-section">
+                            <div class="section-title">Methods (Static)</div>
+                            <div class="method">saveObject(obj, filename): <span class="type">void</span></div>
+                            <div class="method">loadObject(filename): <span class="type">Object</span></div>
+                            <div class="method">saveList(list, filename): <span class="type">void</span></div>
+                            <div class="method">loadList(filename): <span class="type">List&lt;T&gt;</span></div>
+                            <div class="method">fileExists(filename): <span class="type">boolean</span></div>
+                            <div class="method">deleteFile(filename): <span class="type">boolean</span></div>
+                            <div class="method">listFiles(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="method">clearAllData(): <span class="type">void</span></div>
                         </div>
                     </div>
 
                 </div>
             </div>
 
-            <!-- ADDITIONAL CLASSES -->
+            <!-- USER CLASSES MODULE -->
             <div class="module module-extra">
-                <div class="module-title">📦 Additional Classes (Ek Sınıflar)</div>
+                <div class="module-title">📦 Module 4: User Classes (Kullanıcı Sınıfları)</div>
                 <div class="classes-row">
 
                     <!-- User Abstract Class -->
                     <div class="class-box">
                         <div class="class-header interface-header">«abstract» User</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute protected">userId: <span class="type">String</span></div>
                             <div class="attribute protected">username: <span class="type">String</span></div>
                             <div class="attribute protected">password: <span class="type">String</span></div>
                             <div class="attribute protected">email: <span class="type">String</span></div>
                             <div class="attribute protected">role: <span class="type">UserRole</span></div>
+                            <div class="attribute protected">active: <span class="type">boolean</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">User(username, password, email, role)</div>
+                            <div class="method private">generateUserId(): <span class="type">String</span></div>
                             <div class="method">login(username, password): <span class="type">boolean</span></div>
                             <div class="method">logout(): <span class="type">void</span></div>
                             <div class="method">abstract getPermissions(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="method">hasPermission(permission): <span class="type">boolean</span></div>
+                            <div class="method">checkPassword(password): <span class="type">boolean</span></div>
+                            <div class="method">changePassword(oldPw, newPw): <span class="type">void</span></div>
                         </div>
                     </div>
 
@@ -745,15 +884,19 @@
                     <div class="class-box">
                         <div class="class-header">Customer extends User</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">passenger: <span class="type">Passenger</span></div>
                             <div class="attribute">reservationHistory: <span class="type">List&lt;Reservation&gt;</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Customer(username, password, email)</div>
+                            <div class="method">Customer(username, password, email, passenger)</div>
+                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span> [Override]</div>
                             <div class="method">viewReservations(): <span class="type">List&lt;Reservation&gt;</span></div>
-                            <div class="method">makeReservation(flight, seat): <span class="type">Reservation</span></div>
+                            <div class="method">addReservation(reservation): <span class="type">void</span></div>
+                            <div class="method">removeReservation(reservation): <span class="type">void</span></div>
+                            <div class="method">getActiveReservationCount(): <span class="type">int</span></div>
                         </div>
                     </div>
 
@@ -761,17 +904,18 @@
                     <div class="class-box">
                         <div class="class-header">Staff extends User</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">staffId: <span class="type">String</span></div>
                             <div class="attribute">department: <span class="type">String</span></div>
                             <div class="attribute">position: <span class="type">String</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Staff(username, password, email, department, position)</div>
+                            <div class="method private">generateStaffId(): <span class="type">String</span></div>
+                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span> [Override]</div>
                             <div class="method">manageFlights(): <span class="type">void</span></div>
                             <div class="method">viewAllReservations(): <span class="type">List&lt;Reservation&gt;</span></div>
-                            <div class="method">generateReports(): <span class="type">void</span></div>
                         </div>
                     </div>
 
@@ -779,12 +923,14 @@
                     <div class="class-box">
                         <div class="class-header">Admin extends Staff</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
+                            <div class="section-title">Attributes</div>
                             <div class="attribute">adminLevel: <span class="type">int</span></div>
                         </div>
                         <div class="class-section">
-                            <div class="section-title">Methods (Metodlar)</div>
-                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span></div>
+                            <div class="section-title">Methods</div>
+                            <div class="method">Admin(username, password, email)</div>
+                            <div class="method">Admin(username, password, email, adminLevel)</div>
+                            <div class="method">getPermissions(): <span class="type">List&lt;String&gt;</span> [Override]</div>
                             <div class="method">manageStaff(): <span class="type">void</span></div>
                             <div class="method">manageUsers(): <span class="type">void</span></div>
                             <div class="method">systemSettings(): <span class="type">void</span></div>
@@ -795,27 +941,26 @@
                     <div class="class-box">
                         <div class="class-header enum-header">«enum» UserRole</div>
                         <div class="class-section">
-                            <div class="section-title">Values (Değerler)</div>
+                            <div class="section-title">Values</div>
                             <span class="enum-value">CUSTOMER</span>
                             <span class="enum-value">STAFF</span>
                             <span class="enum-value">ADMIN</span>
                         </div>
+                        <div class="class-section">
+                            <div class="section-title">Attributes</div>
+                            <div class="attribute">description: <span class="type">String</span></div>
+                        </div>
                     </div>
 
-                    <!-- FileManager Class -->
+                    <!-- ReportType Enum -->
                     <div class="class-box">
-                        <div class="class-header">FileManager</div>
+                        <div class="class-header enum-header">«enum» ReportType</div>
                         <div class="class-section">
-                            <div class="section-title">Attributes (Özellikler)</div>
-                            <div class="attribute">basePath: <span class="type">String</span></div>
-                        </div>
-                        <div class="class-section">
-                            <div class="section-title">Methods (Metodlar) - Static</div>
-                            <div class="method">saveObject(obj, filename): <span class="type">void</span></div>
-                            <div class="method">loadObject(filename): <span class="type">Object</span></div>
-                            <div class="method">saveList(list, filename): <span class="type">void</span></div>
-                            <div class="method">loadList(filename): <span class="type">List&lt;?&gt;</span></div>
-                            <div class="method">fileExists(filename): <span class="type">boolean</span></div>
+                            <div class="section-title">Values</div>
+                            <span class="enum-value">OCCUPANCY</span>
+                            <span class="enum-value">REVENUE</span>
+                            <span class="enum-value">RESERVATION</span>
+                            <span class="enum-value">FULL</span>
                         </div>
                     </div>
 
@@ -830,75 +975,83 @@
             <div class="rel-grid">
                 <div class="rel-item">
                     <span class="rel-type rel-composition">Composition</span>
-                    <span>Plane ◆── Seat (1:*) - Plane contains Seats</span>
-                </div>
-                <div class="rel-item">
-                    <span class="rel-type rel-composition">Composition</span>
-                    <span>Flight ◆── Route (1:1) - Flight has a Route</span>
+                    <span>Plane ◆── Seat (1:*) - Plane seatMatrix içinde Seat'leri içerir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-aggregation">Aggregation</span>
-                    <span>Flight ◇── Plane (1:1) - Flight uses a Plane</span>
+                    <span>Flight ◇── Plane (1:1) - Flight bir Plane kullanır</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-type rel-aggregation">Aggregation</span>
+                    <span>Flight ◇── Route (1:1) - Flight bir Route kullanır</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-association">Association</span>
-                    <span>Reservation ── Flight (*:1) - Reservation refers to Flight</span>
+                    <span>Reservation ── Flight (*:1) - Reservation bir Flight'a referans verir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-association">Association</span>
-                    <span>Reservation ── Passenger (*:1) - Reservation has Passenger</span>
+                    <span>Reservation ── Passenger (*:1) - Reservation bir Passenger'a aittir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-association">Association</span>
-                    <span>Reservation ── Seat (*:1) - Reservation has Seat</span>
+                    <span>Reservation ── Seat (*:1) - Reservation bir Seat içerir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-composition">Composition</span>
-                    <span>Ticket ◆── Reservation (1:1) - Ticket contains Reservation</span>
+                    <span>Ticket ◆── Reservation (1:1) - Ticket bir Reservation içerir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-composition">Composition</span>
-                    <span>Ticket ◆── Baggage (1:1) - Ticket contains Baggage</span>
+                    <span>Ticket ◆── Baggage (1:1) - Ticket bir Baggage içerir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-dependency">Dependency</span>
-                    <span>FlightManager ··> Flight - Manages flights</span>
+                    <span>FlightManager ··> Flight, Plane, Route - Uçuşları yönetir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-dependency">Dependency</span>
-                    <span>SeatManager ··> Seat - Manages seats</span>
+                    <span>SeatManager ··> Plane, Seat - Koltukları yönetir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-dependency">Dependency</span>
-                    <span>ReservationManager ··> Reservation - Manages reservations</span>
+                    <span>ReservationManager ··> Reservation, Ticket - Rezervasyonları yönetir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-dependency">Dependency</span>
-                    <span>PriceCalculator ··> Seat, Flight - Calculates prices</span>
+                    <span>UserManager ··> User, Passenger - Kullanıcıları yönetir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-dependency">Dependency</span>
-                    <span>FlightSearchEngine ··> FlightManager - Uses for search</span>
+                    <span>PriceCalculator ··> Seat, Flight - Fiyat hesaplar</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-type rel-dependency">Dependency</span>
+                    <span>FlightSearchEngine ··> FlightManager - Arama için kullanır</span>
+                </div>
+                <div class="rel-item">
+                    <span class="rel-type rel-dependency">Dependency</span>
+                    <span>ReportGenerator ··> FlightManager, ReservationManager - Rapor oluşturur</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-inheritance">Inheritance</span>
-                    <span>Customer ──▷ User - Customer extends User</span>
+                    <span>Customer ──▷ User - Customer, User'dan türetilir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-inheritance">Inheritance</span>
-                    <span>Staff ──▷ User - Staff extends User</span>
+                    <span>Staff ──▷ User - Staff, User'dan türetilir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-inheritance">Inheritance</span>
-                    <span>Admin ──▷ Staff - Admin extends Staff</span>
+                    <span>Admin ──▷ Staff - Admin, Staff'tan türetilir</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-implements">Implements</span>
-                    <span>ReportGenerator ──▷ Runnable - For threading</span>
+                    <span>ReportGenerator ──▷ Runnable - Threading için implement eder</span>
                 </div>
                 <div class="rel-item">
                     <span class="rel-type rel-association">Association</span>
-                    <span>Customer ── Passenger (1:1) - Customer has Passenger info</span>
+                    <span>Customer ── Passenger (1:1) - Customer bir Passenger bilgisi içerir</span>
                 </div>
             </div>
         </div>
@@ -907,14 +1060,14 @@
         <div class="notes">
             <h3>📝 Önemli Notlar (Important Notes)</h3>
             <ul>
-                <li><strong>Encapsulation (Kapsülleme):</strong> Tüm attribute'lar private (-) olarak tanımlanmıştır. Getter/setter metodları ile erişim sağlanır.</li>
-                <li><strong>Inheritance (Kalıtım):</strong> User abstract sınıfından Customer, Staff ve Admin sınıfları türetilmiştir.</li>
-                <li><strong>Polymorphism (Çok Biçimlilik):</strong> getPermissions() metodu her alt sınıfta farklı şekilde implement edilir.</li>
+                <li><strong>Encapsulation (Kapsülleme):</strong> Tüm attribute'lar private (-) olarak tanımlanmıştır. User sınıfında protected (#) erişim belirleyicisi kullanılmıştır. Getter/setter metodları ile erişim sağlanır.</li>
+                <li><strong>Inheritance (Kalıtım):</strong> User abstract sınıfından Customer ve Staff türetilmiştir. Admin ise Staff'tan türetilmiştir (çok seviyeli kalıtım).</li>
+                <li><strong>Polymorphism (Çok Biçimlilik):</strong> getPermissions() metodu her alt sınıfta farklı şekilde override edilir (Runtime polymorphism).</li>
                 <li><strong>Abstraction (Soyutlama):</strong> User sınıfı abstract olarak tanımlanmıştır, doğrudan instance oluşturulamaz.</li>
-                <li><strong>Multithreading:</strong> ReservationManager synchronized metodlar içerir, ReportGenerator Runnable interface'ini implement eder.</li>
-                <li><strong>JUnit Tests:</strong> PriceCalculator, FlightSearchEngine ve SeatManager sınıfları için test yazılmalıdır.</li>
-                <li><strong>File Operations:</strong> FileManager sınıfı tüm veri kaydetme/yükleme işlemlerini yönetir.</li>
-                <li><strong>Enum Types:</strong> SeatClass, FlightStatus, ReservationStatus, TicketStatus ve UserRole enum olarak tanımlanmıştır.</li>
+                <li><strong>Multithreading:</strong> ReservationManager'da ReentrantLock ile thread-safe rezervasyon, ReportGenerator Runnable interface'ini implement eder. Seat sınıfında synchronized metodlar kullanılmıştır.</li>
+                <li><strong>JUnit Tests:</strong> PriceCalculator, FlightSearchEngine ve SeatManager sınıfları için birim testler yazılmıştır.</li>
+                <li><strong>File Operations:</strong> FileManager sınıfı ObjectInputStream/ObjectOutputStream kullanarak Serialization ile veri kaydetme/yükleme işlemlerini yönetir. Veritabanı kullanılmaz.</li>
+                <li><strong>Enum Types:</strong> SeatClass, FlightStatus, ReservationStatus, TicketStatus, UserRole ve ReportType enum olarak tanımlanmıştır.</li>
             </ul>
         </div>
 
