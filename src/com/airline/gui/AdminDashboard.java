@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -50,21 +51,114 @@ public class AdminDashboard {
         // Üst menü
         mainLayout.setTop(createHeader());
 
-        // Tab panel
-        TabPane tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        // İçerik paneli
+        StackPane contentPane = new StackPane();
+        VBox flightsPane = createFlightsPane();
+        VBox reservationsPane = createReservationsPane();
+        VBox reportsPane = createReportsPane();
+        VBox simulationPane = createSimulationPane();
 
-        Tab flightsTab = new Tab("✈ Uçuş Yönetimi", createFlightsPane());
-        Tab reservationsTab = new Tab("📋 Rezervasyonlar", createReservationsPane());
-        Tab reportsTab = new Tab("📊 Raporlar", createReportsPane());
-        Tab simulationTab = new Tab("🔄 Simülasyon", createSimulationPane());
+        reservationsPane.setVisible(false);
+        reportsPane.setVisible(false);
+        simulationPane.setVisible(false);
+        contentPane.getChildren().addAll(flightsPane, reservationsPane, reportsPane, simulationPane);
 
-        tabPane.getTabs().addAll(flightsTab, reservationsTab, reportsTab, simulationTab);
-        mainLayout.setCenter(tabPane);
+        // Modern Pill Style Tab Bar
+        HBox tabBar = new HBox(10);
+        tabBar.setAlignment(Pos.CENTER);
+        tabBar.setPadding(new Insets(15, 20, 15, 20));
+        tabBar.setStyle("-fx-background-color: #f0f0f0;");
+
+        Button flightsTabBtn = createPillTab("✈ Uçuş Yönetimi", true);
+        Button reservationsTabBtn = createPillTab("📋 Rezervasyonlar", false);
+        Button reportsTabBtn = createPillTab("📊 Raporlar", false);
+        Button simulationTabBtn = createPillTab("🔄 Simülasyon", false);
+
+        Button[] allTabs = {flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn};
+        VBox[] allPanes = {flightsPane, reservationsPane, reportsPane, simulationPane};
+
+        for (int i = 0; i < allTabs.length; i++) {
+            final int index = i;
+            allTabs[i].setOnAction(e -> {
+                for (int j = 0; j < allPanes.length; j++) {
+                    allPanes[j].setVisible(j == index);
+                    updatePillTabStyle(allTabs[j], j == index);
+                }
+            });
+        }
+
+        tabBar.getChildren().addAll(flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn);
+
+        VBox centerContent = new VBox();
+        centerContent.getChildren().addAll(tabBar, contentPane);
+        VBox.setVgrow(contentPane, Priority.ALWAYS);
+        mainLayout.setCenter(centerContent);
 
         Scene scene = new Scene(mainLayout, 1100, 750);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Button createPillTab(String text, boolean isActive) {
+        Button btn = new Button(text);
+        btn.setCursor(Cursor.HAND);
+        updatePillTabStyle(btn, isActive);
+        return btn;
+    }
+
+    private void updatePillTabStyle(Button btn, boolean isActive) {
+        if (isActive) {
+            btn.setStyle(
+                "-fx-background-color: #ffc107; " +
+                "-fx-text-fill: #333333; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-cursor: hand;"
+            );
+        } else {
+            btn.setStyle(
+                "-fx-background-color: white; " +
+                "-fx-text-fill: #666666; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: normal; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: #e0e0e0; " +
+                "-fx-border-radius: 25; " +
+                "-fx-cursor: hand;"
+            );
+        }
+        btn.setOnMouseEntered(e -> {
+            if (!btn.getStyle().contains("#ffc107")) {
+                btn.setStyle(
+                    "-fx-background-color: #fff8e1; " +
+                    "-fx-text-fill: #333333; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-font-weight: normal; " +
+                    "-fx-background-radius: 25; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: #ffc107; " +
+                    "-fx-border-radius: 25; " +
+                    "-fx-cursor: hand;"
+                );
+            }
+        });
+        btn.setOnMouseExited(e -> {
+            if (!btn.getStyle().contains("#fff8e1")) return;
+            btn.setStyle(
+                "-fx-background-color: white; " +
+                "-fx-text-fill: #666666; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: normal; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: #e0e0e0; " +
+                "-fx-border-radius: 25; " +
+                "-fx-cursor: hand;"
+            );
+        });
     }
 
     private HBox createHeader() {

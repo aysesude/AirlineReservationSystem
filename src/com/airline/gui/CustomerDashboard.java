@@ -63,19 +63,109 @@ public class CustomerDashboard {
         // Üst menü
         mainLayout.setTop(createHeader());
 
-        // Tab panel
-        TabPane tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        // İçerik paneli
+        StackPane contentPane = new StackPane();
+        VBox searchPane = createSearchPane();
+        VBox reservationsPane = createReservationsPane();
+        reservationsPane.setVisible(false);
+        contentPane.getChildren().addAll(searchPane, reservationsPane);
 
-        Tab searchTab = new Tab("🔍 Uçuş Ara", createSearchPane());
-        Tab reservationsTab = new Tab("📋 Rezervasyonlarım", createReservationsPane());
+        // Modern Pill Style Tab Bar
+        HBox tabBar = new HBox(10);
+        tabBar.setAlignment(Pos.CENTER);
+        tabBar.setPadding(new Insets(15, 20, 15, 20));
+        tabBar.setStyle("-fx-background-color: #f0f0f0;");
 
-        tabPane.getTabs().addAll(searchTab, reservationsTab);
-        mainLayout.setCenter(tabPane);
+        Button searchTabBtn = createPillTab("🔍 Uçuş Ara", true);
+        Button reservationsTabBtn = createPillTab("📋 Rezervasyonlarım", false);
+
+        searchTabBtn.setOnAction(e -> {
+            searchPane.setVisible(true);
+            reservationsPane.setVisible(false);
+            updatePillTabStyle(searchTabBtn, true);
+            updatePillTabStyle(reservationsTabBtn, false);
+        });
+
+        reservationsTabBtn.setOnAction(e -> {
+            searchPane.setVisible(false);
+            reservationsPane.setVisible(true);
+            loadReservations();
+            updatePillTabStyle(searchTabBtn, false);
+            updatePillTabStyle(reservationsTabBtn, true);
+        });
+
+        tabBar.getChildren().addAll(searchTabBtn, reservationsTabBtn);
+
+        VBox centerContent = new VBox();
+        centerContent.getChildren().addAll(tabBar, contentPane);
+        VBox.setVgrow(contentPane, Priority.ALWAYS);
+        mainLayout.setCenter(centerContent);
 
         Scene scene = new Scene(mainLayout, 1100, 750);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Button createPillTab(String text, boolean isActive) {
+        Button btn = new Button(text);
+        btn.setCursor(Cursor.HAND);
+        updatePillTabStyle(btn, isActive);
+        return btn;
+    }
+
+    private void updatePillTabStyle(Button btn, boolean isActive) {
+        if (isActive) {
+            btn.setStyle(
+                "-fx-background-color: #ffc107; " +
+                "-fx-text-fill: #333333; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-cursor: hand;"
+            );
+        } else {
+            btn.setStyle(
+                "-fx-background-color: white; " +
+                "-fx-text-fill: #666666; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: normal; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: #e0e0e0; " +
+                "-fx-border-radius: 25; " +
+                "-fx-cursor: hand;"
+            );
+        }
+        btn.setOnMouseEntered(e -> {
+            if (!btn.getStyle().contains("#ffc107")) {
+                btn.setStyle(
+                    "-fx-background-color: #fff8e1; " +
+                    "-fx-text-fill: #333333; " +
+                    "-fx-font-size: 14px; " +
+                    "-fx-font-weight: normal; " +
+                    "-fx-background-radius: 25; " +
+                    "-fx-padding: 10 25; " +
+                    "-fx-border-color: #ffc107; " +
+                    "-fx-border-radius: 25; " +
+                    "-fx-cursor: hand;"
+                );
+            }
+        });
+        btn.setOnMouseExited(e -> {
+            if (!btn.getStyle().contains("#fff8e1")) return;
+            btn.setStyle(
+                "-fx-background-color: white; " +
+                "-fx-text-fill: #666666; " +
+                "-fx-font-size: 14px; " +
+                "-fx-font-weight: normal; " +
+                "-fx-background-radius: 25; " +
+                "-fx-padding: 10 25; " +
+                "-fx-border-color: #e0e0e0; " +
+                "-fx-border-radius: 25; " +
+                "-fx-cursor: hand;"
+            );
+        });
     }
 
     private HBox createHeader() {
