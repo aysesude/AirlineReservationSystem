@@ -236,17 +236,24 @@ public class CustomerDashboard {
 
         // Yolcular ve Kabin Sınıfı
         VBox passengerBox = createPassengerField();
-        passengerBox.setPrefWidth(180);
+        passengerBox.setPrefWidth(280);
+        passengerBox.setMinWidth(280);
+
+        // Ara butonu öncesi boşluk
+        Region spacer = new Region();
+        spacer.setPrefWidth(15);
 
         // Ara Butonu
         Button searchButton = new Button("Ara");
+        searchButton.setMinWidth(80);
+        searchButton.setPrefWidth(80);
         searchButton.setStyle(
             "-fx-background-color: #ffc107; " +
             "-fx-text-fill: #333; " +
             "-fx-font-size: 16px; " +
             "-fx-font-weight: bold; " +
             "-fx-background-radius: 8; " +
-            "-fx-padding: 15 30; " +
+            "-fx-padding: 15 20; " +
             "-fx-cursor: hand;"
         );
         searchButton.setCursor(Cursor.HAND);
@@ -255,7 +262,7 @@ public class CustomerDashboard {
         searchBox.getChildren().addAll(
             departureBox, swapPane, arrivalBox, separator1,
             departureDateBox, separator2, returnDateBox, separator3,
-            passengerBox, searchButton
+            passengerBox, spacer, searchButton
         );
 
         // Tüm uçuşları göster butonu
@@ -381,17 +388,26 @@ public class CustomerDashboard {
 
     private VBox createPassengerField() {
         VBox box = new VBox(2);
-        box.setPadding(new Insets(10, 15, 10, 15));
+        box.setPadding(new Insets(10, 10, 10, 10));
 
         Label fieldLabel = new Label("Yolcular ve kabin sınıfı");
         fieldLabel.setStyle("-fx-text-fill: #68697f; -fx-font-size: 12px;");
 
-        HBox valueBox = new HBox(5);
+        HBox valueBox = new HBox(0);
         valueBox.setAlignment(Pos.CENTER_LEFT);
 
         passengerCombo = new ComboBox<>();
         passengerCombo.getItems().addAll("1 yetişkin", "2 yetişkin", "3 yetişkin", "4 yetişkin");
         passengerCombo.setValue("1 yetişkin");
+        passengerCombo.setMinWidth(120);
+        passengerCombo.setPrefWidth(120);
+        passengerCombo.setButtonCell(new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item);
+            }
+        });
         passengerCombo.setStyle(
             "-fx-background-color: transparent; " +
             "-fx-border-color: transparent; " +
@@ -399,12 +415,18 @@ public class CustomerDashboard {
             "-fx-font-weight: bold;"
         );
 
-        Label commaLabel = new Label(",");
-        commaLabel.setStyle("-fx-font-weight: bold;");
-
         cabinClassCombo = new ComboBox<>();
         cabinClassCombo.getItems().addAll(SeatClass.values());
         cabinClassCombo.setValue(SeatClass.ECONOMY);
+        cabinClassCombo.setMinWidth(120);
+        cabinClassCombo.setPrefWidth(120);
+        cabinClassCombo.setButtonCell(new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(SeatClass item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.getDisplayName());
+            }
+        });
         cabinClassCombo.setStyle(
             "-fx-background-color: transparent; " +
             "-fx-border-color: transparent; " +
@@ -412,7 +434,7 @@ public class CustomerDashboard {
             "-fx-font-weight: bold;"
         );
 
-        valueBox.getChildren().addAll(passengerCombo, commaLabel, cabinClassCombo);
+        valueBox.getChildren().addAll(passengerCombo, cabinClassCombo);
         box.getChildren().addAll(fieldLabel, valueBox);
         return box;
     }

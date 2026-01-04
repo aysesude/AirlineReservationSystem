@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -126,7 +127,14 @@ public class SeatSimulationPanel extends VBox {
         gridContainer.setAlignment(Pos.CENTER);
         gridContainer.getChildren().addAll(seatGrid, legend);
 
-        getChildren().add(gridContainer);
+        // ScrollPane ile kaydırılabilir yap
+        ScrollPane scrollPane = new ScrollPane(gridContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        scrollPane.setPrefViewportHeight(500);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        getChildren().add(scrollPane);
     }
 
     private HBox createLegendItem(Color color, String text) {
@@ -138,6 +146,8 @@ public class SeatSimulationPanel extends VBox {
 
         Label label = new Label(text);
         label.setFont(Font.font("Arial", 11));
+        label.setTextFill(Color.BLACK);
+        label.setStyle("-fx-text-fill: black;");
 
         HBox box = new HBox(5);
         box.setAlignment(Pos.CENTER_LEFT);
@@ -219,19 +229,18 @@ public class SeatSimulationPanel extends VBox {
 
                         // GUI'yi güncelle
                         final boolean wasReserved = reserved;
-                        final boolean hasConflict = !synchronized_ && !reserved && selectedSeat.isReserveStatus();
 
                         Platform.runLater(() -> {
                             if (row >= 0 && row < ROWS && col >= 0 && col < SEATS_PER_ROW) {
                                 if (wasReserved) {
+                                    // Başarılı rezervasyon - turuncu
                                     seatRectangles[row][col].setFill(Color.ORANGERED);
                                     successCount.incrementAndGet();
-                                } else if (hasConflict || !synchronized_) {
-                                    // Race condition nedeniyle çakışma
-                                    if (seatRectangles[row][col].getFill() == Color.ORANGERED) {
-                                        seatRectangles[row][col].setFill(Color.DARKRED);
-                                        conflictCount.incrementAndGet();
-                                    }
+                                } else if (!synchronized_) {
+                                    // Unsynchronized modda başarısız = çakışma (race condition)
+                                    // Koltuk zaten dolu olarak işaretlenmiş ama biz de seçmiştik
+                                    seatRectangles[row][col].setFill(Color.DARKRED);
+                                    conflictCount.incrementAndGet();
                                 }
                                 updateStatus(successCount.get(), conflictCount.get());
                             }

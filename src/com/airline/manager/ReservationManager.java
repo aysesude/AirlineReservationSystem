@@ -85,17 +85,25 @@ public class ReservationManager {
      */
     public boolean unsynchronizedReserve(Seat seat) {
         // Bu metod synchronized DEĞİL - race condition olabilir
-        if (seat.isReserveStatus()) {
-            return false;
-        }
+        // Önce durumu kontrol et
+        boolean wasAvailable = !seat.isReserveStatus();
+
         // Yapay gecikme ekle - race condition'ı daha görünür yapmak için
         try {
-            Thread.sleep(1);
+            Thread.sleep(2);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        seat.reserve();
-        return true;
+
+        // Gecikme sonrası tekrar kontrol et - bu arada başkası almış olabilir
+        if (seat.isReserveStatus()) {
+            // Koltuk zaten alınmış - çakışma!
+            return false;
+        }
+
+        // Koltuğu rezerve et (ama başka thread de aynı anda yapıyor olabilir)
+        seat.setReserveStatus(true);
+        return wasAvailable;
     }
 
     /**
