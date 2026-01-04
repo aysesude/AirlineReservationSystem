@@ -41,6 +41,50 @@ public class MainApp extends Application {
         if (flightManager.getAllFlights().isEmpty()) {
             flightManager.createSampleData();
         }
+
+        // Rezervasyonları uçuşlarla senkronize et
+        syncReservationsWithFlights();
+    }
+
+    /**
+     * Rezervasyonlardaki koltuk durumlarını uçuşlarla senkronize eder.
+     * Bu, uygulama yeniden başlatıldığında doluluk oranlarının doğru gösterilmesi için gereklidir.
+     */
+    private void syncReservationsWithFlights() {
+        // Önce tüm uçuşlardaki koltukları sıfırla
+        for (com.airline.model.Flight flight : flightManager.getAllFlights()) {
+            if (flight.getPlane() != null) {
+                flight.getPlane().resetAllSeats();
+            }
+        }
+
+        // Sonra sadece aktif rezervasyonlardaki koltukları rezerve et
+        for (com.airline.model.Reservation reservation : reservationManager.getAllReservations()) {
+            System.out.println("DEBUG: Rezervasyon " + reservation.getReservationCode() +
+                " - Status: " + reservation.getStatus() +
+                " - isActive: " + reservation.isActive() +
+                " - Flight: " + (reservation.getFlight() != null ? reservation.getFlight().getFlightNum() : "null"));
+
+            if (reservation.isActive() && reservation.getFlight() != null && reservation.getSeat() != null) {
+                // Uçuşu FlightManager'dan bul
+                String flightNum = reservation.getFlight().getFlightNum();
+                com.airline.model.Flight flight = flightManager.getFlightByNumber(flightNum);
+
+                System.out.println("DEBUG: Aranan uçuş: " + flightNum + " - Bulunan: " + (flight != null ? flight.getFlightNum() : "null"));
+
+                if (flight != null && flight.getPlane() != null) {
+                    // Koltuğu uçağın içinden bul ve rezerve et
+                    String seatNum = reservation.getSeat().getSeatNum();
+                    com.airline.model.Seat seat = flight.getPlane().getSeat(seatNum);
+                    if (seat != null) {
+                        seat.reserve();
+                        System.out.println("DEBUG: Koltuk rezerve edildi: " + seatNum + " uçuş: " + flightNum);
+                    }
+                }
+            }
+        }
+        // Güncellenmiş uçuşları kaydet
+        flightManager.saveToFile();
     }
 
     /**

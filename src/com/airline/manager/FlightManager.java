@@ -47,7 +47,7 @@ public class FlightManager {
 
         Flight flight = new Flight(flightNum, route, date, hour, duration, plane);
         flights.add(flight);
-        
+
         // Uçak ve rotayı da listeye ekle (eğer yoksa)
         if (!planes.contains(plane)) {
             planes.add(plane);
@@ -55,7 +55,7 @@ public class FlightManager {
         if (route != null && !routes.contains(route)) {
             routes.add(route);
         }
-        
+
         saveToFile();
         return flight;
     }
@@ -242,15 +242,6 @@ public class FlightManager {
      * Örnek veriler oluşturur (test için).
      */
     public void createSampleData() {
-        // Örnek uçaklar
-        Plane plane1 = new Plane("TC-001", "Boeing 737-800", 500);
-        Plane plane2 = new Plane("TC-002", "Airbus A320", 450);
-        Plane plane3 = new Plane("TC-003", "Boeing 777", 600);
-
-        planes.add(plane1);
-        planes.add(plane2);
-        planes.add(plane3);
-
         // Örnek rotalar
         Route route1 = new Route("İstanbul", "İstanbul Havalimanı", "IST",
                                  "Ankara", "Esenboğa Havalimanı", "ESB");
@@ -270,25 +261,46 @@ public class FlightManager {
         routes.add(route5);
 
         // Örnek uçuşlar (bugün ve yarın için)
+        // Her uçuş için ayrı plane instance oluştur (doluluk oranları karışmasın)
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
         LocalDate nextWeek = today.plusDays(7);
 
         // Bugünkü uçuşlar
-        flights.add(new Flight("TK101", route1, today, LocalTime.of(8, 30), 60, plane1));
-        flights.add(new Flight("TK102", route2, today, LocalTime.of(10, 0), 75, plane2));
-        flights.add(new Flight("TK103", route4, today, LocalTime.of(14, 30), 90, plane1));
+        Plane plane101 = new Plane("TC-101", "Boeing 737-800", 500);
+        Plane plane102 = new Plane("TC-102", "Airbus A320", 450);
+        Plane plane103 = new Plane("TC-103", "Boeing 737-800", 500);
+        planes.add(plane101);
+        planes.add(plane102);
+        planes.add(plane103);
+        flights.add(new Flight("TK101", route1, today, LocalTime.of(8, 30), 60, plane101));
+        flights.add(new Flight("TK102", route2, today, LocalTime.of(10, 0), 75, plane102));
+        flights.add(new Flight("TK103", route4, today, LocalTime.of(14, 30), 90, plane103));
 
         // Yarınki uçuşlar
-        flights.add(new Flight("TK201", route1, tomorrow, LocalTime.of(7, 0), 60, plane1));
-        flights.add(new Flight("TK202", route3, tomorrow, LocalTime.of(9, 30), 75, plane2));
-        flights.add(new Flight("TK203", route2, tomorrow, LocalTime.of(12, 0), 75, plane3));
-        flights.add(new Flight("TK204", route5, tomorrow, LocalTime.of(16, 0), 105, plane1));
+        Plane plane201 = new Plane("TC-201", "Boeing 737-800", 500);
+        Plane plane202 = new Plane("TC-202", "Airbus A320", 450);
+        Plane plane203 = new Plane("TC-203", "Boeing 777", 600);
+        Plane plane204 = new Plane("TC-204", "Boeing 737-800", 500);
+        planes.add(plane201);
+        planes.add(plane202);
+        planes.add(plane203);
+        planes.add(plane204);
+        flights.add(new Flight("TK201", route1, tomorrow, LocalTime.of(7, 0), 60, plane201));
+        flights.add(new Flight("TK202", route3, tomorrow, LocalTime.of(9, 30), 75, plane202));
+        flights.add(new Flight("TK203", route2, tomorrow, LocalTime.of(12, 0), 75, plane203));
+        flights.add(new Flight("TK204", route5, tomorrow, LocalTime.of(16, 0), 105, plane204));
 
         // Gelecek hafta uçuşları
-        flights.add(new Flight("TK301", route1, nextWeek, LocalTime.of(6, 0), 60, plane1));
-        flights.add(new Flight("TK302", route4, nextWeek, LocalTime.of(11, 0), 90, plane2));
-        flights.add(new Flight("TK303", route2, nextWeek, LocalTime.of(15, 30), 75, plane3));
+        Plane plane301 = new Plane("TC-301", "Boeing 737-800", 500);
+        Plane plane302 = new Plane("TC-302", "Airbus A320", 450);
+        Plane plane303 = new Plane("TC-303", "Boeing 777", 600);
+        planes.add(plane301);
+        planes.add(plane302);
+        planes.add(plane303);
+        flights.add(new Flight("TK301", route1, nextWeek, LocalTime.of(6, 0), 60, plane301));
+        flights.add(new Flight("TK302", route4, nextWeek, LocalTime.of(11, 0), 90, plane302));
+        flights.add(new Flight("TK303", route2, nextWeek, LocalTime.of(15, 30), 75, plane303));
 
         saveToFile();
     }
