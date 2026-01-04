@@ -9,38 +9,30 @@ Bu proje, Java programlama dili kullanılarak geliştirilmiş kapsamlı bir Hava
 ## 🛠️ Gereksinimler
 
 - **JDK 17** veya üzeri
-- **Maven 3.6+**
-- **JavaFX 21**
+- **JavaFX 21** (lib klasöründe mevcut)
 
 ## 🚀 Kurulum ve Çalıştırma
+
+### Terminal ile (Önerilen)
+
+```bash
+# Projeyi derle
+./compile.sh
+
+# Uygulamayı çalıştır
+./run.sh
+```
 
 ### VS Code ile
 
 1. **Extension Pack for Java** eklentisini yükleyin
 2. Projeyi VS Code'da açın: `File` → `Open Folder`
-3. Maven bağımlılıklarının yüklenmesini bekleyin
-4. `F5` tuşuna basın veya `Run` → `Start Debugging`
-
-### Terminal ile
-
-```bash
-# Bağımlılıkları yükle ve derle
-mvn clean compile
-
-# Uygulamayı çalıştır
-mvn javafx:run
-
-# Testleri çalıştır
-mvn test
-
-# JAR oluştur
-mvn clean package
-```
+3. `F5` tuşuna basın veya `Run` → `Start Debugging`
 
 ### IntelliJ IDEA ile
 
 1. `File` → `Open` → Proje klasörünü seçin
-2. Maven projesini import edin
+2. JavaFX SDK'yı `lib` klasöründen ayarlayın
 3. `MainApp.java` → Sağ tık → `Run`
 
 ## 🔐 Giriş Bilgileri
@@ -99,7 +91,9 @@ AirlineReservationSystem/
 │           ├── PriceCalculatorTest.java
 │           ├── FlightSearchEngineTest.java
 │           └── SeatManagerTest.java
-├── pom.xml                           # Maven konfigürasyonu
+├── lib/                              # JavaFX ve JUnit kütüphaneleri
+├── compile.sh                        # Derleme scripti
+├── run.sh                            # Çalıştırma scripti
 └── README.md
 ```
 
@@ -152,23 +146,16 @@ AirlineReservationSystem/
 
 ## 🧪 Testleri Çalıştırma
 
-```bash
-# Tüm testleri çalıştır
-mvn test
+Testler `src/com/airline/test/` klasöründe bulunmaktadır. IDE üzerinden veya JUnit test runner ile çalıştırabilirsiniz.
 
-# Belirli bir test sınıfını çalıştır
-mvn test -Dtest=PriceCalculatorTest
-mvn test -Dtest=FlightSearchEngineTest
-mvn test -Dtest=SeatManagerTest
-```
-
-## 📦 JAR Oluşturma
+## 📦 Derleme
 
 ```bash
-mvn clean package
+# Projeyi derle
+./compile.sh
 ```
 
-JAR dosyası `target/` klasöründe oluşturulacaktır.
+Derlenmiş .class dosyaları `out/` klasöründe oluşturulacaktır.
 
 ## 👥 Geliştirici
 
