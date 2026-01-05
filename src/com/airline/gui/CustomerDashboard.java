@@ -1,15 +1,12 @@
 package com.airline.gui;
 
 import com.airline.MainApp;
-import com.airline.manager.FlightManager;
-import com.airline.manager.ReservationManager;
 import com.airline.model.*;
 import com.airline.model.enums.SeatClass;
 import com.airline.service.FlightSearchEngine;
 import com.airline.service.PriceCalculator;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

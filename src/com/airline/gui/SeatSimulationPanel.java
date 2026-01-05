@@ -284,7 +284,6 @@ public class SeatSimulationPanel extends VBox {
 
             // Sonuçları göster
             int occupied = simulationPlane.getReservedSeatCount();
-            int empty = simulationPlane.getAvailableSeatCount();
 
             Platform.runLater(() -> {
                 if (synchronized_) {

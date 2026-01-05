@@ -4,8 +4,6 @@ import com.airline.manager.FlightManager;
 import com.airline.model.Flight;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -234,7 +232,7 @@ public class FlightSearchEngine {
         if (flights.isEmpty()) {
             return null;
         }
-        
+
         // En az dolu (en çok boş koltuk olan) uçuşu döndür
         // Gerçek uygulamada fiyat karşılaştırması yapılır
         return flights.stream()

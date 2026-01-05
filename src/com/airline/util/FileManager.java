@@ -61,7 +61,6 @@ public class FileManager {
      * @param list Kaydedilecek liste
      * @param filename Dosya adı
      */
-    @SuppressWarnings("unchecked")
     public static <T> void saveList(List<T> list, String filename) {
         saveObject(new ArrayList<>(list), filename);
     }

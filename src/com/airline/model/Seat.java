@@ -2,8 +2,6 @@ package com.airline.model;
 
 import com.airline.model.enums.SeatClass;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 /**
  * Uçaktaki bir koltuğu temsil eder.

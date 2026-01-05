@@ -42,7 +42,6 @@ public class FlightSearchEngineTest {
     private void createTestFlights() {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
-        LocalDate yesterday = today.minusDays(1);
 
         // Istanbul -> Ankara uçuşları
         Route route1 = new Route("İstanbul", "IST", "Ankara", "ESB");

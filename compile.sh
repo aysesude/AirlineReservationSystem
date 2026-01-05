@@ -21,6 +21,12 @@ CLASSPATH="$JAVAFX_JARS:$JUNIT_JARS"
 
 echo "Derleniyor..."
 
+# module-info.java dosyasını kontrol et (yedekten geri yükle gerekirse)
+if [ -f "$SRC_DIR/module-info.java.bak" ] && [ ! -f "$SRC_DIR/module-info.java" ]; then
+    cp "$SRC_DIR/module-info.java.bak" "$SRC_DIR/module-info.java"
+    RESTORE_BAK=true
+fi
+
 # Tüm .java dosyalarını bul (test klasörü hariç)
 find "$SRC_DIR" -name "*.java" ! -path "*/test/*" > "$PROJECT_DIR/sources.txt"
 
@@ -31,8 +37,16 @@ javac --module-path "$LIB_DIR" \
 if [ $? -eq 0 ]; then
     echo "✅ Derleme başarılı! Çıktı: $OUT_DIR"
     rm "$PROJECT_DIR/sources.txt"
+    # Eğer module-info.java geri yüklendiyse, sil
+    if [ "$RESTORE_BAK" = true ]; then
+        rm "$SRC_DIR/module-info.java"
+    fi
 else
     echo "❌ Derleme hatası!"
     rm "$PROJECT_DIR/sources.txt"
+    # Eğer module-info.java geri yüklendiyse, sil
+    if [ "$RESTORE_BAK" = true ]; then
+        rm "$SRC_DIR/module-info.java"
+    fi
     exit 1
 fi
