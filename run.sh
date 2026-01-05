@@ -11,13 +11,19 @@ if [ ! -d "$OUT_DIR" ]; then
     exit 1
 fi
 
-# JavaFX modül yolu
-JAVAFX_MODULES="$LIB_DIR/javafx-base-21.jar:$LIB_DIR/javafx-base-21-mac-aarch64.jar:$LIB_DIR/javafx-controls-21.jar:$LIB_DIR/javafx-controls-21-mac-aarch64.jar:$LIB_DIR/javafx-fxml-21.jar:$LIB_DIR/javafx-fxml-21-mac-aarch64.jar:$LIB_DIR/javafx-graphics-21.jar:$LIB_DIR/javafx-graphics-21-mac-aarch64.jar"
+# CLI modu kontrolü
+if [ "$1" == "--cli" ] || [ "$1" == "-c" ] || [ "$1" == "--no-gui" ]; then
+    echo "Terminal modunda başlatılıyor..."
+    java -cp "$OUT_DIR" com.airline.CliApp
+else
+    # JavaFX modül yolu
+    JAVAFX_MODULES="$LIB_DIR/javafx-base-21.jar:$LIB_DIR/javafx-base-21-mac-aarch64.jar:$LIB_DIR/javafx-controls-21.jar:$LIB_DIR/javafx-controls-21-mac-aarch64.jar:$LIB_DIR/javafx-fxml-21.jar:$LIB_DIR/javafx-fxml-21-mac-aarch64.jar:$LIB_DIR/javafx-graphics-21.jar:$LIB_DIR/javafx-graphics-21-mac-aarch64.jar"
 
-echo "Uygulama başlatılıyor..."
+    echo "GUI modunda başlatılıyor..."
 
-java --module-path "$LIB_DIR" \
-     --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base \
-     --enable-native-access=javafx.graphics \
-     -cp "$OUT_DIR:$JAVAFX_MODULES" \
-     com.airline.Launcher 2>&1 | grep -v "^WARNING:"
+    java --module-path "$LIB_DIR" \
+         --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base \
+         --enable-native-access=javafx.graphics \
+         -cp "$OUT_DIR:$JAVAFX_MODULES" \
+         com.airline.Launcher 2>&1 | grep -v "^WARNING:"
+fi
