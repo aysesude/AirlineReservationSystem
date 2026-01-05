@@ -98,8 +98,20 @@ public class AdminDashboard {
         VBox.setVgrow(contentPane, Priority.ALWAYS);
         mainLayout.setCenter(centerContent);
 
-        Scene scene = new Scene(mainLayout, 1100, 750);
+        // Ekran boyutuna göre pencere boyutu ayarla
+        javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+        double screenWidth = screen.getVisualBounds().getWidth();
+        double screenHeight = screen.getVisualBounds().getHeight();
+
+        // Pencere boyutunu ekranın %85'i olarak ayarla, maksimum 1200x800
+        double windowWidth = Math.min(1200, screenWidth * 0.85);
+        double windowHeight = Math.min(800, screenHeight * 0.85);
+
+        Scene scene = new Scene(mainLayout, windowWidth, windowHeight);
         stage.setScene(scene);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+        stage.centerOnScreen();
         stage.show();
     }
 
@@ -277,54 +289,55 @@ public class AdminDashboard {
     @SuppressWarnings("unchecked")
     private TableView<Flight> createFlightTable() {
         TableView<Flight> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<Flight, String> numCol = new TableColumn<>("Uçuş No");
         numCol.setCellValueFactory(new PropertyValueFactory<>("flightNum"));
-        numCol.setPrefWidth(80);
+        numCol.setMinWidth(70);
 
         TableColumn<Flight, String> depCol = new TableColumn<>("Kalkış");
         depCol.setCellValueFactory(new PropertyValueFactory<>("departurePlace"));
-        depCol.setPrefWidth(100);
+        depCol.setMinWidth(80);
 
         TableColumn<Flight, String> arrCol = new TableColumn<>("Varış");
         arrCol.setCellValueFactory(new PropertyValueFactory<>("arrivalPlace"));
-        arrCol.setPrefWidth(100);
+        arrCol.setMinWidth(80);
 
         TableColumn<Flight, LocalDate> dateCol = new TableColumn<>("Tarih");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-        dateCol.setPrefWidth(100);
+        dateCol.setMinWidth(85);
 
         TableColumn<Flight, String> timeCol = new TableColumn<>("Saat");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("hour"));
-        timeCol.setPrefWidth(70);
+        timeCol.setMinWidth(55);
 
         TableColumn<Flight, Integer> durationCol = new TableColumn<>("Süre(dk)");
         durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        durationCol.setPrefWidth(70);
+        durationCol.setMinWidth(60);
 
         TableColumn<Flight, String> planeCol = new TableColumn<>("Uçak");
         planeCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getPlane().getPlaneModel()));
-        planeCol.setPrefWidth(100);
+        planeCol.setMinWidth(90);
 
         TableColumn<Flight, Integer> capacityCol = new TableColumn<>("Kapasite");
         capacityCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleIntegerProperty(
                         cellData.getValue().getPlane().getCapacity()).asObject());
-        capacityCol.setPrefWidth(70);
+        capacityCol.setMinWidth(60);
 
         TableColumn<Flight, Integer> availableCol = new TableColumn<>("Boş");
         availableCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleIntegerProperty(
                         cellData.getValue().getAvailableSeatCount()).asObject());
-        availableCol.setPrefWidth(50);
+        availableCol.setMinWidth(45);
 
         TableColumn<Flight, String> statusCol = new TableColumn<>("Durum");
         statusCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getStatus().getDescription()));
-        statusCol.setPrefWidth(90);
+        statusCol.setMinWidth(75);
 
         table.getColumns().addAll(numCol, depCol, arrCol, dateCol, timeCol,
                 durationCol, planeCol, capacityCol, availableCol, statusCol);
@@ -529,22 +542,23 @@ public class AdminDashboard {
     @SuppressWarnings("unchecked")
     private TableView<Reservation> createReservationTable() {
         TableView<Reservation> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<Reservation, String> codeCol = new TableColumn<>("Kod");
         codeCol.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
-        codeCol.setPrefWidth(100);
+        codeCol.setMinWidth(80);
 
         TableColumn<Reservation, String> passengerCol = new TableColumn<>("Yolcu");
         passengerCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getPassenger().getFullName()));
-        passengerCol.setPrefWidth(150);
+        passengerCol.setMinWidth(120);
 
         TableColumn<Reservation, String> flightCol = new TableColumn<>("Uçuş");
         flightCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getFlight().getFlightNum()));
-        flightCol.setPrefWidth(80);
+        flightCol.setMinWidth(70);
 
         TableColumn<Reservation, String> routeCol = new TableColumn<>("Rota");
         routeCol.setCellValueFactory(cellData -> {
@@ -552,26 +566,26 @@ public class AdminDashboard {
             return new javafx.beans.property.SimpleStringProperty(
                     f.getDeparturePlace() + " → " + f.getArrivalPlace());
         });
-        routeCol.setPrefWidth(180);
+        routeCol.setMinWidth(140);
 
         TableColumn<Reservation, String> seatCol = new TableColumn<>("Koltuk");
         seatCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getSeat().getSeatNum() + " (" +
                         cellData.getValue().getSeat().getClass_() + ")"));
-        seatCol.setPrefWidth(100);
+        seatCol.setMinWidth(85);
 
         TableColumn<Reservation, String> dateCol = new TableColumn<>("Rez. Tarihi");
         dateCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getFormattedDate()));
-        dateCol.setPrefWidth(130);
+        dateCol.setMinWidth(100);
 
         TableColumn<Reservation, String> statusCol = new TableColumn<>("Durum");
         statusCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getStatus().getDescription()));
-        statusCol.setPrefWidth(90);
+        statusCol.setMinWidth(75);
 
         table.getColumns().addAll(codeCol, passengerCol, flightCol, routeCol, seatCol, dateCol, statusCol);
 

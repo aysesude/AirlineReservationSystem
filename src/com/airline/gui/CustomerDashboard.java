@@ -98,8 +98,20 @@ public class CustomerDashboard {
         VBox.setVgrow(contentPane, Priority.ALWAYS);
         mainLayout.setCenter(centerContent);
 
-        Scene scene = new Scene(mainLayout, 1100, 750);
+        // Ekran boyutuna göre pencere boyutu ayarla
+        javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+        double screenWidth = screen.getVisualBounds().getWidth();
+        double screenHeight = screen.getVisualBounds().getHeight();
+
+        // Pencere boyutunu ekranın %85'i olarak ayarla, maksimum 1200x800
+        double windowWidth = Math.min(1200, screenWidth * 0.85);
+        double windowHeight = Math.min(800, screenHeight * 0.85);
+
+        Scene scene = new Scene(mainLayout, windowWidth, windowHeight);
         stage.setScene(scene);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+        stage.centerOnScreen();
         stage.show();
     }
 
@@ -596,44 +608,45 @@ public class CustomerDashboard {
     @SuppressWarnings("unchecked")
     private TableView<Flight> createFlightTable() {
         TableView<Flight> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<Flight, String> numCol = new TableColumn<>("Uçuş No");
         numCol.setCellValueFactory(new PropertyValueFactory<>("flightNum"));
-        numCol.setPrefWidth(80);
+        numCol.setMinWidth(70);
 
         TableColumn<Flight, String> depCol = new TableColumn<>("Kalkış");
         depCol.setCellValueFactory(new PropertyValueFactory<>("departurePlace"));
-        depCol.setPrefWidth(120);
+        depCol.setMinWidth(100);
 
         TableColumn<Flight, String> arrCol = new TableColumn<>("Varış");
         arrCol.setCellValueFactory(new PropertyValueFactory<>("arrivalPlace"));
-        arrCol.setPrefWidth(120);
+        arrCol.setMinWidth(100);
 
         TableColumn<Flight, LocalDate> dateCol = new TableColumn<>("Tarih");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-        dateCol.setPrefWidth(100);
+        dateCol.setMinWidth(85);
 
         TableColumn<Flight, String> timeCol = new TableColumn<>("Saat");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("hour"));
-        timeCol.setPrefWidth(80);
+        timeCol.setMinWidth(60);
 
         TableColumn<Flight, String> durationCol = new TableColumn<>("Süre");
         durationCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getFormattedDuration()));
-        durationCol.setPrefWidth(80);
+        durationCol.setMinWidth(70);
 
         TableColumn<Flight, Integer> seatsCol = new TableColumn<>("Boş Koltuk");
         seatsCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleIntegerProperty(
                         cellData.getValue().getAvailableSeatCount()).asObject());
-        seatsCol.setPrefWidth(90);
+        seatsCol.setMinWidth(75);
 
         TableColumn<Flight, String> statusCol = new TableColumn<>("Durum");
         statusCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getStatus().getDescription()));
-        statusCol.setPrefWidth(100);
+        statusCol.setMinWidth(80);
 
         table.getColumns().addAll(numCol, depCol, arrCol, dateCol, timeCol, durationCol, seatsCol, statusCol);
         table.setPlaceholder(new Label("Uçuş bulunamadı"));
@@ -839,16 +852,17 @@ public class CustomerDashboard {
     @SuppressWarnings("unchecked")
     private TableView<Reservation> createReservationTable() {
         TableView<Reservation> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<Reservation, String> codeCol = new TableColumn<>("Rezervasyon Kodu");
         codeCol.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
-        codeCol.setPrefWidth(130);
+        codeCol.setMinWidth(110);
 
         TableColumn<Reservation, String> flightCol = new TableColumn<>("Uçuş");
         flightCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getFlight().getFlightNum()));
-        flightCol.setPrefWidth(80);
+        flightCol.setMinWidth(70);
 
         TableColumn<Reservation, String> routeCol = new TableColumn<>("Rota");
         routeCol.setCellValueFactory(cellData -> {
@@ -856,25 +870,25 @@ public class CustomerDashboard {
             return new javafx.beans.property.SimpleStringProperty(
                     f.getDeparturePlace() + " → " + f.getArrivalPlace());
         });
-        routeCol.setPrefWidth(180);
+        routeCol.setMinWidth(140);
 
         TableColumn<Reservation, String> dateCol = new TableColumn<>("Tarih");
         dateCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getFlight().getDate().toString()));
-        dateCol.setPrefWidth(100);
+        dateCol.setMinWidth(85);
 
         TableColumn<Reservation, String> seatCol = new TableColumn<>("Koltuk");
         seatCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getSeat().getSeatNum()));
-        seatCol.setPrefWidth(70);
+        seatCol.setMinWidth(60);
 
         TableColumn<Reservation, String> statusCol = new TableColumn<>("Durum");
         statusCol.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         cellData.getValue().getStatus().getDescription()));
-        statusCol.setPrefWidth(100);
+        statusCol.setMinWidth(80);
 
         table.getColumns().addAll(codeCol, flightCol, routeCol, dateCol, seatCol, statusCol);
         table.setPlaceholder(new Label("Henüz rezervasyonunuz bulunmamaktadır"));

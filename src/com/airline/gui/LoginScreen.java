@@ -108,9 +108,21 @@ public class LoginScreen {
 
         mainLayout.getChildren().addAll(titleLabel, subtitleLabel, formBox, demoLabel);
 
-        Scene scene = new Scene(mainLayout, 500, 600);
+        // Ekran boyutuna göre pencere boyutu ayarla
+        javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+        double screenWidth = screen.getVisualBounds().getWidth();
+        double screenHeight = screen.getVisualBounds().getHeight();
+
+        // Pencere boyutunu ekranın %40'ı olarak ayarla, min 450x550
+        double windowWidth = Math.max(450, Math.min(500, screenWidth * 0.4));
+        double windowHeight = Math.max(550, Math.min(600, screenHeight * 0.7));
+
+        Scene scene = new Scene(mainLayout, windowWidth, windowHeight);
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setMinWidth(400);
+        stage.setMinHeight(500);
+        stage.setResizable(true);
+        stage.centerOnScreen();
         stage.show();
     }
 

@@ -72,6 +72,9 @@ public class Plane implements Serializable {
      * Belirtilen numaralı koltuğu döndürür.
      */
     public Seat getSeat(String seatNum) {
+        if (seatNum == null) {
+            throw new IllegalArgumentException("Koltuk numarası null olamaz");
+        }
         return seatMatrix.get(seatNum.toUpperCase());
     }
 

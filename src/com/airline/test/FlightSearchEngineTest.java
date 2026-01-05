@@ -43,15 +43,15 @@ public class FlightSearchEngineTest {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
 
-        // Istanbul -> Ankara uçuşları
+        // Istanbul -> Ankara uçuşları (saat 23:59 - her zaman gelecek)
         Route route1 = new Route("İstanbul", "IST", "Ankara", "ESB");
-        flightManager.createFlight("TK101", route1, today, LocalTime.of(10, 0), 60, testPlane);
+        flightManager.createFlight("TK101", route1, today, LocalTime.of(23, 59), 60, testPlane);
         flightManager.createFlight("TK102", route1, tomorrow, LocalTime.of(14, 0), 60,
                 new Plane("TEST-002", "Airbus A320", 450));
 
-        // Istanbul -> Izmir uçuşları
+        // Istanbul -> Izmir uçuşları (saat 23:59 - her zaman gelecek)
         Route route2 = new Route("İstanbul", "IST", "İzmir", "ADB");
-        flightManager.createFlight("TK201", route2, today, LocalTime.of(12, 0), 75, testPlane);
+        flightManager.createFlight("TK201", route2, today, LocalTime.of(23, 59), 75, testPlane);
 
         // Ankara -> Antalya uçuşları
         Route route3 = new Route("Ankara", "ESB", "Antalya", "AYT");
