@@ -11,15 +11,17 @@ import com.airline.model.enums.SeatClass;
 public class PriceCalculator {
 
     private double basePrice;       // Baz fiyat (TL)
-    private double taxRate;         // Vergi oranı (örn: 0.18 = %18)
+    private double taxRate;         // Vergi oranı (örn: 0.20 = %20)
     private double businessMultiplier;  // Business sınıf çarpanı
     private double economyMultiplier;   // Economy sınıf çarpanı
+    private double serviceFee;      // Sabit hizmet bedeli
 
     // Varsayılan değerler
-    private static final double DEFAULT_BASE_PRICE = 500.0;
-    private static final double DEFAULT_TAX_RATE = 0.18;
-    private static final double DEFAULT_BUSINESS_MULTIPLIER = 2.5;
+    private static final double DEFAULT_BASE_PRICE = 450.0;
+    private static final double DEFAULT_TAX_RATE = 0.20;
+    private static final double DEFAULT_BUSINESS_MULTIPLIER = 2.8;
     private static final double DEFAULT_ECONOMY_MULTIPLIER = 1.0;
+    private static final double DEFAULT_SERVICE_FEE = 35.0;
 
     /**
      * Varsayılan değerlerle PriceCalculator oluşturur.
@@ -29,6 +31,7 @@ public class PriceCalculator {
         this.taxRate = DEFAULT_TAX_RATE;
         this.businessMultiplier = DEFAULT_BUSINESS_MULTIPLIER;
         this.economyMultiplier = DEFAULT_ECONOMY_MULTIPLIER;
+        this.serviceFee = DEFAULT_SERVICE_FEE;
     }
 
     /**
@@ -39,6 +42,7 @@ public class PriceCalculator {
         this.taxRate = taxRate;
         this.businessMultiplier = DEFAULT_BUSINESS_MULTIPLIER;
         this.economyMultiplier = DEFAULT_ECONOMY_MULTIPLIER;
+        this.serviceFee = DEFAULT_SERVICE_FEE;
     }
 
     /**
@@ -59,10 +63,12 @@ public class PriceCalculator {
             price = calculateEconomyPrice(basePrice);
         }
 
-        // Uçuş süresine göre ek ücret (her saat için %5 ekleme)
+        // Uçuş süresine göre logaritmik ek ücret hesaplama
+        // Kısa uçuşlarda düşük, uzun uçuşlarda kademeli artış
         if (flight != null) {
-            int hours = flight.getDuration() / 60;
-            price += price * (hours * 0.05);
+            int durationMinutes = flight.getDuration();
+            double durationFactor = Math.log1p(durationMinutes / 30.0) * 0.08;
+            price += price * durationFactor;
         }
 
         return calculateTotalWithTax(price);
@@ -79,6 +85,7 @@ public class PriceCalculator {
 
     /**
      * Business sınıfı fiyatını hesaplar.
+     * Formül: (baz * çarpan) + sabit hizmet bedeli + konfor primi
      * @param base Baz fiyat
      * @return Business fiyatı (vergi hariç)
      */
@@ -86,11 +93,13 @@ public class PriceCalculator {
         if (base < 0) {
             throw new IllegalArgumentException("Baz fiyat negatif olamaz!");
         }
-        return base * businessMultiplier;
+        double comfortPremium = base * 0.15; // %15 konfor primi
+        return (base * businessMultiplier) + serviceFee + comfortPremium;
     }
 
     /**
      * Economy sınıfı fiyatını hesaplar.
+     * Formül: (baz * çarpan) + sabit hizmet bedeli
      * @param base Baz fiyat
      * @return Economy fiyatı (vergi hariç)
      */
@@ -98,7 +107,7 @@ public class PriceCalculator {
         if (base < 0) {
             throw new IllegalArgumentException("Baz fiyat negatif olamaz!");
         }
-        return base * economyMultiplier;
+        return (base * economyMultiplier) + serviceFee;
     }
 
     /**
@@ -157,7 +166,8 @@ public class PriceCalculator {
     }
 
     /**
-     * Bagaj ek ücreti hesaplar.
+     * Bagaj ek ücreti hesaplar (kademeli sistem).
+     * İlk 5 kg: normal fiyat, sonraki kg'lar: %25 zamlı
      * @param extraKg Fazla kilo miktarı
      * @param pricePerKg Kilo başına ücret
      * @return Toplam ek ücret
@@ -166,7 +176,13 @@ public class PriceCalculator {
         if (extraKg < 0 || pricePerKg < 0) {
             throw new IllegalArgumentException("Değerler negatif olamaz!");
         }
-        return extraKg * pricePerKg;
+        if (extraKg <= 5) {
+            return extraKg * pricePerKg;
+        }
+        // İlk 5 kg normal, geri kalanı %25 zamlı
+        double firstTierFee = 5 * pricePerKg;
+        double secondTierFee = (extraKg - 5) * (pricePerKg * 1.25);
+        return firstTierFee + secondTierFee;
     }
 
     /**
@@ -215,5 +231,16 @@ public class PriceCalculator {
 
     public void setEconomyMultiplier(double economyMultiplier) {
         this.economyMultiplier = economyMultiplier;
+    }
+
+    public double getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(double serviceFee) {
+        if (serviceFee < 0) {
+            throw new IllegalArgumentException("Hizmet bedeli negatif olamaz!");
+        }
+        this.serviceFee = serviceFee;
     }
 }

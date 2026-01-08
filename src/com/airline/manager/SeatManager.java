@@ -3,6 +3,8 @@ package com.airline.manager;
 import com.airline.model.Plane;
 import com.airline.model.Seat;
 import com.airline.model.enums.SeatClass;
+import com.airline.exception.SeatNotFoundException;
+import com.airline.exception.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,16 +63,16 @@ public class SeatManager {
      * Belirtilen koltuğu rezerve eder.
      * @param seatNum Koltuk numarası (örn: "15A")
      * @return Rezervasyon başarılı ise true
-     * @throws IllegalArgumentException Koltuk bulunamazsa
+     * @throws SeatNotFoundException Koltuk bulunamazsa
      */
-    public boolean reserveSeat(String seatNum) throws IllegalArgumentException {
+    public boolean reserveSeat(String seatNum) {
         if (plane == null) {
-            throw new IllegalArgumentException("Uçak tanımlanmamış!");
+            throw new ResourceNotFoundException("Uçak");
         }
 
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
-            throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
+            throw new SeatNotFoundException(seatNum);
         }
 
         if (seat.isReserveStatus()) {
@@ -85,16 +87,16 @@ public class SeatManager {
      * Belirtilen koltuğu serbest bırakır.
      * @param seatNum Koltuk numarası
      * @return İşlem başarılı ise true
-     * @throws IllegalArgumentException Koltuk bulunamazsa
+     * @throws SeatNotFoundException Koltuk bulunamazsa
      */
-    public boolean releaseSeat(String seatNum) throws IllegalArgumentException {
+    public boolean releaseSeat(String seatNum) {
         if (plane == null) {
-            throw new IllegalArgumentException("Uçak tanımlanmamış!");
+            throw new ResourceNotFoundException("Uçak");
         }
 
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
-            throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
+            throw new SeatNotFoundException(seatNum);
         }
 
         if (!seat.isReserveStatus()) {
@@ -109,16 +111,16 @@ public class SeatManager {
      * Belirtilen numaralı koltuğu döndürür.
      * @param seatNum Koltuk numarası
      * @return Koltuk nesnesi
-     * @throws IllegalArgumentException Koltuk bulunamazsa
+     * @throws SeatNotFoundException Koltuk bulunamazsa
      */
-    public Seat getSeat(String seatNum) throws IllegalArgumentException {
+    public Seat getSeat(String seatNum) {
         if (plane == null) {
-            throw new IllegalArgumentException("Uçak tanımlanmamış!");
+            throw new ResourceNotFoundException("Uçak");
         }
 
         Seat seat = plane.getSeat(seatNum);
         if (seat == null) {
-            throw new IllegalArgumentException("Koltuk bulunamadı: " + seatNum);
+            throw new SeatNotFoundException(seatNum);
         }
 
         return seat;

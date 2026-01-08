@@ -4,6 +4,7 @@ import com.airline.model.Flight;
 import com.airline.model.Plane;
 import com.airline.model.Route;
 import com.airline.util.FileManager;
+import com.airline.exception.DuplicateEntryException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,7 +43,7 @@ public class FlightManager {
                                LocalTime hour, int duration, Plane plane) {
         // Aynı numarada uçuş var mı kontrol et
         if (getFlightByNumber(flightNum) != null) {
-            throw new IllegalArgumentException("Bu uçuş numarası zaten mevcut: " + flightNum);
+            throw new DuplicateEntryException("Uçuş numarası", flightNum);
         }
 
         Flight flight = new Flight(flightNum, route, date, hour, duration, plane);

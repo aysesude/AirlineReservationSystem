@@ -6,8 +6,8 @@ package com.airline.model.enums;
  * BUSINESS: Business sınıfı - 2x fiyat, 40kg bagaj hakkı
  */
 public enum SeatClass {
-    ECONOMY(1.0, 20, "Ekonomi"),
-    BUSINESS(2.0, 40, "Business");
+    ECONOMY(1.0, 23, "Ekonomi"),
+    BUSINESS(2.0, 35, "Business");
 
     private final double priceMultiplier;
     private final int baggageAllowance;

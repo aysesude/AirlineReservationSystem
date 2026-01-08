@@ -14,7 +14,9 @@ public class Baggage implements Serializable {
     private double weight;      // kg cinsinden gerçek ağırlık
     private int allowance;      // kg cinsinden izin verilen ağırlık
     private double extraFee;    // Fazla bagaj ücreti
-    private static final double EXTRA_FEE_PER_KG = 50.0; // Kg başına ek ücret (TL)
+    private static final double EXTRA_FEE_PER_KG = 65.0; // Kg başına ek ücret (TL)
+    private static final double SURCHARGE_THRESHOLD = 10.0; // Ek zam eşiği (kg)
+    private static final double SURCHARGE_RATE = 1.40; // Eşik sonrası zam oranı
 
     /**
      * Yeni bagaj oluşturur.
@@ -40,7 +42,9 @@ public class Baggage implements Serializable {
     }
 
     /**
-     * Fazla bagaj ücretini hesaplar.
+     * Fazla bagaj ücretini hesaplar (kademeli tarife).
+     * İlk 10 kg fazlalık: standart ücret
+     * 10 kg üzeri: %40 zamlı ücret
      * @return Ek ücret (TL)
      */
     public double calculateExtraFee() {
@@ -48,7 +52,15 @@ public class Baggage implements Serializable {
             return 0;
         }
         double extraWeight = weight - allowance;
-        this.extraFee = extraWeight * EXTRA_FEE_PER_KG;
+
+        if (extraWeight <= SURCHARGE_THRESHOLD) {
+            this.extraFee = extraWeight * EXTRA_FEE_PER_KG;
+        } else {
+            // İlk 10 kg normal, sonrası %40 zamlı
+            double baseFee = SURCHARGE_THRESHOLD * EXTRA_FEE_PER_KG;
+            double surgeFee = (extraWeight - SURCHARGE_THRESHOLD) * (EXTRA_FEE_PER_KG * SURCHARGE_RATE);
+            this.extraFee = baseFee + surgeFee;
+        }
         return this.extraFee;
     }
 

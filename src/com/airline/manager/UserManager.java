@@ -3,6 +3,7 @@ package com.airline.manager;
 import com.airline.model.*;
 import com.airline.model.enums.UserRole;
 import com.airline.util.FileManager;
+import com.airline.exception.DuplicateEntryException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class UserManager {
                                       String name, String surname, String phone) {
         // Kullanıcı adı kontrolü
         if (isUsernameTaken(username)) {
-            throw new IllegalArgumentException("Bu kullanıcı adı zaten kullanılıyor: " + username);
+            throw new DuplicateEntryException("Kullanıcı adı", username);
         }
 
         // Yolcu oluştur
@@ -112,7 +113,7 @@ public class UserManager {
         }
 
         if (isUsernameTaken(username)) {
-            throw new IllegalArgumentException("Bu kullanıcı adı zaten kullanılıyor: " + username);
+            throw new DuplicateEntryException("Kullanıcı adı", username);
         }
 
         Staff staff = new Staff(username, password, email, department, position);

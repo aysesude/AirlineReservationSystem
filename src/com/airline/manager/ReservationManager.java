@@ -3,6 +3,7 @@ package com.airline.manager;
 import com.airline.model.*;
 import com.airline.model.enums.ReservationStatus;
 import com.airline.util.FileManager;
+import com.airline.exception.SeatNotAvailableException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ReservationManager {
         try {
             // Koltuk zaten rezerve mi kontrol et
             if (seat.isReserveStatus()) {
-                throw new IllegalStateException("Bu koltuk zaten rezerve edilmiş: " + seat.getSeatNum());
+                throw new SeatNotAvailableException(seat.getSeatNum(), "Koltuk zaten rezerve edilmiş");
             }
 
             // Rezervasyon oluştur

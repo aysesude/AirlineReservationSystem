@@ -22,53 +22,55 @@ public class PriceCalculatorTest {
 
     @BeforeEach
     void setUp() {
-        calculator = new PriceCalculator(500.0, 0.18); // 500 TL baz, %18 vergi
-        economySeat = new Seat("15A", SeatClass.ECONOMY, 500);
-        businessSeat = new Seat("3A", SeatClass.BUSINESS, 500);
+        calculator = new PriceCalculator(450.0, 0.20); // 450 TL baz, %20 vergi
+        economySeat = new Seat("15A", SeatClass.ECONOMY, 450);
+        businessSeat = new Seat("3A", SeatClass.BUSINESS, 450);
     }
 
     @Test
     @DisplayName("Economy sınıfı fiyat hesaplama testi")
     void testCalculateEconomyPrice() {
-        double price = calculator.calculateEconomyPrice(500);
-        assertEquals(500.0, price, 0.01, "Economy fiyatı baz fiyata eşit olmalı");
+        double price = calculator.calculateEconomyPrice(450);
+        // 450 * 1.0 + 35 (hizmet bedeli) = 485 TL
+        assertEquals(485.0, price, 0.01, "Economy fiyatı baz + hizmet bedeli olmalı");
     }
 
     @Test
     @DisplayName("Business sınıfı fiyat hesaplama testi")
     void testCalculateBusinessPrice() {
-        double price = calculator.calculateBusinessPrice(500);
-        assertEquals(1250.0, price, 0.01, "Business fiyatı baz fiyatın 2.5 katı olmalı");
+        double price = calculator.calculateBusinessPrice(450);
+        // (450 * 2.8) + 35 (hizmet) + (450 * 0.15 konfor) = 1260 + 35 + 67.5 = 1362.5 TL
+        assertEquals(1362.5, price, 0.01, "Business fiyatı (baz*2.8) + hizmet + konfor primi olmalı");
     }
 
     @Test
     @DisplayName("Vergi hesaplama testi")
     void testCalculateTax() {
         double tax = calculator.calculateTax(1000);
-        assertEquals(180.0, tax, 0.01, "1000 TL için %18 vergi = 180 TL olmalı");
+        assertEquals(200.0, tax, 0.01, "1000 TL için %20 vergi = 200 TL olmalı");
     }
 
     @Test
     @DisplayName("Vergi dahil toplam fiyat testi")
     void testCalculateTotalWithTax() {
         double total = calculator.calculateTotalWithTax(1000);
-        assertEquals(1180.0, total, 0.01, "1000 TL + %18 vergi = 1180 TL olmalı");
+        assertEquals(1200.0, total, 0.01, "1000 TL + %20 vergi = 1200 TL olmalı");
     }
 
     @Test
     @DisplayName("Economy koltuk için tam fiyat hesaplama testi")
     void testCalculatePriceForEconomySeat() {
         double price = calculator.calculatePrice(economySeat);
-        // 500 * 1.0 (economy) + %18 vergi = 590 TL
-        assertEquals(590.0, price, 0.01, "Economy koltuk fiyatı vergi dahil 590 TL olmalı");
+        // (450 * 1.0 + 35) * 1.20 = 485 * 1.20 = 582 TL
+        assertEquals(582.0, price, 0.01, "Economy koltuk fiyatı vergi dahil 582 TL olmalı");
     }
 
     @Test
     @DisplayName("Business koltuk için tam fiyat hesaplama testi")
     void testCalculatePriceForBusinessSeat() {
         double price = calculator.calculatePrice(businessSeat);
-        // 500 * 2.5 (business) + %18 vergi = 1475 TL
-        assertEquals(1475.0, price, 0.01, "Business koltuk fiyatı vergi dahil 1475 TL olmalı");
+        // ((450 * 2.8) + 35 + (450*0.15)) * 1.20 = 1362.5 * 1.20 = 1635 TL
+        assertEquals(1635.0, price, 0.01, "Business koltuk fiyatı vergi dahil 1635 TL olmalı");
     }
 
     @Test
@@ -123,8 +125,13 @@ public class PriceCalculatorTest {
     @Test
     @DisplayName("Bagaj ek ücreti hesaplama testi")
     void testCalculateBaggageFee() {
-        double fee = calculator.calculateBaggageFee(10, 50);
-        assertEquals(500.0, fee, 0.01, "10 kg fazla * 50 TL/kg = 500 TL olmalı");
+        // İlk 5 kg normal fiyat testi
+        double fee = calculator.calculateBaggageFee(5, 50);
+        assertEquals(250.0, fee, 0.01, "5 kg fazla * 50 TL/kg = 250 TL olmalı");
+
+        // Kademeli tarife testi: 10 kg = (5*50) + (5*62.5) = 250 + 312.5 = 562.5
+        fee = calculator.calculateBaggageFee(10, 50);
+        assertEquals(562.5, fee, 0.01, "10 kg için kademeli tarife uygulanmalı");
     }
 
     @Test
@@ -143,9 +150,9 @@ public class PriceCalculatorTest {
         double economyPrice = calculator.calculatePriceByClass(SeatClass.ECONOMY);
         double businessPrice = calculator.calculatePriceByClass(SeatClass.BUSINESS);
 
-        assertTrue(businessPrice > economyPrice, 
+        assertTrue(businessPrice > economyPrice,
                 "Business fiyatı Economy'den yüksek olmalı");
-        assertEquals(590.0, economyPrice, 0.01);
-        assertEquals(1475.0, businessPrice, 0.01);
+        assertEquals(582.0, economyPrice, 0.01);  // (450+35) * 1.20
+        assertEquals(1635.0, businessPrice, 0.01); // 1362.5 * 1.20
     }
 }

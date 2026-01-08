@@ -4,6 +4,7 @@ import com.airline.manager.SeatManager;
 import com.airline.model.Plane;
 import com.airline.model.Seat;
 import com.airline.model.enums.SeatClass;
+import com.airline.exception.SeatNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,25 +72,25 @@ public class SeatManagerTest {
     @Test
     @DisplayName("Olmayan koltuk numarası için exception testi")
     void testNonExistentSeatThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SeatNotFoundException.class, () -> {
             seatManager.reserveSeat("99Z");
-        }, "Olmayan koltuk için exception fırlatılmalı");
+        }, "Olmayan koltuk için SeatNotFoundException fırlatılmalı");
     }
 
     @Test
     @DisplayName("Geçersiz koltuk numarası formatı için exception testi")
     void testInvalidSeatFormatThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SeatNotFoundException.class, () -> {
             seatManager.reserveSeat("INVALID");
-        }, "Geçersiz format için exception fırlatılmalı");
+        }, "Geçersiz format için SeatNotFoundException fırlatılmalı");
     }
 
     @Test
     @DisplayName("Null koltuk numarası için exception testi")
     void testNullSeatThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(SeatNotFoundException.class, () -> {
             seatManager.getSeat(null);
-        }, "Null koltuk için exception fırlatılmalı");
+        }, "Null koltuk için SeatNotFoundException fırlatılmalı");
     }
 
     @Test
