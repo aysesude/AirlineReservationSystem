@@ -98,7 +98,7 @@ cat > "src_$GROUP_NUMBER/.project" << EOF
 </projectDescription>
 EOF
 
-# Eclipse .classpath dosyası (tüm JavaFX JAR'ları dahil)
+# Eclipse .classpath dosyası (macOS + Windows + JUnit JAR'ları dahil)
 cat > "src_$GROUP_NUMBER/.classpath" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
@@ -106,23 +106,44 @@ cat > "src_$GROUP_NUMBER/.classpath" << EOF
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-base-21.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-base-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-base-21-win.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-controls-21.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-controls-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-controls-21-win.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-fxml-21.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-fxml-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-fxml-21-win.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21-win.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-api-5.10.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-engine-5.10.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-commons-1.10.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-engine-1.10.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/opentest4j-1.3.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/apiguardian-api-1.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
 EOF
 
-# Eclipse launch dosyası (VM argümanları hazır - çift tıkla çalıştır)
-cat > "src_$GROUP_NUMBER/RunAirline.launch" << EOF
+# Eclipse launch dosyaları (platform-specific)
+# macOS için
+cat > "src_$GROUP_NUMBER/RunAirline_Mac.launch" << EOF
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airline.Launcher"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup$GROUP_NUMBER"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_$GROUP_NUMBER --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_$GROUP_NUMBER/javafx-base-21.jar:../lib_$GROUP_NUMBER/javafx-base-21-mac-aarch64.jar:../lib_$GROUP_NUMBER/javafx-controls-21.jar:../lib_$GROUP_NUMBER/javafx-controls-21-mac-aarch64.jar:../lib_$GROUP_NUMBER/javafx-fxml-21.jar:../lib_$GROUP_NUMBER/javafx-fxml-21-mac-aarch64.jar:../lib_$GROUP_NUMBER/javafx-graphics-21.jar:../lib_$GROUP_NUMBER/javafx-graphics-21-mac-aarch64.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
+</launchConfiguration>
+EOF
+
+# Windows için
+cat > "src_$GROUP_NUMBER/RunAirline_Win.launch" << EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airline.Launcher"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup$GROUP_NUMBER"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_$GROUP_NUMBER/javafx-base-21.jar;../lib_$GROUP_NUMBER/javafx-base-21-win.jar;../lib_$GROUP_NUMBER/javafx-controls-21.jar;../lib_$GROUP_NUMBER/javafx-controls-21-win.jar;../lib_$GROUP_NUMBER/javafx-fxml-21.jar;../lib_$GROUP_NUMBER/javafx-fxml-21-win.jar;../lib_$GROUP_NUMBER/javafx-graphics-21.jar;../lib_$GROUP_NUMBER/javafx-graphics-21-win.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
 </launchConfiguration>
 EOF
 
