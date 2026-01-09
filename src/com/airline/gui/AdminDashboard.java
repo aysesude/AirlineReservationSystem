@@ -74,8 +74,8 @@ public class AdminDashboard {
         Button reportsTabBtn = createPillTab("📊 Raporlar", false);
         Button simulationTabBtn = createPillTab("🔄 Simülasyon", false);
 
-        Button[] allTabs = {flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn};
-        VBox[] allPanes = {flightsPane, reservationsPane, reportsPane, simulationPane};
+        Button[] allTabs = { flightsTabBtn, reservationsTabBtn, reportsTabBtn, simulationTabBtn };
+        VBox[] allPanes = { flightsPane, reservationsPane, reportsPane, simulationPane };
 
         int i = 0;
         while (i < allTabs.length) {
@@ -125,99 +125,93 @@ public class AdminDashboard {
     private void updatePillTabStyle(Button btn, boolean isActive) {
         if (isActive) {
             btn.setStyle(
-                "-fx-background-color: #ffc107; " +
-                "-fx-text-fill: #333333; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: #ffc107; " +
+                            "-fx-text-fill: #333333; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-cursor: hand;");
         } else {
             btn.setStyle(
-                "-fx-background-color: white; " +
-                "-fx-text-fill: #666666; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: normal; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: #e0e0e0; " +
-                "-fx-border-radius: 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: white; " +
+                            "-fx-text-fill: #666666; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: normal; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-border-color: #e0e0e0; " +
+                            "-fx-border-radius: 25; " +
+                            "-fx-cursor: hand;");
         }
         btn.setOnMouseEntered(e -> {
             if (!btn.getStyle().contains("#ffc107")) {
                 btn.setStyle(
-                    "-fx-background-color: #fff8e1; " +
-                    "-fx-text-fill: #333333; " +
-                    "-fx-font-size: 14px; " +
-                    "-fx-font-weight: normal; " +
-                    "-fx-background-radius: 25; " +
-                    "-fx-padding: 10 25; " +
-                    "-fx-border-color: #ffc107; " +
-                    "-fx-border-radius: 25; " +
-                    "-fx-cursor: hand;"
-                );
+                        "-fx-background-color: #fff8e1; " +
+                                "-fx-text-fill: #333333; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: normal; " +
+                                "-fx-background-radius: 25; " +
+                                "-fx-padding: 10 25; " +
+                                "-fx-border-color: #ffc107; " +
+                                "-fx-border-radius: 25; " +
+                                "-fx-cursor: hand;");
             }
         });
         btn.setOnMouseExited(e -> {
-            if (!btn.getStyle().contains("#fff8e1")) return;
+            if (!btn.getStyle().contains("#fff8e1"))
+                return;
             btn.setStyle(
-                "-fx-background-color: white; " +
-                "-fx-text-fill: #666666; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: normal; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: #e0e0e0; " +
-                "-fx-border-radius: 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: white; " +
+                            "-fx-text-fill: #666666; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: normal; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-border-color: #e0e0e0; " +
+                            "-fx-border-radius: 25; " +
+                            "-fx-cursor: hand;");
         });
     }
 
     private void applyOutlineStyle(Button btn, String color) {
         btn.setCursor(Cursor.HAND);
         btn.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-text-fill: " + color + "; " +
-            "-fx-font-size: 13px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-background-radius: 8; " +
-            "-fx-border-radius: 8; " +
-            "-fx-border-color: " + color + "; " +
-            "-fx-border-width: 2; " +
-            "-fx-padding: 8 16; " +
-            "-fx-cursor: hand;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-text-fill: " + color + "; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-border-radius: 8; " +
+                        "-fx-border-color: " + color + "; " +
+                        "-fx-border-width: 2; " +
+                        "-fx-padding: 8 16; " +
+                        "-fx-cursor: hand;");
         btn.setOnMouseEntered(e -> {
             btn.setStyle(
-                "-fx-background-color: " + color + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 8; " +
-                "-fx-border-radius: 8; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 2; " +
-                "-fx-padding: 8 16; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: " + color + "; " +
+                            "-fx-text-fill: white; " +
+                            "-fx-font-size: 13px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 8; " +
+                            "-fx-border-radius: 8; " +
+                            "-fx-border-color: " + color + "; " +
+                            "-fx-border-width: 2; " +
+                            "-fx-padding: 8 16; " +
+                            "-fx-cursor: hand;");
         });
         btn.setOnMouseExited(e -> {
             btn.setStyle(
-                "-fx-background-color: transparent; " +
-                "-fx-text-fill: " + color + "; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 8; " +
-                "-fx-border-radius: 8; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 2; " +
-                "-fx-padding: 8 16; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: transparent; " +
+                            "-fx-text-fill: " + color + "; " +
+                            "-fx-font-size: 13px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 8; " +
+                            "-fx-border-radius: 8; " +
+                            "-fx-border-color: " + color + "; " +
+                            "-fx-border-width: 2; " +
+                            "-fx-padding: 8 16; " +
+                            "-fx-cursor: hand;");
         });
     }
 
@@ -296,12 +290,14 @@ public class AdminDashboard {
         numCol.setMinWidth(70);
 
         TableColumn<Flight, String> depCol = new TableColumn<>("Kalkış");
-        depCol.setCellValueFactory(new PropertyValueFactory<>("departurePlace"));
-        depCol.setMinWidth(80);
+        depCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getDepartureWithAirport()));
+        depCol.setMinWidth(120);
 
         TableColumn<Flight, String> arrCol = new TableColumn<>("Varış");
-        arrCol.setCellValueFactory(new PropertyValueFactory<>("arrivalPlace"));
-        arrCol.setMinWidth(80);
+        arrCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getArrivalWithAirport()));
+        arrCol.setMinWidth(120);
 
         TableColumn<Flight, LocalDate> dateCol = new TableColumn<>("Tarih");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -316,27 +312,23 @@ public class AdminDashboard {
         durationCol.setMinWidth(60);
 
         TableColumn<Flight, String> planeCol = new TableColumn<>("Uçak");
-        planeCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getPlane().getPlaneModel()));
+        planeCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getPlane().getPlaneModel()));
         planeCol.setMinWidth(90);
 
         TableColumn<Flight, Integer> capacityCol = new TableColumn<>("Kapasite");
-        capacityCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleIntegerProperty(
-                        cellData.getValue().getPlane().getCapacity()).asObject());
+        capacityCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(
+                cellData.getValue().getPlane().getCapacity()).asObject());
         capacityCol.setMinWidth(60);
 
         TableColumn<Flight, Integer> availableCol = new TableColumn<>("Boş");
-        availableCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleIntegerProperty(
-                        cellData.getValue().getAvailableSeatCount()).asObject());
+        availableCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(
+                cellData.getValue().getAvailableSeatCount()).asObject());
         availableCol.setMinWidth(45);
 
         TableColumn<Flight, String> statusCol = new TableColumn<>("Durum");
-        statusCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getStatus().getDescription()));
+        statusCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getStatus().getDescription()));
         statusCol.setMinWidth(75);
 
         table.getColumns().addAll(numCol, depCol, arrCol, dateCol, timeCol,
@@ -549,42 +541,37 @@ public class AdminDashboard {
         codeCol.setMinWidth(80);
 
         TableColumn<Reservation, String> passengerCol = new TableColumn<>("Yolcu");
-        passengerCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getPassenger().getFullName()));
+        passengerCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getPassenger().getFullName()));
         passengerCol.setMinWidth(120);
 
         TableColumn<Reservation, String> flightCol = new TableColumn<>("Uçuş");
-        flightCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getFlight().getFlightNum()));
+        flightCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getFlight().getFlightNum()));
         flightCol.setMinWidth(70);
 
         TableColumn<Reservation, String> routeCol = new TableColumn<>("Rota");
         routeCol.setCellValueFactory(cellData -> {
             Flight f = cellData.getValue().getFlight();
             return new javafx.beans.property.SimpleStringProperty(
-                    f.getDeparturePlace() + " → " + f.getArrivalPlace());
+                    f.getDepartureWithAirport() + " → " + f.getArrivalWithAirport());
         });
-        routeCol.setMinWidth(140);
+        routeCol.setMinWidth(200);
 
         TableColumn<Reservation, String> seatCol = new TableColumn<>("Koltuk");
-        seatCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getSeat().getSeatNum() + " (" +
+        seatCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getSeat().getSeatNum() + " (" +
                         cellData.getValue().getSeat().getClass_() + ")"));
         seatCol.setMinWidth(85);
 
         TableColumn<Reservation, String> dateCol = new TableColumn<>("Rez. Tarihi");
-        dateCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getFormattedDate()));
+        dateCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getFormattedDate()));
         dateCol.setMinWidth(100);
 
         TableColumn<Reservation, String> statusCol = new TableColumn<>("Durum");
-        statusCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getStatus().getDescription()));
+        statusCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getStatus().getDescription()));
         statusCol.setMinWidth(75);
 
         table.getColumns().addAll(codeCol, passengerCol, flightCol, routeCol, seatCol, dateCol, statusCol);
@@ -642,7 +629,8 @@ public class AdminDashboard {
         reportArea = new TextArea();
         reportArea.setEditable(false);
         reportArea.setFont(Font.font("Consolas", 12));
-        reportArea.setStyle("-fx-control-inner-background: #1e1e1e; -fx-text-fill: #00ff00;");
+        reportArea.setStyle("-fx-control-inner-background: #ffffff; -fx-text-fill: #333333; " +
+                "-fx-border-color: #e0e0e0; -fx-border-radius: 8; -fx-background-radius: 8;");
 
         pane.getChildren().addAll(titleLabel, buttonBox, statusBox, reportArea);
         VBox.setVgrow(reportArea, Priority.ALWAYS);

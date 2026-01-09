@@ -57,13 +57,17 @@ public class CliApp {
     }
 
     private static void syncReservationsWithFlights() {
-        for (Flight flight : flightManager.getAllFlights()) {
+        java.util.Iterator<Flight> flightIterator = flightManager.getAllFlights().iterator();
+        while (flightIterator.hasNext()) {
+            Flight flight = flightIterator.next();
             if (flight.getPlane() != null) {
                 flight.getPlane().resetAllSeats();
             }
         }
 
-        for (Reservation reservation : reservationManager.getAllReservations()) {
+        java.util.Iterator<Reservation> reservationIterator = reservationManager.getAllReservations().iterator();
+        while (reservationIterator.hasNext()) {
+            Reservation reservation = reservationIterator.next();
             if (reservation.isActive() && reservation.getFlight() != null && reservation.getSeat() != null) {
                 String flightNum = reservation.getFlight().getFlightNum();
                 Flight flight = flightManager.getFlightByNumber(flightNum);
@@ -197,12 +201,16 @@ public class CliApp {
                 case "5" -> cancelReservation();
                 case "6" -> viewFlightDetails();
                 case "7" -> {
-                    if (currentUser instanceof Admin) listAllUsers();
-                    else System.out.println("Yetkisiz işlem!");
+                    if (currentUser instanceof Admin)
+                        listAllUsers();
+                    else
+                        System.out.println("Yetkisiz işlem!");
                 }
                 case "8" -> {
-                    if (currentUser instanceof Admin) listAllReservations();
-                    else System.out.println("Yetkisiz işlem!");
+                    if (currentUser instanceof Admin)
+                        listAllReservations();
+                    else
+                        System.out.println("Yetkisiz işlem!");
                 }
                 case "0" -> {
                     return;
@@ -233,10 +241,12 @@ public class CliApp {
 
         final LocalDate searchDate = date;
         List<Flight> results = flightManager.getAllFlights().stream()
-            .filter(f -> departure.isEmpty() || f.getRoute().getDepartureAirport().toLowerCase().contains(departure.toLowerCase()))
-            .filter(f -> arrival.isEmpty() || f.getRoute().getArrivalAirport().toLowerCase().contains(arrival.toLowerCase()))
-            .filter(f -> searchDate == null || f.getDate().equals(searchDate))
-            .toList();
+                .filter(f -> departure.isEmpty()
+                        || f.getRoute().getDepartureAirport().toLowerCase().contains(departure.toLowerCase()))
+                .filter(f -> arrival.isEmpty()
+                        || f.getRoute().getArrivalAirport().toLowerCase().contains(arrival.toLowerCase()))
+                .filter(f -> searchDate == null || f.getDate().equals(searchDate))
+                .toList();
 
         if (results.isEmpty()) {
             System.out.println("\nUygun uçuş bulunamadı.");
@@ -257,12 +267,17 @@ public class CliApp {
     }
 
     private static void printFlightTable(List<Flight> flights) {
-        System.out.println("┌──────────┬────────────────────┬────────────────────┬─────────────────────┬───────────┬──────────┐");
-        System.out.println("│ Uçuş No  │ Kalkış             │ Varış              │ Tarih/Saat          │ Fiyat     │ Boş Kol. │");
-        System.out.println("├──────────┼────────────────────┼────────────────────┼─────────────────────┼───────────┼──────────┤");
+        System.out.println(
+                "┌──────────┬────────────────────┬────────────────────┬─────────────────────┬───────────┬──────────┐");
+        System.out.println(
+                "│ Uçuş No  │ Kalkış             │ Varış              │ Tarih/Saat          │ Fiyat     │ Boş Kol. │");
+        System.out.println(
+                "├──────────┼────────────────────┼────────────────────┼─────────────────────┼───────────┼──────────┤");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        for (Flight f : flights) {
+        int flightIndex = 0;
+        while (flightIndex < flights.size()) {
+            Flight f = flights.get(flightIndex);
             int availableSeats = f.getPlane() != null ? f.getPlane().getAvailableSeatCount() : 0;
             LocalDateTime departureDateTime = LocalDateTime.of(f.getDate(), f.getHour());
             // Fiyatı ilk müsait koltuktan al
@@ -271,15 +286,16 @@ public class CliApp {
                 price = f.getPlane().getAvailableSeats().get(0).getPrice();
             }
             System.out.printf("│ %-8s │ %-18s │ %-18s │ %-19s │ %9.2f │ %8d │%n",
-                f.getFlightNum(),
-                truncate(f.getRoute().getDepartureAirport(), 18),
-                truncate(f.getRoute().getArrivalAirport(), 18),
-                departureDateTime.format(formatter),
-                price,
-                availableSeats
-            );
+                    f.getFlightNum(),
+                    truncate(f.getRoute().getDepartureAirport(), 18),
+                    truncate(f.getRoute().getArrivalAirport(), 18),
+                    departureDateTime.format(formatter),
+                    price,
+                    availableSeats);
+            flightIndex++;
         }
-        System.out.println("└──────────┴────────────────────┴────────────────────┴─────────────────────┴───────────┴──────────┘");
+        System.out.println(
+                "└──────────┴────────────────────┴────────────────────┴─────────────────────┴───────────┴──────────┘");
     }
 
     private static void makeReservation() {
@@ -301,10 +317,13 @@ public class CliApp {
             return;
         }
 
-        for (int i = 0; i < availableSeats.size(); i++) {
-            Seat s = availableSeats.get(i);
+        int seatIndex = 0;
+        while (seatIndex < availableSeats.size()) {
+            Seat s = availableSeats.get(seatIndex);
             System.out.printf("%s (%s)  ", s.getSeatNum(), s.getClass_().getDisplayName());
-            if ((i + 1) % 8 == 0) System.out.println();
+            if ((seatIndex + 1) % 8 == 0)
+                System.out.println();
+            seatIndex++;
         }
         System.out.println();
 
@@ -351,8 +370,8 @@ public class CliApp {
         System.out.println("\n═══════════════ REZERVASYONLARIM ═══════════════");
 
         List<Reservation> myReservations = reservationManager.getAllReservations().stream()
-            .filter(r -> r.getPassenger() != null)
-            .toList();
+                .filter(r -> r.getPassenger() != null)
+                .toList();
 
         if (myReservations.isEmpty()) {
             System.out.println("Henüz rezervasyonunuz bulunmamaktadır.");
@@ -367,16 +386,18 @@ public class CliApp {
         System.out.println("│ Rez. Kodu  │ Uçuş No  │ Kalkış             │ Varış              │ Koltuk │ Durum      │");
         System.out.println("├────────────┼──────────┼────────────────────┼────────────────────┼────────┼────────────┤");
 
-        for (Reservation r : reservations) {
+        int reservationIndex = 0;
+        while (reservationIndex < reservations.size()) {
+            Reservation r = reservations.get(reservationIndex);
             Flight f = r.getFlight();
             System.out.printf("│ %-10s │ %-8s │ %-18s │ %-18s │ %-6s │ %-10s │%n",
-                r.getReservationCode(),
-                f != null ? f.getFlightNum() : "-",
-                f != null ? truncate(f.getRoute().getDepartureAirport(), 18) : "-",
-                f != null ? truncate(f.getRoute().getArrivalAirport(), 18) : "-",
-                r.getSeat() != null ? r.getSeat().getSeatNum() : "-",
-                r.getStatus().toString()
-            );
+                    r.getReservationCode(),
+                    f != null ? f.getFlightNum() : "-",
+                    f != null ? truncate(f.getRoute().getDepartureAirport(), 18) : "-",
+                    f != null ? truncate(f.getRoute().getArrivalAirport(), 18) : "-",
+                    r.getSeat() != null ? r.getSeat().getSeatNum() : "-",
+                    r.getStatus().toString());
+            reservationIndex++;
         }
         System.out.println("└────────────┴──────────┴────────────────────┴────────────────────┴────────┴────────────┘");
     }
@@ -441,8 +462,8 @@ public class CliApp {
         System.out.printf("│ Kapasite   : %-26d │%n", flight.getPlane().getCapacity());
         System.out.printf("│ Boş Koltuk : %-26d │%n", flight.getPlane().getAvailableSeatCount());
         // Ekonomi sınıfı fiyatı
-        double basePrice = flight.getPlane().getAvailableSeats().isEmpty() ? 0 :
-            flight.getPlane().getAllSeats().get(0).getPrice();
+        double basePrice = flight.getPlane().getAvailableSeats().isEmpty() ? 0
+                : flight.getPlane().getAllSeats().get(0).getPrice();
         System.out.printf("│ Fiyat      : %-26.2f │%n", basePrice);
         System.out.printf("│ Durum      : %-26s │%n", flight.getStatus());
         System.out.println("└─────────────────────────────────────────┘");
@@ -455,7 +476,8 @@ public class CliApp {
             int cols = 6; // A-F
             int row = 0;
             System.out.print("    A  B  C    D  E  F\n");
-            for (int i = 0; i < seats.size(); i++) {
+            int i = 0;
+            while (i < seats.size()) {
                 if (i % cols == 0) {
                     row++;
                     System.out.printf("%2d ", row);
@@ -463,8 +485,11 @@ public class CliApp {
                 Seat s = seats.get(i);
                 String symbol = !s.isReserveStatus() ? "□" : "■";
                 System.out.print(" " + symbol + " ");
-                if (i % cols == 2) System.out.print("  "); // Koridor
-                if (i % cols == 5) System.out.println();
+                if (i % cols == 2)
+                    System.out.print("  "); // Koridor
+                if (i % cols == 5)
+                    System.out.println();
+                i++;
             }
         }
     }
@@ -477,12 +502,14 @@ public class CliApp {
         System.out.println("│ Kullanıcı Adı      │ Email              │ Rol            │");
         System.out.println("├────────────────────┼────────────────────┼────────────────┤");
 
-        for (User u : users) {
+        int userIndex = 0;
+        while (userIndex < users.size()) {
+            User u = users.get(userIndex);
             System.out.printf("│ %-18s │ %-18s │ %-14s │%n",
-                truncate(u.getUsername(), 18),
-                truncate(u.getEmail(), 18),
-                u.getRole().toString()
-            );
+                    truncate(u.getUsername(), 18),
+                    truncate(u.getEmail(), 18),
+                    u.getRole().toString());
+            userIndex++;
         }
         System.out.println("└────────────────────┴────────────────────┴────────────────┘");
     }
@@ -500,7 +527,8 @@ public class CliApp {
     }
 
     private static String truncate(String str, int maxLen) {
-        if (str == null) return "";
+        if (str == null)
+            return "";
         return str.length() > maxLen ? str.substring(0, maxLen - 2) + ".." : str;
     }
 }

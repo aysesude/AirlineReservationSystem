@@ -29,10 +29,10 @@ public class ReportGenerator implements Runnable {
      * Rapor türleri
      */
     public enum ReportType {
-        OCCUPANCY,      // Doluluk oranı raporu
-        REVENUE,        // Gelir raporu
-        RESERVATION,    // Rezervasyon raporu
-        FULL            // Tam rapor (hepsi)
+        OCCUPANCY, // Doluluk oranı raporu
+        REVENUE, // Gelir raporu
+        RESERVATION, // Rezervasyon raporu
+        FULL // Tam rapor (hepsi)
     }
 
     /**
@@ -48,7 +48,7 @@ public class ReportGenerator implements Runnable {
      * Rapor türü ile oluşturur.
      */
     public ReportGenerator(FlightManager flightManager, ReservationManager reservationManager,
-                           ReportType reportType) {
+            ReportType reportType) {
         this.flightManager = flightManager;
         this.reservationManager = reservationManager;
         this.reportType = reportType;
@@ -107,7 +107,8 @@ public class ReportGenerator implements Runnable {
         java.util.Iterator<Flight> flightIterator = flights.iterator();
         while (flightIterator.hasNext()) {
             Flight flight = flightIterator.next();
-            if (cancelled) return "Rapor iptal edildi.";
+            if (cancelled)
+                return "Rapor iptal edildi.";
 
             // Simüle edilmiş gecikme (uzun işlem)
             simulateDelay(100);
@@ -159,14 +160,29 @@ public class ReportGenerator implements Runnable {
         int confirmedCount = 0;
         int cancelledCount = 0;
 
+        // Bilet fiyatlarını kullan (ek hizmetler dahil)
+        java.util.List<com.airline.model.Ticket> tickets = reservationManager.getAllTickets();
+        java.util.Map<String, Double> ticketPrices = new java.util.HashMap<>();
+        java.util.Iterator<com.airline.model.Ticket> ticketIterator = tickets.iterator();
+        while (ticketIterator.hasNext()) {
+            com.airline.model.Ticket ticket = ticketIterator.next();
+            if (ticket.getReservation() != null) {
+                ticketPrices.put(ticket.getReservation().getReservationCode(), ticket.getPrice());
+            }
+        }
+
         java.util.Iterator<Reservation> resIterator = reservations.iterator();
         while (resIterator.hasNext()) {
             Reservation res = resIterator.next();
-            if (cancelled) return "Rapor iptal edildi.";
+            if (cancelled)
+                return "Rapor iptal edildi.";
 
             simulateDelay(50);
 
-            double price = res.getSeat().getCalculatedPrice();
+            // Bilet fiyatını kullan, yoksa koltuk fiyatını
+            double price = ticketPrices.getOrDefault(
+                    res.getReservationCode(),
+                    res.getSeat().getCalculatedPrice());
 
             switch (res.getStatus()) {
                 case CONFIRMED:
@@ -187,6 +203,7 @@ public class ReportGenerator implements Runnable {
         report.append(String.format("Toplam Rezervasyon    : %d\n", reservations.size()));
         report.append("───────────────────────────────────────────────────────────\n");
         report.append(String.format("TOPLAM GELİR          : %.2f TL\n", totalRevenue));
+        report.append("(Ek hizmetler dahil)\n");
         report.append("═══════════════════════════════════════════════════════════\n");
 
         return report.toString();
@@ -212,7 +229,8 @@ public class ReportGenerator implements Runnable {
         java.util.Iterator<Reservation> reservationIterator = reservations.iterator();
         while (reservationIterator.hasNext()) {
             Reservation res = reservationIterator.next();
-            if (cancelled) return "Rapor iptal edildi.";
+            if (cancelled)
+                return "Rapor iptal edildi.";
 
             simulateDelay(30);
 
@@ -250,6 +268,7 @@ public class ReportGenerator implements Runnable {
 
     /**
      * Bir uçuşun doluluk oranını hesaplar.
+     * 
      * @param flight Uçuş
      * @return Doluluk oranı (0-100)
      */

@@ -27,8 +27,8 @@ public class Flight implements Serializable {
     /**
      * Yeni bir uçuş oluşturur.
      */
-    public Flight(String flightNum, Route route, LocalDate date, LocalTime hour, 
-                  int duration, Plane plane) {
+    public Flight(String flightNum, Route route, LocalDate date, LocalTime hour,
+            int duration, Plane plane) {
         this.flightNum = flightNum;
         this.route = route;
         this.departurePlace = route.getDepartureCity();
@@ -44,7 +44,7 @@ public class Flight implements Serializable {
      * Basit constructor - rota olmadan.
      */
     public Flight(String flightNum, String departurePlace, String arrivalPlace,
-                  LocalDate date, LocalTime hour, int duration, Plane plane) {
+            LocalDate date, LocalTime hour, int duration, Plane plane) {
         this.flightNum = flightNum;
         this.departurePlace = departurePlace;
         this.arrivalPlace = arrivalPlace;
@@ -109,7 +109,8 @@ public class Flight implements Serializable {
      * Doluluk oranını hesaplar (0-100 arası).
      */
     public double getOccupancyRate() {
-        if (plane.getCapacity() == 0) return 0;
+        if (plane.getCapacity() == 0)
+            return 0;
         return ((double) plane.getReservedSeatCount() / plane.getCapacity()) * 100;
     }
 
@@ -129,6 +130,28 @@ public class Flight implements Serializable {
         return String.format("%s: %s → %s (%s %s)",
                 flightNum, departurePlace, arrivalPlace,
                 date.toString(), hour.toString());
+    }
+
+    /**
+     * Kalkış bilgisini havaalanı koduyla birlikte döndürür.
+     * Örn: "İstanbul (IST)"
+     */
+    public String getDepartureWithAirport() {
+        if (route != null && route.getDepartureAirportCode() != null) {
+            return departurePlace + " (" + route.getDepartureAirportCode() + ")";
+        }
+        return departurePlace;
+    }
+
+    /**
+     * Varış bilgisini havaalanı koduyla birlikte döndürür.
+     * Örn: "Ankara (ESB)"
+     */
+    public String getArrivalWithAirport() {
+        if (route != null && route.getArrivalAirportCode() != null) {
+            return arrivalPlace + " (" + route.getArrivalAirportCode() + ")";
+        }
+        return arrivalPlace;
     }
 
     // Getter ve Setter metodları
@@ -216,8 +239,10 @@ public class Flight implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Flight flight = (Flight) o;
         return flightNum != null && flightNum.equals(flight.flightNum);
     }

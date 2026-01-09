@@ -2,7 +2,10 @@ package com.airline.service;
 
 import com.airline.model.Flight;
 import com.airline.model.Seat;
+import com.airline.model.enums.AdditionalService;
 import com.airline.model.enums.SeatClass;
+
+import java.util.Set;
 
 /**
  * Bilet fiyatı hesaplama işlemlerini gerçekleştirir.
@@ -10,11 +13,11 @@ import com.airline.model.enums.SeatClass;
  */
 public class PriceCalculator {
 
-    private double basePrice;       // Baz fiyat (TL)
-    private double taxRate;         // Vergi oranı (örn: 0.20 = %20)
-    private double businessMultiplier;  // Business sınıf çarpanı
-    private double economyMultiplier;   // Economy sınıf çarpanı
-    private double serviceFee;      // Sabit hizmet bedeli
+    private double basePrice; // Baz fiyat (TL)
+    private double taxRate; // Vergi oranı (örn: 0.20 = %20)
+    private double businessMultiplier; // Business sınıf çarpanı
+    private double economyMultiplier; // Economy sınıf çarpanı
+    private double serviceFee; // Sabit hizmet bedeli
 
     // Varsayılan değerler
     private static final double DEFAULT_BASE_PRICE = 450.0;
@@ -47,7 +50,8 @@ public class PriceCalculator {
 
     /**
      * Koltuk ve uçuş bilgisine göre fiyat hesaplar.
-     * @param seat Koltuk
+     * 
+     * @param seat   Koltuk
      * @param flight Uçuş
      * @return Hesaplanan fiyat (vergi dahil)
      */
@@ -76,6 +80,7 @@ public class PriceCalculator {
 
     /**
      * Sadece koltuk bilgisine göre fiyat hesaplar.
+     * 
      * @param seat Koltuk
      * @return Hesaplanan fiyat (vergi dahil)
      */
@@ -86,6 +91,7 @@ public class PriceCalculator {
     /**
      * Business sınıfı fiyatını hesaplar.
      * Formül: (baz * çarpan) + sabit hizmet bedeli + konfor primi
+     * 
      * @param base Baz fiyat
      * @return Business fiyatı (vergi hariç)
      */
@@ -100,6 +106,7 @@ public class PriceCalculator {
     /**
      * Economy sınıfı fiyatını hesaplar.
      * Formül: (baz * çarpan) + sabit hizmet bedeli
+     * 
      * @param base Baz fiyat
      * @return Economy fiyatı (vergi hariç)
      */
@@ -112,7 +119,8 @@ public class PriceCalculator {
 
     /**
      * İndirim uygular.
-     * @param price Orijinal fiyat
+     * 
+     * @param price           Orijinal fiyat
      * @param discountPercent İndirim yüzdesi (0-100 arası)
      * @return İndirimli fiyat
      */
@@ -128,6 +136,7 @@ public class PriceCalculator {
 
     /**
      * Vergi miktarını hesaplar.
+     * 
      * @param price Fiyat (vergi hariç)
      * @return Vergi miktarı
      */
@@ -140,6 +149,7 @@ public class PriceCalculator {
 
     /**
      * Vergi dahil toplam fiyatı hesaplar.
+     * 
      * @param price Fiyat (vergi hariç)
      * @return Toplam fiyat (vergi dahil)
      */
@@ -152,6 +162,7 @@ public class PriceCalculator {
 
     /**
      * Sınıfa göre fiyat hesaplar.
+     * 
      * @param seatClass Koltuk sınıfı
      * @return Hesaplanan fiyat (vergi dahil)
      */
@@ -168,7 +179,8 @@ public class PriceCalculator {
     /**
      * Bagaj ek ücreti hesaplar (kademeli sistem).
      * İlk 5 kg: normal fiyat, sonraki kg'lar: %25 zamlı
-     * @param extraKg Fazla kilo miktarı
+     * 
+     * @param extraKg    Fazla kilo miktarı
      * @param pricePerKg Kilo başına ücret
      * @return Toplam ek ücret
      */
@@ -187,11 +199,45 @@ public class PriceCalculator {
 
     /**
      * Fiyatı yuvarlar (2 ondalık basamak).
+     * 
      * @param price Yuvarlanacak fiyat
      * @return Yuvarlanmış fiyat
      */
     public double roundPrice(double price) {
         return Math.round(price * 100.0) / 100.0;
+    }
+
+    /**
+     * Seçilen ek hizmetlerin toplam fiyatını hesaplar.
+     * 
+     * @param services Seçilen ek hizmetler
+     * @return Toplam ek hizmet fiyatı
+     */
+    public double calculateServicesTotal(Set<AdditionalService> services) {
+        if (services == null || services.isEmpty()) {
+            return 0;
+        }
+        double total = 0;
+        java.util.Iterator<AdditionalService> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            AdditionalService service = iterator.next();
+            total += service.getPrice();
+        }
+        return total;
+    }
+
+    /**
+     * Koltuk, uçuş ve ek hizmetler dahil toplam fiyat hesaplar.
+     * 
+     * @param seat     Koltuk
+     * @param flight   Uçuş
+     * @param services Seçilen ek hizmetler
+     * @return Toplam fiyat (vergi dahil)
+     */
+    public double calculatePriceWithServices(Seat seat, Flight flight, Set<AdditionalService> services) {
+        double baseTotal = calculatePrice(seat, flight);
+        double servicesTotal = calculateServicesTotal(services);
+        return roundPrice(baseTotal + servicesTotal);
     }
 
     // Getter ve Setter metodları

@@ -10,11 +10,14 @@ public class Launcher {
         boolean cliMode = false;
 
         // Argümanları kontrol et
-        for (String arg : args) {
+        int argIndex = 0;
+        while (argIndex < args.length) {
+            String arg = args[argIndex];
             if (arg.equals("--cli") || arg.equals("--no-gui") || arg.equals("-c")) {
                 cliMode = true;
                 break;
             }
+            argIndex++;
         }
 
         if (cliMode) {

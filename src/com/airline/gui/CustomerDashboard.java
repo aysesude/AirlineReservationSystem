@@ -2,6 +2,7 @@ package com.airline.gui;
 
 import com.airline.MainApp;
 import com.airline.model.*;
+import com.airline.model.enums.AdditionalService;
 import com.airline.model.enums.SeatClass;
 import com.airline.service.FlightSearchEngine;
 import com.airline.service.PriceCalculator;
@@ -22,7 +23,9 @@ import javafx.scene.Cursor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Müşteri dashboard ekranı.
@@ -125,99 +128,93 @@ public class CustomerDashboard {
     private void updatePillTabStyle(Button btn, boolean isActive) {
         if (isActive) {
             btn.setStyle(
-                "-fx-background-color: #ffc107; " +
-                "-fx-text-fill: #333333; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: #ffc107; " +
+                            "-fx-text-fill: #333333; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-cursor: hand;");
         } else {
             btn.setStyle(
-                "-fx-background-color: white; " +
-                "-fx-text-fill: #666666; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: normal; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: #e0e0e0; " +
-                "-fx-border-radius: 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: white; " +
+                            "-fx-text-fill: #666666; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: normal; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-border-color: #e0e0e0; " +
+                            "-fx-border-radius: 25; " +
+                            "-fx-cursor: hand;");
         }
         btn.setOnMouseEntered(e -> {
             if (!btn.getStyle().contains("#ffc107")) {
                 btn.setStyle(
-                    "-fx-background-color: #fff8e1; " +
-                    "-fx-text-fill: #333333; " +
-                    "-fx-font-size: 14px; " +
-                    "-fx-font-weight: normal; " +
-                    "-fx-background-radius: 25; " +
-                    "-fx-padding: 10 25; " +
-                    "-fx-border-color: #ffc107; " +
-                    "-fx-border-radius: 25; " +
-                    "-fx-cursor: hand;"
-                );
+                        "-fx-background-color: #fff8e1; " +
+                                "-fx-text-fill: #333333; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-font-weight: normal; " +
+                                "-fx-background-radius: 25; " +
+                                "-fx-padding: 10 25; " +
+                                "-fx-border-color: #ffc107; " +
+                                "-fx-border-radius: 25; " +
+                                "-fx-cursor: hand;");
             }
         });
         btn.setOnMouseExited(e -> {
-            if (!btn.getStyle().contains("#fff8e1")) return;
+            if (!btn.getStyle().contains("#fff8e1"))
+                return;
             btn.setStyle(
-                "-fx-background-color: white; " +
-                "-fx-text-fill: #666666; " +
-                "-fx-font-size: 14px; " +
-                "-fx-font-weight: normal; " +
-                "-fx-background-radius: 25; " +
-                "-fx-padding: 10 25; " +
-                "-fx-border-color: #e0e0e0; " +
-                "-fx-border-radius: 25; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: white; " +
+                            "-fx-text-fill: #666666; " +
+                            "-fx-font-size: 14px; " +
+                            "-fx-font-weight: normal; " +
+                            "-fx-background-radius: 25; " +
+                            "-fx-padding: 10 25; " +
+                            "-fx-border-color: #e0e0e0; " +
+                            "-fx-border-radius: 25; " +
+                            "-fx-cursor: hand;");
         });
     }
 
     private void applyOutlineStyle(Button btn, String color) {
         btn.setCursor(Cursor.HAND);
         btn.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-text-fill: " + color + "; " +
-            "-fx-font-size: 13px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-background-radius: 8; " +
-            "-fx-border-radius: 8; " +
-            "-fx-border-color: " + color + "; " +
-            "-fx-border-width: 2; " +
-            "-fx-padding: 8 16; " +
-            "-fx-cursor: hand;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-text-fill: " + color + "; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-border-radius: 8; " +
+                        "-fx-border-color: " + color + "; " +
+                        "-fx-border-width: 2; " +
+                        "-fx-padding: 8 16; " +
+                        "-fx-cursor: hand;");
         btn.setOnMouseEntered(e -> {
             btn.setStyle(
-                "-fx-background-color: " + color + "; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 8; " +
-                "-fx-border-radius: 8; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 2; " +
-                "-fx-padding: 8 16; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: " + color + "; " +
+                            "-fx-text-fill: white; " +
+                            "-fx-font-size: 13px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 8; " +
+                            "-fx-border-radius: 8; " +
+                            "-fx-border-color: " + color + "; " +
+                            "-fx-border-width: 2; " +
+                            "-fx-padding: 8 16; " +
+                            "-fx-cursor: hand;");
         });
         btn.setOnMouseExited(e -> {
             btn.setStyle(
-                "-fx-background-color: transparent; " +
-                "-fx-text-fill: " + color + "; " +
-                "-fx-font-size: 13px; " +
-                "-fx-font-weight: bold; " +
-                "-fx-background-radius: 8; " +
-                "-fx-border-radius: 8; " +
-                "-fx-border-color: " + color + "; " +
-                "-fx-border-width: 2; " +
-                "-fx-padding: 8 16; " +
-                "-fx-cursor: hand;"
-            );
+                    "-fx-background-color: transparent; " +
+                            "-fx-text-fill: " + color + "; " +
+                            "-fx-font-size: 13px; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-background-radius: 8; " +
+                            "-fx-border-radius: 8; " +
+                            "-fx-border-color: " + color + "; " +
+                            "-fx-border-width: 2; " +
+                            "-fx-padding: 8 16; " +
+                            "-fx-cursor: hand;");
         });
     }
 
@@ -268,14 +265,13 @@ public class CustomerDashboard {
         tripTypeCombo.getItems().addAll("Gidiş Dönüş", "Tek Yön");
         tripTypeCombo.setValue("Gidiş Dönüş");
         tripTypeCombo.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: rgba(255,255,255,0.5); " +
-            "-fx-border-radius: 20; " +
-            "-fx-background-radius: 20; " +
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 13px; " +
-            "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: rgba(255,255,255,0.5); " +
+                        "-fx-border-radius: 20; " +
+                        "-fx-background-radius: 20; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-padding: 6 12;");
 
         topRow.getChildren().add(tripTypeCombo);
 
@@ -283,10 +279,9 @@ public class CustomerDashboard {
         HBox searchBox = new HBox(0);
         searchBox.setAlignment(Pos.CENTER);
         searchBox.setStyle(
-            "-fx-background-color: white; " +
-            "-fx-background-radius: 10; " +
-            "-fx-border-radius: 10;"
-        );
+                "-fx-background-color: white; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-border-radius: 10;");
         searchBox.setPadding(new Insets(5));
 
         // Kalkış Bölümü
@@ -296,17 +291,16 @@ public class CustomerDashboard {
         // Swap Button - Skyscanner tarzı yukarı-aşağı oklar
         StackPane swapButtonPane = new StackPane();
         swapButtonPane.setStyle(
-            "-fx-background-color: white; " +
-            "-fx-border-color: #ffc107; " +
-            "-fx-border-width: 3; " +
-            "-fx-border-radius: 50; " +
-            "-fx-background-radius: 50; " +
-            "-fx-min-width: 40; " +
-            "-fx-min-height: 40; " +
-            "-fx-max-width: 40; " +
-            "-fx-max-height: 40; " +
-            "-fx-cursor: hand;"
-        );
+                "-fx-background-color: white; " +
+                        "-fx-border-color: #ffc107; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-border-radius: 50; " +
+                        "-fx-background-radius: 50; " +
+                        "-fx-min-width: 40; " +
+                        "-fx-min-height: 40; " +
+                        "-fx-max-width: 40; " +
+                        "-fx-max-height: 40; " +
+                        "-fx-cursor: hand;");
         swapButtonPane.setCursor(Cursor.HAND);
 
         // SVGPath ile yukarı-aşağı ok ikonu
@@ -320,29 +314,27 @@ public class CustomerDashboard {
         swapButtonPane.getChildren().add(swapIcon);
         swapButtonPane.setOnMouseClicked(e -> swapLocations());
         swapButtonPane.setOnMouseEntered(e -> swapButtonPane.setStyle(
-            "-fx-background-color: #f0f0f0; " +
-            "-fx-border-color: #ffc107; " +
-            "-fx-border-width: 3; " +
-            "-fx-border-radius: 50; " +
-            "-fx-background-radius: 50; " +
-            "-fx-min-width: 40; " +
-            "-fx-min-height: 40; " +
-            "-fx-max-width: 40; " +
-            "-fx-max-height: 40; " +
-            "-fx-cursor: hand;"
-        ));
+                "-fx-background-color: #f0f0f0; " +
+                        "-fx-border-color: #ffc107; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-border-radius: 50; " +
+                        "-fx-background-radius: 50; " +
+                        "-fx-min-width: 40; " +
+                        "-fx-min-height: 40; " +
+                        "-fx-max-width: 40; " +
+                        "-fx-max-height: 40; " +
+                        "-fx-cursor: hand;"));
         swapButtonPane.setOnMouseExited(e -> swapButtonPane.setStyle(
-            "-fx-background-color: white; " +
-            "-fx-border-color: #ffc107; " +
-            "-fx-border-width: 3; " +
-            "-fx-border-radius: 50; " +
-            "-fx-background-radius: 50; " +
-            "-fx-min-width: 40; " +
-            "-fx-min-height: 40; " +
-            "-fx-max-width: 40; " +
-            "-fx-max-height: 40; " +
-            "-fx-cursor: hand;"
-        ));
+                "-fx-background-color: white; " +
+                        "-fx-border-color: #ffc107; " +
+                        "-fx-border-width: 3; " +
+                        "-fx-border-radius: 50; " +
+                        "-fx-background-radius: 50; " +
+                        "-fx-min-width: 40; " +
+                        "-fx-min-height: 40; " +
+                        "-fx-max-width: 40; " +
+                        "-fx-max-height: 40; " +
+                        "-fx-cursor: hand;"));
 
         StackPane swapPane = new StackPane(swapButtonPane);
         swapPane.setPadding(new Insets(10, 5, 0, 5));
@@ -391,32 +383,29 @@ public class CustomerDashboard {
         searchButton.setMinWidth(80);
         searchButton.setPrefWidth(80);
         searchButton.setStyle(
-            "-fx-background-color: #ffc107; " +
-            "-fx-text-fill: #333; " +
-            "-fx-font-size: 16px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-background-radius: 8; " +
-            "-fx-padding: 15 20; " +
-            "-fx-cursor: hand;"
-        );
+                "-fx-background-color: #ffc107; " +
+                        "-fx-text-fill: #333; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-padding: 15 20; " +
+                        "-fx-cursor: hand;");
         searchButton.setCursor(Cursor.HAND);
         searchButton.setOnAction(e -> searchFlights());
 
         searchBox.getChildren().addAll(
-            departureBox, swapPane, arrivalBox, separator1,
-            departureDateBox, separator2, returnDateBox, separator3,
-            passengerBox, spacer, searchButton
-        );
+                departureBox, swapPane, arrivalBox, separator1,
+                departureDateBox, separator2, returnDateBox, separator3,
+                passengerBox, spacer, searchButton);
 
         // Tüm uçuşları göster butonu
         Button showAllButton = new Button("Tüm Uçuşları Göster");
         showAllButton.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-text-fill: rgba(255,255,255,0.8); " +
-            "-fx-font-size: 13px; " +
-            "-fx-underline: true; " +
-            "-fx-cursor: hand;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-text-fill: rgba(255,255,255,0.8); " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-underline: true; " +
+                        "-fx-cursor: hand;");
         showAllButton.setCursor(Cursor.HAND);
         showAllButton.setOnAction(e -> showAllFlights());
 
@@ -441,13 +430,12 @@ public class CustomerDashboard {
         // Rezervasyon butonu
         Button reserveButton = new Button("✈ Seçili Uçuşu Rezerve Et");
         reserveButton.setStyle(
-            "-fx-background-color: #ffc107; " +
-            "-fx-text-fill: #333; " +
-            "-fx-font-size: 14px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-padding: 12 30; " +
-            "-fx-background-radius: 8;"
-        );
+                "-fx-background-color: #ffc107; " +
+                        "-fx-text-fill: #333; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 12 30; " +
+                        "-fx-background-radius: 8;");
         reserveButton.setCursor(Cursor.HAND);
         reserveButton.setOnAction(e -> makeReservation());
 
@@ -489,12 +477,11 @@ public class CustomerDashboard {
         combo.setPromptText(placeholder);
         combo.setEditable(true);
         combo.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: transparent; " +
-            "-fx-font-size: 14px; " +
-            "-fx-font-weight: bold; " +
-            "-fx-padding: 0;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 0;");
         combo.setPrefWidth(170);
 
         box.getChildren().addAll(fieldLabel, combo);
@@ -519,10 +506,9 @@ public class CustomerDashboard {
 
         picker.setPromptText(placeholder);
         picker.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: transparent; " +
-            "-fx-font-size: 13px;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-font-size: 13px;");
         picker.setPrefWidth(120);
 
         box.getChildren().addAll(fieldLabel, picker);
@@ -552,11 +538,10 @@ public class CustomerDashboard {
             }
         });
         passengerCombo.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: transparent; " +
-            "-fx-font-size: 13px; " +
-            "-fx-font-weight: bold;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: bold;");
 
         cabinClassCombo = new ComboBox<>();
         cabinClassCombo.getItems().addAll(SeatClass.values());
@@ -571,11 +556,10 @@ public class CustomerDashboard {
             }
         });
         cabinClassCombo.setStyle(
-            "-fx-background-color: transparent; " +
-            "-fx-border-color: transparent; " +
-            "-fx-font-size: 13px; " +
-            "-fx-font-weight: bold;"
-        );
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-font-size: 13px; " +
+                        "-fx-font-weight: bold;");
 
         valueBox.getChildren().addAll(passengerCombo, cabinClassCombo);
         box.getChildren().addAll(fieldLabel, valueBox);
@@ -615,12 +599,14 @@ public class CustomerDashboard {
         numCol.setMinWidth(70);
 
         TableColumn<Flight, String> depCol = new TableColumn<>("Kalkış");
-        depCol.setCellValueFactory(new PropertyValueFactory<>("departurePlace"));
-        depCol.setMinWidth(100);
+        depCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getDepartureWithAirport()));
+        depCol.setMinWidth(130);
 
         TableColumn<Flight, String> arrCol = new TableColumn<>("Varış");
-        arrCol.setCellValueFactory(new PropertyValueFactory<>("arrivalPlace"));
-        arrCol.setMinWidth(100);
+        arrCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getArrivalWithAirport()));
+        arrCol.setMinWidth(130);
 
         TableColumn<Flight, LocalDate> dateCol = new TableColumn<>("Tarih");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -631,21 +617,18 @@ public class CustomerDashboard {
         timeCol.setMinWidth(60);
 
         TableColumn<Flight, String> durationCol = new TableColumn<>("Süre");
-        durationCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getFormattedDuration()));
+        durationCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getFormattedDuration()));
         durationCol.setMinWidth(70);
 
         TableColumn<Flight, Integer> seatsCol = new TableColumn<>("Boş Koltuk");
-        seatsCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleIntegerProperty(
-                        cellData.getValue().getAvailableSeatCount()).asObject());
+        seatsCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(
+                cellData.getValue().getAvailableSeatCount()).asObject());
         seatsCol.setMinWidth(75);
 
         TableColumn<Flight, String> statusCol = new TableColumn<>("Durum");
-        statusCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getStatus().getDescription()));
+        statusCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getStatus().getDescription()));
         statusCol.setMinWidth(80);
 
         table.getColumns().addAll(numCol, depCol, arrCol, dateCol, timeCol, durationCol, seatsCol, statusCol);
@@ -702,7 +685,7 @@ public class CustomerDashboard {
                 allResults.addAll(returnResults);
                 flightTable.setItems(FXCollections.observableArrayList(allResults));
                 showAlert("Bilgi", String.format("Gidiş: %d uçuş, Dönüş: %d uçuş bulundu.",
-                    outboundResults.size(), returnResults.size()));
+                        outboundResults.size(), returnResults.size()));
             }
         } else {
             // Tek yön - sadece gidiş uçuşlarını göster
@@ -791,32 +774,195 @@ public class CustomerDashboard {
 
         dialog.showAndWait().ifPresent(seat -> {
             if (seat != null) {
-                try {
-                    Passenger passenger = customer.getPassenger();
-                    if (passenger == null) {
-                        passenger = new Passenger(customer.getUsername(), "",
-                                customer.getEmail(), "");
-                        customer.setPassenger(passenger);
-                    }
-
-                    Reservation reservation = MainApp.getReservationManager()
-                            .makeReservation(flight, passenger, seat);
-                    customer.addReservation(reservation);
-
-                    double price = priceCalculator.calculatePrice(seat, flight);
-                    MainApp.getReservationManager().createTicket(reservation, price);
-
-                    showAlert("Başarılı",
-                            "Rezervasyon tamamlandı!\nRezernasyon Kodu: " + reservation.getReservationCode());
-
-                    // Tabloyu güncelle
-                    showAllFlights();
-
-                } catch (Exception e) {
-                    showAlert("Hata", "Rezervasyon yapılamadı: " + e.getMessage());
-                }
+                // Koltuk seçildikten sonra ek hizmetler ekranını göster
+                showAdditionalServicesDialog(flight, seat);
             }
         });
+    }
+
+    /**
+     * Ek hizmetler seçim ekranını gösterir.
+     */
+    private void showAdditionalServicesDialog(Flight flight, Seat seat) {
+        Dialog<Set<AdditionalService>> dialog = new Dialog<>();
+        dialog.setTitle("Ek Hizmetler");
+        dialog.setHeaderText("UÇUŞUNA EK HİZMET EKLE");
+
+        ButtonType continueButtonType = new ButtonType("Devam Et", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(continueButtonType, ButtonType.CANCEL);
+
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(20));
+        content.setAlignment(Pos.CENTER);
+        content.setStyle("-fx-background-color: #f5f5f5;");
+
+        // Hizmet kartları için grid
+        HBox cardsContainer = new HBox(15);
+        cardsContainer.setAlignment(Pos.CENTER);
+
+        // Seçilen hizmetleri tutacak set
+        Set<AdditionalService> selectedServices = new HashSet<>();
+
+        // Baz fiyat
+        double basePrice = priceCalculator.calculatePrice(seat, flight);
+
+        // Toplam fiyat label
+        Label totalLabel = new Label(String.format("Toplam: %.2f TL", basePrice));
+        totalLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        totalLabel.setTextFill(Color.web("#333333"));
+
+        // Her hizmet için kart oluştur
+        AdditionalService[] services = AdditionalService.values();
+        int serviceIndex = 0;
+        while (serviceIndex < services.length) {
+            AdditionalService service = services[serviceIndex];
+            VBox card = createServiceCard(service, selectedServices, basePrice, totalLabel);
+            cardsContainer.getChildren().add(card);
+            serviceIndex++;
+        }
+
+        // Fiyat bilgisi
+        VBox priceSection = new VBox(5);
+        priceSection.setAlignment(Pos.CENTER);
+        priceSection.setPadding(new Insets(15, 0, 0, 0));
+
+        Label basePriceLabel = new Label(String.format("Bilet Fiyatı: %.2f TL", basePrice));
+        basePriceLabel.setFont(Font.font("Arial", 14));
+        basePriceLabel.setTextFill(Color.web("#666666"));
+
+        priceSection.getChildren().addAll(basePriceLabel, totalLabel);
+
+        content.getChildren().addAll(cardsContainer, priceSection);
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setPrefWidth(700);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == continueButtonType) {
+                return selectedServices;
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(services2 -> {
+            // Rezervasyonu tamamla
+            completeReservation(flight, seat, services2);
+        });
+    }
+
+    /**
+     * Hizmet kartı oluşturur.
+     */
+    private VBox createServiceCard(AdditionalService service, Set<AdditionalService> selectedServices,
+            double basePrice, Label totalLabel) {
+        VBox card = new VBox(10);
+        card.setAlignment(Pos.CENTER);
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(140);
+        card.setPrefHeight(140);
+        card.setStyle(
+                "-fx-background-color: white; " +
+                        "-fx-background-radius: 12; " +
+                        "-fx-border-color: #e0e0e0; " +
+                        "-fx-border-radius: 12; " +
+                        "-fx-cursor: hand;");
+
+        // İkon
+        Label iconLabel = new Label(service.getIcon());
+        iconLabel.setFont(Font.font(32));
+        iconLabel.setTextFill(Color.web("#ffc107"));
+
+        // İsim
+        Label nameLabel = new Label(service.getDisplayName());
+        nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        nameLabel.setTextFill(Color.web("#333333"));
+        nameLabel.setWrapText(true);
+        nameLabel.setAlignment(Pos.CENTER);
+
+        // Fiyat
+        Label priceLabel = new Label(String.format("+%.0f TL", service.getPrice()));
+        priceLabel.setFont(Font.font("Arial", 12));
+        priceLabel.setTextFill(Color.web("#666666"));
+
+        // Seçim checkbox
+        CheckBox checkBox = new CheckBox();
+        checkBox.setStyle("-fx-cursor: hand;");
+
+        checkBox.setOnAction(e -> {
+            if (checkBox.isSelected()) {
+                selectedServices.add(service);
+                card.setStyle(
+                        "-fx-background-color: #fff8e1; " +
+                                "-fx-background-radius: 12; " +
+                                "-fx-border-color: #ffc107; " +
+                                "-fx-border-width: 2; " +
+                                "-fx-border-radius: 12; " +
+                                "-fx-cursor: hand;");
+            } else {
+                selectedServices.remove(service);
+                card.setStyle(
+                        "-fx-background-color: white; " +
+                                "-fx-background-radius: 12; " +
+                                "-fx-border-color: #e0e0e0; " +
+                                "-fx-border-radius: 12; " +
+                                "-fx-cursor: hand;");
+            }
+            // Toplam fiyatı güncelle
+            double total = basePrice + priceCalculator.calculateServicesTotal(selectedServices);
+            totalLabel.setText(String.format("Toplam: %.2f TL", total));
+        });
+
+        // Karta tıklandığında checkbox'ı toggle et
+        card.setOnMouseClicked(e -> {
+            checkBox.setSelected(!checkBox.isSelected());
+            checkBox.getOnAction().handle(null);
+        });
+
+        card.getChildren().addAll(iconLabel, nameLabel, priceLabel, checkBox);
+        return card;
+    }
+
+    /**
+     * Rezervasyonu tamamlar.
+     */
+    private void completeReservation(Flight flight, Seat seat, Set<AdditionalService> services) {
+        try {
+            Passenger passenger = customer.getPassenger();
+            if (passenger == null) {
+                passenger = new Passenger(customer.getUsername(), "",
+                        customer.getEmail(), "");
+                customer.setPassenger(passenger);
+            }
+
+            Reservation reservation = MainApp.getReservationManager()
+                    .makeReservation(flight, passenger, seat);
+            customer.addReservation(reservation);
+
+            double price = priceCalculator.calculatePriceWithServices(seat, flight, services);
+            MainApp.getReservationManager().createTicket(reservation, price);
+
+            // Seçilen hizmetleri bildir
+            StringBuilder message = new StringBuilder();
+            message.append("Rezervasyon tamamlandı!\n");
+            message.append("Rezervasyon Kodu: ").append(reservation.getReservationCode()).append("\n");
+            message.append(String.format("Toplam Fiyat: %.2f TL", price));
+
+            if (services != null && !services.isEmpty()) {
+                message.append("\n\nSeçilen Ek Hizmetler:");
+                java.util.Iterator<AdditionalService> iterator = services.iterator();
+                while (iterator.hasNext()) {
+                    AdditionalService service = iterator.next();
+                    message.append("\n• ").append(service.getFullLabel());
+                }
+            }
+
+            showAlert("Başarılı", message.toString());
+
+            // Tabloyu güncelle
+            showAllFlights();
+
+        } catch (Exception e) {
+            showAlert("Hata", "Rezervasyon yapılamadı: " + e.getMessage());
+        }
     }
 
     private VBox createReservationsPane() {
@@ -859,35 +1005,31 @@ public class CustomerDashboard {
         codeCol.setMinWidth(110);
 
         TableColumn<Reservation, String> flightCol = new TableColumn<>("Uçuş");
-        flightCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getFlight().getFlightNum()));
+        flightCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getFlight().getFlightNum()));
         flightCol.setMinWidth(70);
 
         TableColumn<Reservation, String> routeCol = new TableColumn<>("Rota");
         routeCol.setCellValueFactory(cellData -> {
             Flight f = cellData.getValue().getFlight();
             return new javafx.beans.property.SimpleStringProperty(
-                    f.getDeparturePlace() + " → " + f.getArrivalPlace());
+                    f.getDepartureWithAirport() + " → " + f.getArrivalWithAirport());
         });
-        routeCol.setMinWidth(140);
+        routeCol.setMinWidth(200);
 
         TableColumn<Reservation, String> dateCol = new TableColumn<>("Tarih");
-        dateCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getFlight().getDate().toString()));
+        dateCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getFlight().getDate().toString()));
         dateCol.setMinWidth(85);
 
         TableColumn<Reservation, String> seatCol = new TableColumn<>("Koltuk");
-        seatCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getSeat().getSeatNum()));
+        seatCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getSeat().getSeatNum()));
         seatCol.setMinWidth(60);
 
         TableColumn<Reservation, String> statusCol = new TableColumn<>("Durum");
-        statusCol.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().getStatus().getDescription()));
+        statusCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
+                cellData.getValue().getStatus().getDescription()));
         statusCol.setMinWidth(80);
 
         table.getColumns().addAll(codeCol, flightCol, routeCol, dateCol, seatCol, statusCol);
