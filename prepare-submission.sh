@@ -116,10 +116,11 @@ cat > "src_$GROUP_NUMBER/.classpath" << EOF
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21-mac-aarch64.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21-win.jar"/>
-	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-api-5.10.0.jar"/>
-	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-engine-5.10.0.jar"/>
-	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-commons-1.10.0.jar"/>
-	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-engine-1.10.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-api-5.11.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-jupiter-engine-5.11.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-commons-1.11.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-engine-1.11.0.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/junit-platform-launcher-1.11.0.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/opentest4j-1.3.0.jar"/>
 	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/apiguardian-api-1.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
@@ -143,7 +144,7 @@ cat > "src_$GROUP_NUMBER/RunAirline_Win.launch" << EOF
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airline.Launcher"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup$GROUP_NUMBER"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_$GROUP_NUMBER/javafx-base-21.jar;../lib_$GROUP_NUMBER/javafx-base-21-win.jar;../lib_$GROUP_NUMBER/javafx-controls-21.jar;../lib_$GROUP_NUMBER/javafx-controls-21-win.jar;../lib_$GROUP_NUMBER/javafx-fxml-21.jar;../lib_$GROUP_NUMBER/javafx-fxml-21-win.jar;../lib_$GROUP_NUMBER/javafx-graphics-21.jar;../lib_$GROUP_NUMBER/javafx-graphics-21-win.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ..\\lib_$GROUP_NUMBER\\javafx-base-21.jar;..\\lib_$GROUP_NUMBER\\javafx-base-21-win.jar;..\\lib_$GROUP_NUMBER\\javafx-controls-21.jar;..\\lib_$GROUP_NUMBER\\javafx-controls-21-win.jar;..\\lib_$GROUP_NUMBER\\javafx-fxml-21.jar;..\\lib_$GROUP_NUMBER\\javafx-fxml-21-win.jar;..\\lib_$GROUP_NUMBER\\javafx-graphics-21.jar;..\\lib_$GROUP_NUMBER\\javafx-graphics-21-win.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
 </launchConfiguration>
 EOF
 
