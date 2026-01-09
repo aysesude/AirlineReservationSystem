@@ -32,8 +32,8 @@ public class CliApp {
         System.out.println("╚════════════════════════════════════════════════════════════╝");
         System.out.println();
 
-        // Login
-        if (!login()) {
+        // Giriş veya Kayıt Ekranı
+        if (!authenticationScreen()) {
             System.out.println("Giriş başarısız. Program sonlandırılıyor.");
             return;
         }
@@ -93,6 +93,81 @@ public class CliApp {
         } else {
             System.out.println("\n✗ Kullanıcı adı veya şifre hatalı!");
             return false;
+        }
+    }
+
+    private static boolean authenticationScreen() {
+        while (true) {
+            System.out.println("╔════════════════════════════════════════════════════════════╗");
+            System.out.println("║           KİMLİK DOĞRULAMA EKRANI                         ║");
+            System.out.println("╚════════════════════════════════════════════════════════════╝");
+            System.out.println("1. Giriş Yap");
+            System.out.println("2. Yeni Hesap Oluştur");
+            System.out.println("0. Çıkış");
+            System.out.print("\nSeçiminiz: ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1" -> {
+                    if (login()) {
+                        return true;
+                    }
+                }
+                case "2" -> register();
+                case "0" -> {
+                    return false;
+                }
+                default -> System.out.println("✗ Geçersiz seçim!");
+            }
+            System.out.println();
+        }
+    }
+
+    private static void register() {
+        System.out.println("\n═══════════════ YENİ HESAP OLUŞTUR ═══════════════");
+
+        System.out.print("Kullanıcı Adı: ");
+        String username = scanner.nextLine().trim();
+
+        if (username.isEmpty()) {
+            System.out.println("✗ Kullanıcı adı boş olamaz!");
+            return;
+        }
+
+        // Kullanıcı adı zaten var mı kontrol et
+        if (userManager.getUserByUsername(username) != null) {
+            System.out.println("✗ Bu kullanıcı adı zaten kullanımda!");
+            return;
+        }
+
+        System.out.print("Şifre: ");
+        String password = scanner.nextLine().trim();
+
+        if (password.isEmpty()) {
+            System.out.println("✗ Şifre boş olamaz!");
+            return;
+        }
+
+        System.out.print("Ad: ");
+        String firstName = scanner.nextLine().trim();
+
+        System.out.print("Soyad: ");
+        String lastName = scanner.nextLine().trim();
+
+        System.out.print("E-posta: ");
+        String email = scanner.nextLine().trim();
+
+        System.out.print("Telefon: ");
+        String phone = scanner.nextLine().trim();
+
+        try {
+            Customer customer = userManager.registerCustomer(username, password, email, firstName, lastName, phone);
+            System.out.println("\n✓ Hesap başarıyla oluşturuldu!");
+            System.out.println("✓ Şimdi giriş yapabilirsiniz.");
+            System.out.println();
+        } catch (IllegalArgumentException e) {
+            System.out.println("✗ Kayıt başarısız: " + e.getMessage());
         }
     }
 

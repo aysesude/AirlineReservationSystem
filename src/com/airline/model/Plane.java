@@ -1,6 +1,7 @@
 package com.airline.model;
 
 import com.airline.model.enums.SeatClass;
+import com.airline.exception.SeatNotFoundException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -73,7 +74,7 @@ public class Plane implements Serializable {
      */
     public Seat getSeat(String seatNum) {
         if (seatNum == null) {
-            throw new IllegalArgumentException("Koltuk numarası null olamaz");
+            throw new SeatNotFoundException("Koltuk numarası null olamaz");
         }
         return seatMatrix.get(seatNum.toUpperCase());
     }

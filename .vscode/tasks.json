@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🧪 Compile and Run Tests",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "cd \"c:\\Users\\zeyne\\Downloads\\oop_proje (1)\\oop_proje\"; Write-Host '═════════════════════════════════════════════════════════════' -ForegroundColor Cyan; Write-Host '📦 Derlemeler Başlanıyor...' -ForegroundColor Green; Write-Host '═════════════════════════════════════════════════════════════' -ForegroundColor Cyan; mkdir -Force bin | Out-Null; $files = (Get-ChildItem -Path src -Filter '*.java' -Recurse).FullName; Write-Host \"📄 Bulundu: $($files.Count) Java dosyası\" -ForegroundColor Yellow; javac -d bin -cp 'lib/*' $files 2>&1; if ($LASTEXITCODE -eq 0) { Write-Host '✓ Derleme Başarılı!' -ForegroundColor Green } else { Write-Host '✗ Derleme Hatalı!' -ForegroundColor Red; exit 1 }; Write-Host ''; Write-Host '═════════════════════════════════════════════════════════════' -ForegroundColor Cyan; Write-Host '🧪 JUnit Testleri Çalıştırılıyor...' -ForegroundColor Green; Write-Host '═════════════════════════════════════════════════════════════' -ForegroundColor Cyan; java -cp 'bin;lib/*' org.junit.platform.console.ConsoleLauncher --scan-classpath --classpath bin 2>&1"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

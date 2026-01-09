@@ -60,7 +60,7 @@ public class MainApp extends Application {
             }
         }
 
-        // Sonra sadece aktif rezervasyonlardaki koltukları rezerve et
+        // sadece aktif rezervasyonlardaki koltukları rezerve et
         java.util.Iterator<com.airline.model.Reservation> reservationIterator = reservationManager.getAllReservations().iterator();
         while (reservationIterator.hasNext()) {
             com.airline.model.Reservation reservation = reservationIterator.next();
