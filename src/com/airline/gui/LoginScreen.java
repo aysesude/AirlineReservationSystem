@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -33,11 +35,38 @@ public class LoginScreen {
     public void show() {
         stage.setTitle("Havayolu Rezervasyon Sistemi - Giriş");
 
-        // Ana layout
-        VBox mainLayout = new VBox(20);
-        mainLayout.setAlignment(Pos.CENTER);
-        mainLayout.setPadding(new Insets(40));
+        // Ana layout - Sol: Resim, Sağ: Form
+        HBox mainLayout = new HBox();
         mainLayout.setStyle("-fx-background-color: linear-gradient(to bottom, #f9a825, #ff8f00);");
+
+        // ===== SOL TARAF: Resim =====
+        VBox leftPane = new VBox();
+        leftPane.setAlignment(Pos.CENTER);
+        leftPane.setPrefWidth(400);
+        leftPane.setPadding(new Insets(20));
+
+        try {
+            // ytu_airline.png dosyasını yükle - src/resources klasöründen
+            java.io.File imageFile = new java.io.File("src/resources/ytu_airline.png");
+            Image airlineImage = new Image(imageFile.toURI().toString());
+            ImageView imageView = new ImageView(airlineImage);
+            imageView.setFitWidth(350);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            leftPane.getChildren().add(imageView);
+        } catch (Exception e) {
+            // Resim bulunamazsa placeholder göster
+            Label placeholderLabel = new Label("✈");
+            placeholderLabel.setFont(Font.font("Arial", FontWeight.BOLD, 120));
+            placeholderLabel.setTextFill(Color.WHITE);
+            leftPane.getChildren().add(placeholderLabel);
+        }
+
+        // ===== SAĞ TARAF: Form =====
+        VBox rightPane = new VBox(20);
+        rightPane.setAlignment(Pos.CENTER);
+        rightPane.setPadding(new Insets(40));
+        HBox.setHgrow(rightPane, Priority.ALWAYS);
 
         // Başlık
         Label titleLabel = new Label("✈ Havayolu Rezervasyon Sistemi");
@@ -46,7 +75,7 @@ public class LoginScreen {
 
         Label subtitleLabel = new Label("Hoş Geldiniz");
         subtitleLabel.setFont(Font.font("Arial", 16));
-        subtitleLabel.setTextFill(Color.LIGHTGRAY);
+        subtitleLabel.setTextFill(Color.WHITE);
 
         // Form container
         VBox formBox = new VBox(15);
@@ -61,7 +90,7 @@ public class LoginScreen {
         usernameField = new TextField();
         usernameField.setPromptText("Kullanıcı adınızı girin");
         usernameField.setPrefHeight(40);
-        usernameField.setStyle("-fx-font-size: 14px;");
+        usernameField.setStyle("-fx-font-size: 14px; -fx-background-radius: 5;");
 
         // Şifre
         Label passwordLabel = new Label("Şifre");
@@ -69,7 +98,7 @@ public class LoginScreen {
         passwordField = new PasswordField();
         passwordField.setPromptText("Şifrenizi girin");
         passwordField.setPrefHeight(40);
-        passwordField.setStyle("-fx-font-size: 14px;");
+        passwordField.setStyle("-fx-font-size: 14px; -fx-background-radius: 5;");
 
         // Mesaj etiketi
         messageLabel = new Label();
@@ -80,7 +109,7 @@ public class LoginScreen {
         loginButton.setPrefWidth(200);
         loginButton.setPrefHeight(40);
         loginButton.setStyle("-fx-background-color: #f9a825; -fx-text-fill: white; " +
-                "-fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;");
+                "-fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;");
         loginButton.setOnAction(e -> handleLogin());
 
         // Kayıt ol butonu
@@ -98,28 +127,25 @@ public class LoginScreen {
                 usernameLabel, usernameField,
                 passwordLabel, passwordField,
                 messageLabel,
-                loginButton, registerButton
-        );
+                loginButton, registerButton);
 
-        // Demo bilgisi
-        Label demoLabel = new Label("Demo: admin / admin123");
-        demoLabel.setFont(Font.font("Arial", 11));
-        demoLabel.setTextFill(Color.LIGHTGRAY);
+        rightPane.getChildren().addAll(titleLabel, subtitleLabel, formBox);
 
-        mainLayout.getChildren().addAll(titleLabel, subtitleLabel, formBox, demoLabel);
+        // Ana layout'a ekle
+        mainLayout.getChildren().addAll(leftPane, rightPane);
 
         // Ekran boyutuna göre pencere boyutu ayarla
         javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
         double screenWidth = screen.getVisualBounds().getWidth();
         double screenHeight = screen.getVisualBounds().getHeight();
 
-        // Pencere boyutunu ekranın %40'ı olarak ayarla, min 450x550
-        double windowWidth = Math.max(450, Math.min(500, screenWidth * 0.4));
-        double windowHeight = Math.max(550, Math.min(600, screenHeight * 0.7));
+        // Pencere boyutunu ayarla
+        double windowWidth = Math.max(900, Math.min(1000, screenWidth * 0.7));
+        double windowHeight = Math.max(550, Math.min(650, screenHeight * 0.7));
 
         Scene scene = new Scene(mainLayout, windowWidth, windowHeight);
         stage.setScene(scene);
-        stage.setMinWidth(400);
+        stage.setMinWidth(800);
         stage.setMinHeight(500);
         stage.setResizable(true);
         stage.centerOnScreen();
@@ -203,8 +229,7 @@ public class LoginScreen {
                             emailField.getText().trim(),
                             firstNameField.getText().trim(),
                             lastNameField.getText().trim(),
-                            phoneField.getText().trim()
-                    );
+                            phoneField.getText().trim());
                     return customer;
                 } catch (IllegalArgumentException e) {
                     showAlert("Hata", e.getMessage());

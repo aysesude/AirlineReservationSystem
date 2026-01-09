@@ -5,159 +5,142 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Tüm kullanıcı tiplerinin temel abstract sınıfı.
- * Customer, Staff ve Admin bu sınıftan türetilir.
- */
 public abstract class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected String userId;
-    protected String username;
-    protected String password;
-    protected String email;
-    protected UserRole role;
-    protected boolean active;
+	protected String userId;
+	protected String username;
+	protected String password;
+	protected String email;
+	protected UserRole role;
+	protected boolean active;
 
-    /**
-     * Yeni bir kullanıcı oluşturur.
-     */
-    public User(String username, String password, String email, UserRole role) {
-        this.userId = generateUserId();
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.active = true;
-    }
+	public User(String username, String password, String email, UserRole role) {
+		this.userId = generateUserId();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.active = true;
+	}
 
-    /**
-     * ID ile birlikte kullanıcı oluşturur.
-     */
-    public User(String userId, String username, String password, String email, UserRole role) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.active = true;
-    }
+	public User(String userId, String username, String password, String email, UserRole role) {
+		this.userId = userId;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.active = true;
+	}
 
-    private String generateUserId() {
-        return "USR-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-    }
+	private String generateUserId() {
+		return "USR-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+	}
 
-    /**
-     * Kullanıcı girişi yapar.
-     * @param username Kullanıcı adı
-     * @param password Şifre
-     * @return Giriş başarılı ise true
-     */
-    public boolean login(String username, String password) {
-        return this.username.equals(username) && this.password.equals(password) && this.active;
-    }
+	/**
+	 * Kullanıcı girişi yapar.
+	 * @param username Kullanıcı adı
+	 * @param password Şifre
+	 * @return Giriş başarılı ise true
+	 */
+	public boolean login(String username, String password) {
+		return this.username.equals(username) && this.password.equals(password) && this.active;
+	}
 
-    /**
-     * Kullanıcı çıkışı yapar.
-     */
-    public void logout() {
-        // Oturum kapatma işlemleri
-    }
+	/**
+	 * Kullanıcı çıkışı yapar.
+	 */
+	public void logout() {
+		// Oturum kapatma işlemleri
+	}
 
-    /**
-     * Kullanıcının yetkilerini döndürür.
-     * Her alt sınıf kendi yetkilerini tanımlar.
-     */
-    public abstract List<String> getPermissions();
+	public abstract List<String> getPermissions();
 
-    /**
-     * Kullanıcının belirli bir yetkisi var mı kontrol eder.
-     */
-    public boolean hasPermission(String permission) {
-        return getPermissions().contains(permission);
-    }
+	public boolean hasPermission(String permission) {
+		return getPermissions().contains(permission);
+	}
 
-    /**
-     * Şifre doğrulama.
-     */
-    public boolean checkPassword(String password) {
-        return this.password.equals(password);
-    }
+	/**
+	 * Şifre doğrulama.
+	 */
+	public boolean checkPassword(String password) {
+		return this.password.equals(password);
+	}
 
-    /**
-     * Şifre değiştirme.
-     */
-    public void changePassword(String oldPassword, String newPassword) {
-        if (checkPassword(oldPassword)) {
-            this.password = newPassword;
-        }
-    }
+	/**
+	 * Şifre değiştirme.
+	 */
+	public void changePassword(String oldPassword, String newPassword) {
+		if (checkPassword(oldPassword)) {
+			this.password = newPassword;
+		}
+	}
 
-    // Getter ve Setter metodları
-    public String getUserId() {
-        return userId;
-    }
+	// Getter ve Setter metodları
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public UserRole getRole() {
-        return role;
-    }
+	public UserRole getRole() {
+		return role;
+	}
 
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
 
-    public boolean isActive() {
-        return active;
-    }
+	public boolean isActive() {
+		return active;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("User{id='%s', username='%s', role=%s, active=%s}",
-                userId, username, role, active);
-    }
+	@Override
+	public String toString() {
+		return String.format("User{id='%s', username='%s', role=%s, active=%s}",
+				userId, username, role, active);
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId != null && userId.equals(user.userId);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return userId != null && userId.equals(user.userId);
+	}
 
-    @Override
-    public int hashCode() {
-        return userId != null ? userId.hashCode() : 0;
-    }
+	@Override
+	public int hashCode() {
+		return userId != null ? userId.hashCode() : 0;
+	}
 }
