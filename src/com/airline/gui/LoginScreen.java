@@ -46,14 +46,35 @@ public class LoginScreen {
         leftPane.setPadding(new Insets(20));
 
         try {
-            // ytu_airline.png dosyasını yükle - src/resources klasöründen
-            java.io.File imageFile = new java.io.File("src/resources/ytu_airline.png");
-            Image airlineImage = new Image(imageFile.toURI().toString());
-            ImageView imageView = new ImageView(airlineImage);
-            imageView.setFitWidth(350);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            leftPane.getChildren().add(imageView);
+            // Önce classpath'ten yüklemeyi dene (Eclipse ve JAR için)
+            java.io.InputStream is = getClass().getResourceAsStream("/resources/ytu_airline.png");
+            if (is == null) {
+                // Alternatif yol dene
+                is = getClass().getClassLoader().getResourceAsStream("resources/ytu_airline.png");
+            }
+            if (is == null) {
+                // Dosya sisteminden yüklemeyi dene
+                java.io.File imageFile = new java.io.File("resources/ytu_airline.png");
+                if (!imageFile.exists()) {
+                    imageFile = new java.io.File("src/resources/ytu_airline.png");
+                }
+                if (!imageFile.exists()) {
+                    imageFile = new java.io.File("../resources/ytu_airline.png");
+                }
+                if (imageFile.exists()) {
+                    is = new java.io.FileInputStream(imageFile);
+                }
+            }
+            if (is != null) {
+                Image airlineImage = new Image(is);
+                ImageView imageView = new ImageView(airlineImage);
+                imageView.setFitWidth(350);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+                leftPane.getChildren().add(imageView);
+            } else {
+                throw new Exception("Image not found");
+            }
         } catch (Exception e) {
             // Resim bulunamazsa placeholder göster
             Label placeholderLabel = new Label("✈");

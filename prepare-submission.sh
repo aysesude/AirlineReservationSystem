@@ -2,6 +2,12 @@
 
 # ============================================
 # Ödev Teslim Paketi Hazırlayıcı - Grup 3
+# SADECE hocanın istediği dosyalar:
+# - 3.jar
+# - src_3.zip (Eclipse uyumlu)
+# - lib_3.zip
+# - report_3.pdf (sen ekleyeceksin)
+# - video_3.mp4 (sen ekleyeceksin)
 # ============================================
 
 GROUP_NUMBER="3"
@@ -25,7 +31,6 @@ echo "📦 Adım 1: Kaynak kodlar derleniyor..."
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 
-# Platform-bağımsız JAR'ları ve bir native JAR setini kullan
 JAVAFX_MODULE_PATH="$LIB_DIR/javafx-base-21.jar:$LIB_DIR/javafx-base-21-mac-aarch64.jar:$LIB_DIR/javafx-controls-21.jar:$LIB_DIR/javafx-controls-21-mac-aarch64.jar:$LIB_DIR/javafx-fxml-21.jar:$LIB_DIR/javafx-fxml-21-mac-aarch64.jar:$LIB_DIR/javafx-graphics-21.jar:$LIB_DIR/javafx-graphics-21-mac-aarch64.jar"
 
 find "$SRC_DIR" -name "*.java" ! -path "*/test/*" > "$PROJECT_DIR/sources.txt"
@@ -52,7 +57,7 @@ MANIFEST_FILE="$PROJECT_DIR/MANIFEST.MF"
 cat > "$MANIFEST_FILE" << EOF
 Manifest-Version: 1.0
 Main-Class: com.airline.Launcher
-Class-Path: lib_$GROUP_NUMBER/javafx-base-21.jar lib_$GROUP_NUMBER/javafx-base-21-mac-aarch64.jar lib_$GROUP_NUMBER/javafx-controls-21.jar lib_$GROUP_NUMBER/javafx-controls-21-mac-aarch64.jar lib_$GROUP_NUMBER/javafx-fxml-21.jar lib_$GROUP_NUMBER/javafx-fxml-21-mac-aarch64.jar lib_$GROUP_NUMBER/javafx-graphics-21.jar lib_$GROUP_NUMBER/javafx-graphics-21-mac-aarch64.jar
+Class-Path: lib_$GROUP_NUMBER/javafx-base-21.jar lib_$GROUP_NUMBER/javafx-controls-21.jar lib_$GROUP_NUMBER/javafx-fxml-21.jar lib_$GROUP_NUMBER/javafx-graphics-21.jar
 
 EOF
 
@@ -61,18 +66,71 @@ jar cfm "$SUBMISSION_DIR/$GROUP_NUMBER.jar" "$MANIFEST_FILE" .
 rm "$MANIFEST_FILE"
 echo "✅ $GROUP_NUMBER.jar oluşturuldu!"
 
-# 4. src_3.zip oluştur
+# 4. src_3.zip oluştur (Eclipse uyumlu - .project, .classpath, module-info.java dahil)
 echo ""
-echo "📦 Adım 3: src_$GROUP_NUMBER.zip oluşturuluyor..."
+echo "📦 Adım 3: src_$GROUP_NUMBER.zip oluşturuluyor (Eclipse uyumlu)..."
 cd "$PROJECT_DIR"
-# src klasörünü src_3 olarak kopyala ve zipele
 rm -rf "src_$GROUP_NUMBER"
 cp -r src "src_$GROUP_NUMBER"
+
+# module-info.java'yı kaldır (classpath yaklaşımı için)
+rm -f "src_$GROUP_NUMBER/module-info.java.bak"
+rm -f "src_$GROUP_NUMBER/module-info.java"
+
+# Eclipse .project dosyası
+cat > "src_$GROUP_NUMBER/.project" << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>AirlineReservationSystem_Grup$GROUP_NUMBER</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
+EOF
+
+# Eclipse .classpath dosyası (tüm JavaFX JAR'ları dahil)
+cat > "src_$GROUP_NUMBER/.classpath" << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-base-21.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-base-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-controls-21.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-controls-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-fxml-21.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-fxml-21-mac-aarch64.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21.jar"/>
+	<classpathentry kind="lib" path="../lib_$GROUP_NUMBER/javafx-graphics-21-mac-aarch64.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+EOF
+
+# Eclipse launch dosyası (VM argümanları hazır - çift tıkla çalıştır)
+cat > "src_$GROUP_NUMBER/RunAirline.launch" << EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airline.Launcher"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup$GROUP_NUMBER"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_$GROUP_NUMBER --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/>
+</launchConfiguration>
+EOF
+
 zip -rq "$SUBMISSION_DIR/src_$GROUP_NUMBER.zip" "src_$GROUP_NUMBER"
 rm -rf "src_$GROUP_NUMBER"
 echo "✅ src_$GROUP_NUMBER.zip oluşturuldu!"
 
-# 5. lib_3.zip oluştur (JavaFX kütüphaneleri)
+# 5. lib_3.zip oluştur
 echo ""
 echo "📦 Adım 4: lib_$GROUP_NUMBER.zip oluşturuluyor..."
 cd "$PROJECT_DIR"
@@ -82,91 +140,24 @@ zip -rq "$SUBMISSION_DIR/lib_$GROUP_NUMBER.zip" "lib_$GROUP_NUMBER"
 rm -rf "lib_$GROUP_NUMBER"
 echo "✅ lib_$GROUP_NUMBER.zip oluşturuldu!"
 
-# 6. Çalıştırma talimatları oluştur
+# 6. Final 3.zip oluştur
 echo ""
-echo "📦 Adım 5: Çalıştırma talimatları oluşturuluyor..."
-cat > "$SUBMISSION_DIR/CALISTIRMA_TALIMATLARI.txt" << EOF
-========================================
-  Havayolu Rezervasyon Sistemi - Grup 3
-  Çalıştırma Talimatları
-========================================
-
-ÖNEMLİ: Bu proje JavaFX kullandığı için JAR dosyası lib klasörüyle birlikte çalıştırılmalıdır.
-
-ADIMLAR:
-1. lib_3.zip dosyasını JAR dosyasıyla aynı klasöre çıkarın
-2. Aşağıdaki komutu çalıştırın:
-
-macOS/Linux:
------------
-java --module-path lib_3 --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base -jar 3.jar
-
-Windows:
---------
-java --module-path lib_3 --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base -jar 3.jar
-
-NOT: Java 17 veya üzeri sürüm gereklidir.
-EOF
-echo "✅ Çalıştırma talimatları oluşturuldu!"
-
-# 7. Çalıştırma script'i oluştur
-cat > "$SUBMISSION_DIR/run.sh" << 'EOF'
-#!/bin/bash
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-# lib_3.zip'i çıkar (eğer çıkarılmamışsa)
-if [ ! -d "$SCRIPT_DIR/lib_3" ]; then
-    if [ -f "$SCRIPT_DIR/lib_3.zip" ]; then
-        unzip -q "$SCRIPT_DIR/lib_3.zip" -d "$SCRIPT_DIR"
-    else
-        echo "❌ lib_3.zip bulunamadı!"
-        exit 1
-    fi
-fi
-
-java --module-path "$SCRIPT_DIR/lib_3" \
-     --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base \
-     --enable-native-access=javafx.graphics \
-     -jar "$SCRIPT_DIR/3.jar" 2>&1 | grep -v "^WARNING:"
-EOF
-chmod +x "$SUBMISSION_DIR/run.sh"
-
-cat > "$SUBMISSION_DIR/run.bat" << 'EOF'
-@echo off
-cd /d "%~dp0"
-
-if not exist "lib_3" (
-    if exist "lib_3.zip" (
-        powershell -command "Expand-Archive -Path 'lib_3.zip' -DestinationPath '.'"
-    ) else (
-        echo lib_3.zip bulunamadi!
-        pause
-        exit /b 1
-    )
-)
-
-java --module-path lib_3 --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base -jar 3.jar
-pause
-EOF
+echo "📦 Adım 5: Final $GROUP_NUMBER.zip oluşturuluyor..."
+cd "$PROJECT_DIR/submission"
+rm -f "$GROUP_NUMBER.zip"
+zip -rq "$GROUP_NUMBER.zip" "$GROUP_NUMBER"
+echo "✅ $GROUP_NUMBER.zip oluşturuldu!"
 
 echo ""
 echo "=========================================="
 echo "✅ TESLİM PAKETİ HAZIRLANDI!"
 echo "=========================================="
 echo ""
-echo "📁 Klasör: $SUBMISSION_DIR"
+echo "📁 Final dosya: $PROJECT_DIR/submission/$GROUP_NUMBER.zip"
 echo ""
-echo "📋 Oluşturulan dosyalar:"
-ls -la "$SUBMISSION_DIR"
+echo "📋 ZIP içeriği:"
+unzip -l "$PROJECT_DIR/submission/$GROUP_NUMBER.zip"
 echo ""
-echo "⚠️  EKSİK DOSYALAR (sizin eklemeniz gereken):"
-echo "   📄 report_$GROUP_NUMBER.pdf  - UML ve açıklamaları"
-echo "   🎥 video_$GROUP_NUMBER.mp4   - Tanıtım videosu"
-echo ""
-echo "📌 SONRAKİ ADIMLAR:"
-echo "   1. report_$GROUP_NUMBER.pdf dosyasını $SUBMISSION_DIR klasörüne ekleyin"
-echo "   2. video_$GROUP_NUMBER.mp4 dosyasını $SUBMISSION_DIR klasörüne ekleyin"
-echo "   3. Aşağıdaki komutu çalıştırarak son zip'i oluşturun:"
-echo ""
-echo "      cd $PROJECT_DIR/submission && zip -r $GROUP_NUMBER.zip $GROUP_NUMBER"
-echo ""
+echo "⚠️  EKSİK DOSYALAR (ekleyip scripti tekrar çalıştır):"
+echo "   📄 report_$GROUP_NUMBER.pdf"
+echo "   🎥 video_$GROUP_NUMBER.mp4"
