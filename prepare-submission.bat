@@ -30,10 +30,12 @@ mkdir "%OUT_DIR%"
 
 set JAVAFX_MODULE_PATH=%LIB_DIR%\javafx-base-21.jar;%LIB_DIR%\javafx-base-21-win.jar;%LIB_DIR%\javafx-controls-21.jar;%LIB_DIR%\javafx-controls-21-win.jar;%LIB_DIR%\javafx-fxml-21.jar;%LIB_DIR%\javafx-fxml-21-win.jar;%LIB_DIR%\javafx-graphics-21.jar;%LIB_DIR%\javafx-graphics-21-win.jar
 
+set JUNIT_CLASSPATH=%LIB_DIR%\junit-jupiter-api-5.11.0.jar;%LIB_DIR%\junit-jupiter-engine-5.11.0.jar;%LIB_DIR%\junit-platform-commons-1.11.0.jar;%LIB_DIR%\junit-platform-engine-1.11.0.jar;%LIB_DIR%\junit-platform-launcher-1.11.0.jar;%LIB_DIR%\opentest4j-1.3.0.jar;%LIB_DIR%\apiguardian-api-1.1.2.jar
+
 REM Java dosyalarını bul ve derle
 dir /s /b "%SRC_DIR%\*.java" > "%PROJECT_DIR%sources.txt"
 
-javac --module-path "%JAVAFX_MODULE_PATH%" --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base --release 17 -d "%OUT_DIR%" @"%PROJECT_DIR%sources.txt"
+javac --module-path "%JAVAFX_MODULE_PATH%" --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base -cp "%JUNIT_CLASSPATH%" --release 17 -d "%OUT_DIR%" @"%PROJECT_DIR%sources.txt"
 
 if %ERRORLEVEL% neq 0 (
     echo [X] Derleme hatasi!
