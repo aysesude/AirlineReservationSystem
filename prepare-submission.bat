@@ -50,13 +50,24 @@ REM 3. JAR dosyası oluştur
 echo.
 echo [2/5] %GROUP_NUMBER%.jar olusturuluyor...
 
-echo Manifest-Version: 1.0> "%PROJECT_DIR%MANIFEST.MF"
-echo Main-Class: com.airline.Launcher>> "%PROJECT_DIR%MANIFEST.MF"
-echo Class-Path: lib_%GROUP_NUMBER%/javafx-base-21.jar lib_%GROUP_NUMBER%/javafx-controls-21.jar lib_%GROUP_NUMBER%/javafx-fxml-21.jar lib_%GROUP_NUMBER%/javafx-graphics-21.jar>> "%PROJECT_DIR%MANIFEST.MF"
-echo.>> "%PROJECT_DIR%MANIFEST.MF"
+REM Resources klasörünü out'a kopyala
+if exist "%SRC_DIR%\resources" xcopy /s /e /i /q "%SRC_DIR%\resources" "%OUT_DIR%\resources"
+
+REM Manifest oluştur
+(
+echo Manifest-Version: 1.0
+echo Main-Class: com.airline.Launcher
+echo Class-Path: lib_%GROUP_NUMBER%/javafx-base-21.jar lib_%GROUP_NUMBER%/javafx-controls-21.jar lib_%GROUP_NUMBER%/javafx-fxml-21.jar lib_%GROUP_NUMBER%/javafx-graphics-21.jar
+echo.
+) > "%PROJECT_DIR%MANIFEST.MF"
 
 cd "%OUT_DIR%"
 jar cfm "%SUBMISSION_DIR%\%GROUP_NUMBER%.jar" "%PROJECT_DIR%MANIFEST.MF" .
+if %ERRORLEVEL% neq 0 (
+    echo [X] JAR olusturma hatasi!
+    pause
+    exit /b 1
+)
 del "%PROJECT_DIR%MANIFEST.MF"
 cd "%PROJECT_DIR%"
 echo [OK] %GROUP_NUMBER%.jar olusturuldu!
@@ -86,7 +97,7 @@ echo 	^</natures^>
 echo ^</projectDescription^>
 ) > "%PROJECT_DIR%src_%GROUP_NUMBER%\.project"
 
-REM Eclipse .classpath dosyası
+REM Eclipse .classpath dosyası (macOS + Windows JAR'ları)
 (
 echo ^<?xml version="1.0" encoding="UTF-8"?^>
 echo ^<classpath^>
@@ -94,12 +105,16 @@ echo 	^<classpathentry kind="src" path=""/^>
 echo 	^<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-base-21.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-base-21-win.jar"/^>
+echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-base-21-mac-aarch64.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-controls-21.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-controls-21-win.jar"/^>
+echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-controls-21-mac-aarch64.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-fxml-21.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-fxml-21-win.jar"/^>
+echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-fxml-21-mac-aarch64.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-graphics-21.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-graphics-21-win.jar"/^>
+echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/javafx-graphics-21-mac-aarch64.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/junit-jupiter-api-5.11.0.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/junit-jupiter-engine-5.11.0.jar"/^>
 echo 	^<classpathentry kind="lib" path="../lib_%GROUP_NUMBER%/junit-platform-commons-1.11.0.jar"/^>
@@ -119,7 +134,17 @@ echo ^<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airl
 echo ^<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup%GROUP_NUMBER%"/^>
 echo ^<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_%GROUP_NUMBER%/javafx-base-21.jar;../lib_%GROUP_NUMBER%/javafx-base-21-win.jar;../lib_%GROUP_NUMBER%/javafx-controls-21.jar;../lib_%GROUP_NUMBER%/javafx-controls-21-win.jar;../lib_%GROUP_NUMBER%/javafx-fxml-21.jar;../lib_%GROUP_NUMBER%/javafx-fxml-21-win.jar;../lib_%GROUP_NUMBER%/javafx-graphics-21.jar;../lib_%GROUP_NUMBER%/javafx-graphics-21-win.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/^>
 echo ^</launchConfiguration^>
-) > "%PROJECT_DIR%src_%GROUP_NUMBER%\RunAirline.launch"
+) > "%PROJECT_DIR%src_%GROUP_NUMBER%\RunAirline_Win.launch"
+
+REM Eclipse launch dosyası (macOS)
+(
+echo ^<?xml version="1.0" encoding="UTF-8" standalone="no"?^>
+echo ^<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication"^>
+echo ^<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.airline.Launcher"/^>
+echo ^<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="AirlineReservationSystem_Grup%GROUP_NUMBER%"/^>
+echo ^<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--module-path ../lib_%GROUP_NUMBER%/javafx-base-21.jar:../lib_%GROUP_NUMBER%/javafx-base-21-mac-aarch64.jar:../lib_%GROUP_NUMBER%/javafx-controls-21.jar:../lib_%GROUP_NUMBER%/javafx-controls-21-mac-aarch64.jar:../lib_%GROUP_NUMBER%/javafx-fxml-21.jar:../lib_%GROUP_NUMBER%/javafx-fxml-21-mac-aarch64.jar:../lib_%GROUP_NUMBER%/javafx-graphics-21.jar:../lib_%GROUP_NUMBER%/javafx-graphics-21-mac-aarch64.jar --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base"/^>
+echo ^</launchConfiguration^>
+) > "%PROJECT_DIR%src_%GROUP_NUMBER%\RunAirline_Mac.launch"
 
 powershell Compress-Archive -Path "%PROJECT_DIR%src_%GROUP_NUMBER%\*" -DestinationPath "%SUBMISSION_DIR%\src_%GROUP_NUMBER%.zip" -Force
 rmdir /s /q "%PROJECT_DIR%src_%GROUP_NUMBER%"
@@ -134,9 +159,21 @@ powershell Compress-Archive -Path "%PROJECT_DIR%lib_%GROUP_NUMBER%\*" -Destinati
 rmdir /s /q "%PROJECT_DIR%lib_%GROUP_NUMBER%"
 echo [OK] lib_%GROUP_NUMBER%.zip olusturuldu!
 
-REM 6. Final 3.zip oluştur
+REM 6. report_3.pdf ve video_3.mp4 varsa kopyala
 echo.
-echo [5/5] Final %GROUP_NUMBER%.zip olusturuluyor...
+echo [5/6] Ek dosyalar kontrol ediliyor...
+if exist "%PROJECT_DIR%report_%GROUP_NUMBER%.pdf" (
+    copy "%PROJECT_DIR%report_%GROUP_NUMBER%.pdf" "%SUBMISSION_DIR%\" >nul
+    echo [OK] report_%GROUP_NUMBER%.pdf eklendi!
+)
+if exist "%PROJECT_DIR%video_%GROUP_NUMBER%.mp4" (
+    copy "%PROJECT_DIR%video_%GROUP_NUMBER%.mp4" "%SUBMISSION_DIR%\" >nul
+    echo [OK] video_%GROUP_NUMBER%.mp4 eklendi!
+)
+
+REM 7. Final 3.zip oluştur
+echo.
+echo [6/6] Final %GROUP_NUMBER%.zip olusturuluyor...
 cd "%PROJECT_DIR%submission"
 if exist "%GROUP_NUMBER%.zip" del "%GROUP_NUMBER%.zip"
 powershell Compress-Archive -Path "%GROUP_NUMBER%" -DestinationPath "%GROUP_NUMBER%.zip" -Force

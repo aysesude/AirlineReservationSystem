@@ -162,9 +162,21 @@ zip -rq "$SUBMISSION_DIR/lib_$GROUP_NUMBER.zip" "lib_$GROUP_NUMBER"
 rm -rf "lib_$GROUP_NUMBER"
 echo "✅ lib_$GROUP_NUMBER.zip oluşturuldu!"
 
-# 6. Final 3.zip oluştur
+# 6. report_3.pdf ve video_3.mp4 varsa kopyala
 echo ""
-echo "📦 Adım 5: Final $GROUP_NUMBER.zip oluşturuluyor..."
+echo "📦 Adım 5: Ek dosyalar kontrol ediliyor..."
+if [ -f "$PROJECT_DIR/report_$GROUP_NUMBER.pdf" ]; then
+    cp "$PROJECT_DIR/report_$GROUP_NUMBER.pdf" "$SUBMISSION_DIR/"
+    echo "✅ report_$GROUP_NUMBER.pdf eklendi!"
+fi
+if [ -f "$PROJECT_DIR/video_$GROUP_NUMBER.mp4" ]; then
+    cp "$PROJECT_DIR/video_$GROUP_NUMBER.mp4" "$SUBMISSION_DIR/"
+    echo "✅ video_$GROUP_NUMBER.mp4 eklendi!"
+fi
+
+# 7. Final 3.zip oluştur
+echo ""
+echo "📦 Adım 6: Final $GROUP_NUMBER.zip oluşturuluyor..."
 cd "$PROJECT_DIR/submission"
 rm -f "$GROUP_NUMBER.zip"
 zip -rq "$GROUP_NUMBER.zip" "$GROUP_NUMBER"
