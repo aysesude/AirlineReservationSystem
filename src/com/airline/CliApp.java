@@ -468,30 +468,6 @@ public class CliApp {
         System.out.printf("│ Durum      : %-26s │%n", flight.getStatus());
         System.out.println("└─────────────────────────────────────────┘");
 
-        // Koltuk haritası
-        System.out.println("\nKoltuk Durumu: [■]=Dolu  [□]=Boş");
-        Plane plane = flight.getPlane();
-        if (plane != null) {
-            List<Seat> seats = plane.getAllSeats();
-            int cols = 6; // A-F
-            int row = 0;
-            System.out.print("    A  B  C    D  E  F\n");
-            int i = 0;
-            while (i < seats.size()) {
-                if (i % cols == 0) {
-                    row++;
-                    System.out.printf("%2d ", row);
-                }
-                Seat s = seats.get(i);
-                String symbol = !s.isReserveStatus() ? "□" : "■";
-                System.out.print(" " + symbol + " ");
-                if (i % cols == 2)
-                    System.out.print("  "); // Koridor
-                if (i % cols == 5)
-                    System.out.println();
-                i++;
-            }
-        }
     }
 
     private static void listAllUsers() {
