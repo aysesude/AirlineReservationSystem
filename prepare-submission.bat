@@ -166,9 +166,9 @@ if exist "%PROJECT_DIR%report_%GROUP_NUMBER%.pdf" (
     copy "%PROJECT_DIR%report_%GROUP_NUMBER%.pdf" "%SUBMISSION_DIR%\" >nul
     echo [OK] report_%GROUP_NUMBER%.pdf eklendi!
 )
-if exist "%PROJECT_DIR%video_%GROUP_NUMBER%.mp4" (
-    copy "%PROJECT_DIR%video_%GROUP_NUMBER%.mp4" "%SUBMISSION_DIR%\" >nul
-    echo [OK] video_%GROUP_NUMBER%.mp4 eklendi!
+if exist "%PROJECT_DIR%video_%GROUP_NUMBER%.txt" (
+    copy "%PROJECT_DIR%video_%GROUP_NUMBER%.txt" "%SUBMISSION_DIR%\" >nul
+    echo [OK] video_%GROUP_NUMBER%.txt eklendi!
 )
 
 REM 7. Final 3.zip oluştur
@@ -189,6 +189,6 @@ echo Final dosya: %PROJECT_DIR%submission\%GROUP_NUMBER%.zip
 echo.
 echo Eksik dosyalar (ekleyip scripti tekrar calistir):
 echo    - report_%GROUP_NUMBER%.pdf
-echo    - video_%GROUP_NUMBER%.mp4
+echo    - video_%GROUP_NUMBER%.txt
 echo.
 pause

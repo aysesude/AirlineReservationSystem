@@ -169,9 +169,9 @@ if [ -f "$PROJECT_DIR/report_$GROUP_NUMBER.pdf" ]; then
     cp "$PROJECT_DIR/report_$GROUP_NUMBER.pdf" "$SUBMISSION_DIR/"
     echo "✅ report_$GROUP_NUMBER.pdf eklendi!"
 fi
-if [ -f "$PROJECT_DIR/video_$GROUP_NUMBER.mp4" ]; then
-    cp "$PROJECT_DIR/video_$GROUP_NUMBER.mp4" "$SUBMISSION_DIR/"
-    echo "✅ video_$GROUP_NUMBER.mp4 eklendi!"
+if [ -f "$PROJECT_DIR/video_$GROUP_NUMBER.txt" ]; then
+    cp "$PROJECT_DIR/video_$GROUP_NUMBER.txt" "$SUBMISSION_DIR/"
+    echo "✅ video_$GROUP_NUMBER.txt eklendi!"
 fi
 
 # 7. Final 3.zip oluştur
@@ -194,4 +194,4 @@ unzip -l "$PROJECT_DIR/submission/$GROUP_NUMBER.zip"
 echo ""
 echo "⚠️  EKSİK DOSYALAR (ekleyip scripti tekrar çalıştır):"
 echo "   📄 report_$GROUP_NUMBER.pdf"
-echo "   🎥 video_$GROUP_NUMBER.mp4"
+echo "   🎥 video_$GROUP_NUMBER.txt"
