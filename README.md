@@ -37,11 +37,15 @@ Bu proje, Java programlama dili kullanılarak geliştirilmiş kapsamlı bir Hava
 
 ## 🔐 Giriş Bilgileri
 
+**Admin Girişi:**
+
 | Kullanıcı | Şifre | Rol |
 |-----------|-------|-----|
 | admin | admin123 | Yönetici |
 
-Yeni kullanıcı kaydı giriş ekranından yapılabilir.
+**Yeni Kullanıcı Kaydı:**
+
+Müşteri olarak sisteme kayıt olmak için giriş ekranındaki "Kayıt Ol" butonunu kullanabilirsiniz. Kayıt sırasında ad, soyad, e-posta ve şifre bilgilerini girmeniz gerekmektedir.
 
 ## 📁 Proje Yapısı
 
@@ -147,20 +151,6 @@ AirlineReservationSystem/
 ## 🧪 Testleri Çalıştırma
 
 Testler `src/com/airline/test/` klasöründe bulunmaktadır. IDE üzerinden veya JUnit test runner ile çalıştırabilirsiniz.
-
-## 📦 Derleme
-
-```bash
-# Projeyi derle
-./compile.sh
-```
-
-Derlenmiş .class dosyaları `out/` klasöründe oluşturulacaktır.
-
-## 👥 Geliştirici
-
-- **Grup No**: 3
-- **Öğrenciler**: Ayşe Sude Cami, Zeynep Feryat Gözüngül
 
 ## 📄 Lisans
 
