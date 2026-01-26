@@ -18,10 +18,10 @@ Bu proje, Java programlama dili kullanılarak geliştirilmiş kapsamlı bir Hava
   <img src="assets/reservation.gif" width="700">
 </p>
 
-<!--### 🛠️ Admin Paneli
+### 🛠️ Admin Paneli
 <p align="center">
   <img src="assets/admin.gif" width="700">
-</p>-->
+</p>
 
 ## 🛠️ Gereksinimler
 
