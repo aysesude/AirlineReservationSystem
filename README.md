@@ -6,6 +6,23 @@
 
 Bu proje, Java programlama dili kullanılarak geliştirilmiş kapsamlı bir Havayolu Rezervasyon ve Yönetim Sistemidir. Proje, OOP prensiplerini (Encapsulation, Inheritance, Polymorphism, Abstraction), Multithreading ve JUnit testlerini içermektedir.
 
+## 🎬 Uygulama Tanıtımı
+
+<!--### 🔐 Giriş ve Kayıt
+<p align="center">
+  <img src="assets/login.gif" width="700">
+</p>-->
+
+### ✈️ Uçuş Arama & Rezervasyon
+<p align="center">
+  <img src="assets/reservation.gif" width="700">
+</p>
+
+<!--### 🛠️ Admin Paneli
+<p align="center">
+  <img src="assets/admin.gif" width="700">
+</p>-->
+
 ## 🛠️ Gereksinimler
 
 - **JDK 17** veya üzeri
@@ -46,60 +63,6 @@ Bu proje, Java programlama dili kullanılarak geliştirilmiş kapsamlı bir Hava
 **Yeni Kullanıcı Kaydı:**
 
 Müşteri olarak sisteme kayıt olmak için giriş ekranındaki "Kayıt Ol" butonunu kullanabilirsiniz. Kayıt sırasında ad, soyad, e-posta ve şifre bilgilerini girmeniz gerekmektedir.
-
-## 📁 Proje Yapısı
-
-```
-AirlineReservationSystem/
-├── src/
-│   ├── module-info.java
-│   └── com/airline/
-│       ├── MainApp.java              # Ana uygulama
-│       ├── Launcher.java             # JAR için launcher
-│       ├── model/                    # Model sınıfları
-│       │   ├── enums/               # Enum tipleri
-│       │   │   ├── SeatClass.java
-│       │   │   ├── FlightStatus.java
-│       │   │   ├── ReservationStatus.java
-│       │   │   ├── TicketStatus.java
-│       │   │   └── UserRole.java
-│       │   ├── Seat.java
-│       │   ├── Plane.java
-│       │   ├── Route.java
-│       │   ├── Flight.java
-│       │   ├── Passenger.java
-│       │   ├── Reservation.java
-│       │   ├── Ticket.java
-│       │   ├── Baggage.java
-│       │   ├── User.java            # Abstract sınıf
-│       │   ├── Customer.java
-│       │   ├── Staff.java
-│       │   └── Admin.java
-│       ├── manager/                  # Yönetici sınıfları
-│       │   ├── FlightManager.java
-│       │   ├── SeatManager.java
-│       │   ├── ReservationManager.java
-│       │   └── UserManager.java
-│       ├── service/                  # Servis sınıfları
-│       │   ├── PriceCalculator.java
-│       │   ├── FlightSearchEngine.java
-│       │   └── ReportGenerator.java
-│       ├── util/
-│       │   └── FileManager.java
-│       ├── gui/                      # JavaFX GUI
-│       │   ├── LoginScreen.java
-│       │   ├── CustomerDashboard.java
-│       │   ├── AdminDashboard.java
-│       │   └── SeatSimulationPanel.java
-│       └── test/                     # JUnit Testleri
-│           ├── PriceCalculatorTest.java
-│           ├── FlightSearchEngineTest.java
-│           └── SeatManagerTest.java
-├── lib/                              # JavaFX ve JUnit kütüphaneleri
-├── compile.sh                        # Derleme scripti
-├── run.sh                            # Çalıştırma scripti
-└── README.md
-```
 
 ## ✅ Proje Gereksinimleri
 
